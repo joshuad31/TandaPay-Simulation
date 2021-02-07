@@ -30,10 +30,10 @@ class TandaPaySimulationApp(QMainWindow):
         self.pv = [0] * 6
         for i in range(9):
             getattr(self.ui, f"ev_{i}").textChanged.connect(partial(self._on_value_changed, 'ev', i))
-            self.ev[i] = int(getattr(self, f"ev_{i}").value())
+            self.ev[i] = int(getattr(self.ui, f"ev_{i}").value())
         for i in range(6):
             getattr(self.ui, f"pv_{i}").textChanged.connect(partial(self._on_value_changed, 'pv', i))
-            self.pv[i] = int(getattr(self, f"pv_{i}").value())
+            self.pv[i] = int(getattr(self.ui, f"pv_{i}").value())
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
         self.ui.btn_clear.released.connect(self.btn_clear)
