@@ -15,8 +15,6 @@ import time
 
 logging.basicConfig(level=logging.ERROR, filemode='simulation.log', format='%(levelname)s:%(message)s')
 
-prog_start = time.time()
-
 # Windows File System
 root_sys = os.getcwd()
 root_us = os.getcwd()
@@ -31,7 +29,7 @@ root_us = os.getcwd()
 # root_sys = os.getcwd()
 # root_us = os.getcwd()
 
-sys_file = "1 System Database.xlsx"
+sys_file = "databases/1 System Database.xlsx"
 # if "1 System Database.xlsx" not in os.listdir(root_sys):
 #     wb = openpyxl.Workbook()
 #     wb.save(root_sys)
@@ -41,7 +39,7 @@ wb_system = load_workbook(path_system)
 # to identify the active sheet
 sh_system = wb_system.active
 
-us_file = "2 User Database.xlsx"
+us_file = "databases/2 User Database.xlsx"
 # if "2 User Database.xlsx" not in os.listdir(root_us):
 #     wb = openpyxl.Workbook()
 #     wb.save(root_us)
@@ -51,7 +49,7 @@ wb_user = load_workbook(path_user)
 # to identify the active sheet
 sh_user = wb_user.active
 
-matrix_file = '3 Matrix Database.xlsx'
+matrix_file = 'databases/3 Matrix Database.xlsx'
 path_matrix = root_us + r'\\' + matrix_file
 matrix_wb = load_workbook(path_matrix)
 matrix_var_sh = matrix_wb['Variable Map']
@@ -227,9 +225,6 @@ class Simulator:
                 messagebox.showinfo("Alert!", "Enter value 0, 1, 2, 3 as per your requirement.")
 
     def keypress9(self, event):
-        print(event)
-
-    def keypress10(self, event):
         print(event)
 
     def keypress1pv(self, event):
@@ -2140,10 +2135,10 @@ class Simulator:
                 try:
                     if not self._matrix:
                         x = datetime.now()
-                        file1_path = os.path.join(root_sys, 'LOGS', 'myfile.txt')
+                        file1_path = os.path.join(root_sys, 'logs', 'myfile.txt')
 
                         file1 = open(file1_path, 'w')
-                        # file1 = open("C:\\Tandapay\\LOGS\\myfile.txt", 'w')
+                        # file1 = open("C:\\Tandapay\\logs\\myfile.txt", 'w')
                         log1 = f'{self.ev1} is the number of members at the start of the simulation\n'
                         log2 = f'{self.SyRec1_r.value} is the number of valid members remaining at the end of the simulation\n'
                         log3 = f'{round(((self.ev1 - self.SyRec1_r.value) / self.ev1) * 100, 2)}% of policyholders left the group by end of simulation\n'
@@ -2172,10 +2167,10 @@ class Simulator:
                         edge_sys = os.path.join(root_sys, '1 System Database.xlsx')
                         edge_us = os.path.join(root_sys, '2 User Database.xlsx')
 
-                        target = os.path.join(root_sys, 'LOGS', '1 System Database temp copy.xlsx')
+                        target = os.path.join(root_sys, 'logs', '1 System Database temp copy.xlsx')
                         print(original_sys + ' -> ' + target)
                         # original = r"C:\Tandapay\1 System Database.xlsx"
-                        # target = r"C:\Tandapay\LOGS\1 System Database temp copy.xlsx"
+                        # target = r"C:\Tandapay\logs\1 System Database temp copy.xlsx"
                         shutil.copyfile(original_sys, target)
 
                         if self.edge:
@@ -2232,10 +2227,10 @@ class Simulator:
                             matrix_wb.save(path_matrix)
                             return
                         elif self.edge:
-                            file1_path = os.path.join(root_sys, 'LOGS', str(self.run) + '_' + 'log.txt')
+                            file1_path = os.path.join(root_sys, 'logs', str(self.run) + '_' + 'log.txt')
 
                             file1 = open(file1_path, 'w')
-                            # file1 = open("C:\\Tandapay\\LOGS\\myfile.txt", 'w')
+                            # file1 = open("C:\\Tandapay\\logs\\myfile.txt", 'w')
                             log1 = f'{self.ev1} is the number of members at the start of the simulation\n'
                             log2 = f'{self.SyRec1_r.value} is the number of valid members remaining at the end of the simulation\n'
                             log3 = f'{round(((self.ev1 - self.SyRec1_f.value) / self.ev1) * 100, 2)}% of policyholders left the group by end of simulation\n'
