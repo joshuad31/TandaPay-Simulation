@@ -42,9 +42,9 @@ class TandaPaySimulationApp(QMainWindow):
         self.counter = 0
         self.current_period_list = []
 
-        self.sy_rec_p = [None, ]
-        self.sy_rec_f = [None, ]
-        self.sy_rec_r = [None, ]
+        self.sy_rec_p = [None, ] * 21
+        self.sy_rec_f = [None, ] * 21
+        self.sy_rec_r = [None, ] * 21
 
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
