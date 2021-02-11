@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1086, 785)
+        TandaPaySimulationWindow.resize(1086, 740)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -291,39 +291,16 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.horizontalLayout_13.addWidget(self.label_12)
 
-        self.ev_8 = QSpinBox(self.groupBox)
+        self.ev_8 = QDoubleSpinBox(self.groupBox)
         self.ev_8.setObjectName(u"ev_8")
-        self.ev_8.setMinimumSize(QSize(70, 0))
         self.ev_8.setMaximumSize(QSize(70, 16777215))
         self.ev_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev_8.setMinimum(0)
-        self.ev_8.setMaximum(3)
+        self.ev_8.setMaximum(1.000000000000000)
 
         self.horizontalLayout_13.addWidget(self.ev_8)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_13)
-
-        self.horizontalLayout_14 = QHBoxLayout()
-        self.horizontalLayout_14.setSpacing(10)
-        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.label_19 = QLabel(self.groupBox)
-        self.label_19.setObjectName(u"label_19")
-
-        self.horizontalLayout_14.addWidget(self.label_19)
-
-        self.ev_9 = QSpinBox(self.groupBox)
-        self.ev_9.setObjectName(u"ev_9")
-        self.ev_9.setMinimumSize(QSize(70, 0))
-        self.ev_9.setMaximumSize(QSize(70, 16777215))
-        self.ev_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev_9.setMinimum(0)
-        self.ev_9.setMaximum(3)
-
-        self.horizontalLayout_14.addWidget(self.ev_9)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_14)
 
 
         self.horizontalLayout_4.addWidget(self.groupBox)
@@ -528,7 +505,7 @@ class Ui_TandaPaySimulationWindow(object):
 #if QT_CONFIG(tooltip)
         self.ev_1.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Average take-home pay for group members?", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Chance of a claim each month", None))
+        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Chance of a claim each month(%)", None))
 #if QT_CONFIG(tooltip)
         self.ev_2.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the chance of a claim each month?", None))
 #endif // QT_CONFIG(tooltip)
@@ -556,13 +533,6 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_7.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
 #endif // QT_CONFIG(tooltip)
         self.label_12.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 9", None))
-#if QT_CONFIG(tooltip)
-        self.ev_8.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_19.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 10", None))
-#if QT_CONFIG(tooltip)
-        self.ev_9.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
-#endif // QT_CONFIG(tooltip)
         self.groupBox_2.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"PRICING VARIABLES", None))
         self.label_13.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Lower threshold of premium price", None))
 #if QT_CONFIG(tooltip)
