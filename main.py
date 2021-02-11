@@ -31,7 +31,8 @@ class TandaPaySimulationApp(QMainWindow):
             self._init_sheet(k)
         self.ev = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.]
         self.pv = [0, 0, 0, 0, 0, 0]
-        for i in range(10):
+        self.rows = [0, 0, 0]
+        for i in range(9):
             getattr(self.ui, f"ev_{i}").textChanged.connect(partial(self._on_value_changed, 'ev', i))
             self._on_value_changed('ev', i, int(getattr(self.ui, f"ev_{i}").value()))
         for i in range(6):
@@ -85,6 +86,8 @@ class TandaPaySimulationApp(QMainWindow):
         getattr(self, v_type)[index] = float(value) * ratio
         if v_type == 'ev' and index in {0, 1}:
             self.ev[9] = self.ev[1] * 0.025 * self.ev[0]
+        if v_type == 'ev' and index == 0:
+            self.ev[0] = int(self.ev[0])
 
     def _checksum(self, syfunc: int, period: int, line: int):
         c_count = 0
@@ -150,6 +153,8 @@ class TandaPaySimulationApp(QMainWindow):
         return [i + 2 for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, u_rec + 1).value == _filter]
 
     def assign_variables(self):
+        for i in range(3):
+            self.rows[i] = self.start_iter * 3 + i + 2
         for i in range(1, 20):
             self.sy_rec_p[i] = self.sh['system'].cell(self.start_iter * 3 + 2, i + 2)
             self.sy_rec_f[i] = self.sh['system'].cell(self.start_iter * 3 + 3, i + 2)
@@ -557,7 +562,7 @@ class TandaPaySimulationApp(QMainWindow):
 
                 slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
 
-                sy_rec19_prev = self.sh['system'].cell(self.row1 - 3, 21)
+                sy_rec19_prev = self.sh['system'].cell(self.rows[0] - 3, 21)
                 try:
                     a = float(self.sy_rec_p[19].value)
                     b = float(sy_rec19_prev.value)
@@ -566,8 +571,8 @@ class TandaPaySimulationApp(QMainWindow):
                     logger.exception(e)
                     logger.debug(f'SyRec19.value: {self.sy_rec_p[19].value}')
                     logger.debug(f'sy_rec19_prev.value: {sy_rec19_prev.value}')
-                    logger.debug(f'row1: {self.row1}')
-                    logger.debug(f'row1-3: {self.row1 - 3}')
+                    logger.debug(f'row1: {self.rows[0]}')
+                    logger.debug(f'row1-3: {self.rows[0] - 3}')
                     inc_premium = 0
 
                 valid_users = []
@@ -591,7 +596,8 @@ class TandaPaySimulationApp(QMainWindow):
 
                 if inc_premium < self.pv[0]:
                     try:
-                        num = (self.sy_rec_p[19].value / (float(self.ev[0] / self.ev[0])) - 1)
+                        sy_recp_19 = self.sy_rec_p[19].value if self.sy_rec_p[19].value is not None else 0
+                        num = (sy_recp_19 / (float(self.ev[0] / self.ev[0])) - 1)
                         if num >= self.pv[4]:
                             skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
                             skip_users = random.sample(valid_users, skip_hash)
@@ -1094,9 +1100,9 @@ class TandaPaySimulationApp(QMainWindow):
             """
 
             prob = round(random.uniform(0, 1), 2)
-            if self.ev3 > prob:
+            if self.ev[2] > prob:
                 self.sy_rec_r[16].value = 'yes'
-            elif self.ev3 < prob:
+            elif self.ev[2] < prob:
                 self.sy_rec_r[16].value = "no"
                 self.sy_rec_r[17].value = self.sy_rec_r[2].value
             self.wb['system'].save(self.conf['database']['system'])
@@ -1142,7 +1148,8 @@ class TandaPaySimulationApp(QMainWindow):
                     us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - us10.value
                     us10.value = 0
                 else:
-                    us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - self.sy_rec_r[18].value
+                    sr18 = self.sy_rec_r[18].value
+                    us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0
             self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
             self.wb['system'].save(self.conf['database']['system'])
             self.wb['user'].save(self.conf['database']['user'])
