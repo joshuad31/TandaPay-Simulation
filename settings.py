@@ -12,6 +12,8 @@ if not os.path.exists(CONFIG_FILE):
     print('No JSON Config File Found! Recovering the default one...')
     shutil.copy(os.path.join(_cur_dir, 'utils', 'default_config.json'), CONFIG_FILE)
 
+LOG_DIR = os.path.join(_cur_dir, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
 
 try:
     from local_settings import *

@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(946, 528)
+        TandaPaySimulationWindow.resize(1086, 785)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -103,6 +103,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setSpacing(50)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
@@ -112,13 +113,10 @@ class Ui_TandaPaySimulationWindow(object):
         sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
         self.groupBox.setSizePolicy(sizePolicy)
         self.verticalLayout_2 = QVBoxLayout(self.groupBox)
-        self.verticalLayout_2.setSpacing(30)
+        self.verticalLayout_2.setSpacing(15)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(20, 20, 20, 20)
-        self.horizontalLayout_14 = QHBoxLayout()
-        self.horizontalLayout_14.setSpacing(30)
-        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
         self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setSpacing(10)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.label_4 = QLabel(self.groupBox)
         self.label_4.setObjectName(u"label_4")
@@ -128,6 +126,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_0 = QSpinBox(self.groupBox)
         self.ev_0.setObjectName(u"ev_0")
         self.ev_0.setMinimumSize(QSize(70, 0))
+        self.ev_0.setMaximumSize(QSize(70, 16777215))
         self.ev_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_0.setMinimum(4)
         self.ev_0.setMaximum(9999)
@@ -135,9 +134,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_5.addWidget(self.ev_0)
 
 
-        self.horizontalLayout_14.addLayout(self.horizontalLayout_5)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setSpacing(10)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.label_5 = QLabel(self.groupBox)
         self.label_5.setObjectName(u"label_5")
@@ -147,6 +147,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_1 = QSpinBox(self.groupBox)
         self.ev_1.setObjectName(u"ev_1")
         self.ev_1.setMinimumSize(QSize(70, 0))
+        self.ev_1.setMaximumSize(QSize(70, 16777215))
         self.ev_1.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_1.setMinimum(4)
         self.ev_1.setMaximum(9999)
@@ -154,9 +155,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_6.addWidget(self.ev_1)
 
 
-        self.horizontalLayout_14.addLayout(self.horizontalLayout_6)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_6)
 
         self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setSpacing(10)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.label_6 = QLabel(self.groupBox)
         self.label_6.setObjectName(u"label_6")
@@ -166,6 +168,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_2 = QSpinBox(self.groupBox)
         self.ev_2.setObjectName(u"ev_2")
         self.ev_2.setMinimumSize(QSize(70, 0))
+        self.ev_2.setMaximumSize(QSize(70, 16777215))
         self.ev_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_2.setMinimum(25)
         self.ev_2.setMaximum(75)
@@ -173,15 +176,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_7.addWidget(self.ev_2)
 
 
-        self.horizontalLayout_14.addLayout(self.horizontalLayout_7)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_14)
-
-        self.horizontalLayout_15 = QHBoxLayout()
-        self.horizontalLayout_15.setSpacing(30)
-        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setSpacing(10)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.label_7 = QLabel(self.groupBox)
         self.label_7.setObjectName(u"label_7")
@@ -191,6 +189,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_3 = QSpinBox(self.groupBox)
         self.ev_3.setObjectName(u"ev_3")
         self.ev_3.setMinimumSize(QSize(70, 0))
+        self.ev_3.setMaximumSize(QSize(70, 16777215))
         self.ev_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_3.setMinimum(10)
         self.ev_3.setMaximum(30)
@@ -198,9 +197,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_8.addWidget(self.ev_3)
 
 
-        self.horizontalLayout_15.addLayout(self.horizontalLayout_8)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_8)
 
         self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setSpacing(10)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.label_8 = QLabel(self.groupBox)
         self.label_8.setObjectName(u"label_8")
@@ -210,6 +210,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_4 = QSpinBox(self.groupBox)
         self.ev_4.setObjectName(u"ev_4")
         self.ev_4.setMinimumSize(QSize(70, 0))
+        self.ev_4.setMaximumSize(QSize(70, 16777215))
         self.ev_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_4.setMinimum(10)
         self.ev_4.setMaximum(30)
@@ -217,9 +218,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_9.addWidget(self.ev_4)
 
 
-        self.horizontalLayout_15.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_9)
 
         self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setSpacing(10)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.label_9 = QLabel(self.groupBox)
         self.label_9.setObjectName(u"label_9")
@@ -229,6 +231,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_5 = QSpinBox(self.groupBox)
         self.ev_5.setObjectName(u"ev_5")
         self.ev_5.setMinimumSize(QSize(70, 0))
+        self.ev_5.setMaximumSize(QSize(70, 16777215))
         self.ev_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_5.setMinimum(20)
         self.ev_5.setMaximum(80)
@@ -236,15 +239,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_10.addWidget(self.ev_5)
 
 
-        self.horizontalLayout_15.addLayout(self.horizontalLayout_10)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
 
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_15)
-
-        self.horizontalLayout_16 = QHBoxLayout()
-        self.horizontalLayout_16.setSpacing(30)
-        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
         self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setSpacing(10)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
         self.label_10 = QLabel(self.groupBox)
         self.label_10.setObjectName(u"label_10")
@@ -254,6 +252,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_6 = QSpinBox(self.groupBox)
         self.ev_6.setObjectName(u"ev_6")
         self.ev_6.setMinimumSize(QSize(70, 0))
+        self.ev_6.setMaximumSize(QSize(70, 16777215))
         self.ev_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_6.setMinimum(2)
         self.ev_6.setMaximum(4)
@@ -261,9 +260,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_11.addWidget(self.ev_6)
 
 
-        self.horizontalLayout_16.addLayout(self.horizontalLayout_11)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_11)
 
         self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setSpacing(10)
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.label_11 = QLabel(self.groupBox)
         self.label_11.setObjectName(u"label_11")
@@ -273,6 +273,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_7 = QSpinBox(self.groupBox)
         self.ev_7.setObjectName(u"ev_7")
         self.ev_7.setMinimumSize(QSize(70, 0))
+        self.ev_7.setMaximumSize(QSize(70, 16777215))
         self.ev_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_7.setMinimum(0)
         self.ev_7.setMaximum(3)
@@ -280,9 +281,10 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_12.addWidget(self.ev_7)
 
 
-        self.horizontalLayout_16.addLayout(self.horizontalLayout_12)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_12)
 
         self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setSpacing(10)
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
         self.label_12 = QLabel(self.groupBox)
         self.label_12.setObjectName(u"label_12")
@@ -292,17 +294,36 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_8 = QSpinBox(self.groupBox)
         self.ev_8.setObjectName(u"ev_8")
         self.ev_8.setMinimumSize(QSize(70, 0))
+        self.ev_8.setMaximumSize(QSize(70, 16777215))
         self.ev_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev_8.setMinimum(4)
-        self.ev_8.setMaximum(9999)
+        self.ev_8.setMinimum(0)
+        self.ev_8.setMaximum(3)
 
         self.horizontalLayout_13.addWidget(self.ev_8)
 
 
-        self.horizontalLayout_16.addLayout(self.horizontalLayout_13)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_13)
+
+        self.horizontalLayout_14 = QHBoxLayout()
+        self.horizontalLayout_14.setSpacing(10)
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.label_19 = QLabel(self.groupBox)
+        self.label_19.setObjectName(u"label_19")
+
+        self.horizontalLayout_14.addWidget(self.label_19)
+
+        self.ev_9 = QSpinBox(self.groupBox)
+        self.ev_9.setObjectName(u"ev_9")
+        self.ev_9.setMinimumSize(QSize(70, 0))
+        self.ev_9.setMaximumSize(QSize(70, 16777215))
+        self.ev_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ev_9.setMinimum(0)
+        self.ev_9.setMaximum(3)
+
+        self.horizontalLayout_14.addWidget(self.ev_9)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_16)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_14)
 
 
         self.horizontalLayout_4.addWidget(self.groupBox)
@@ -312,12 +333,8 @@ class Ui_TandaPaySimulationWindow(object):
         sizePolicy.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
         self.groupBox_2.setSizePolicy(sizePolicy)
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_2)
-        self.verticalLayout_3.setSpacing(30)
+        self.verticalLayout_3.setSpacing(15)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(20, 20, 20, 20)
-        self.horizontalLayout_17 = QHBoxLayout()
-        self.horizontalLayout_17.setSpacing(30)
-        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
         self.horizontalLayout_18 = QHBoxLayout()
         self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
         self.label_13 = QLabel(self.groupBox_2)
@@ -328,6 +345,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_0 = QSpinBox(self.groupBox_2)
         self.pv_0.setObjectName(u"pv_0")
         self.pv_0.setMinimumSize(QSize(70, 0))
+        self.pv_0.setMaximumSize(QSize(70, 16777215))
         self.pv_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_0.setMinimum(1)
         self.pv_0.setMaximum(100)
@@ -335,7 +353,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_18.addWidget(self.pv_0)
 
 
-        self.horizontalLayout_17.addLayout(self.horizontalLayout_18)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_18)
 
         self.horizontalLayout_19 = QHBoxLayout()
         self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
@@ -347,6 +365,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_1 = QSpinBox(self.groupBox_2)
         self.pv_1.setObjectName(u"pv_1")
         self.pv_1.setMinimumSize(QSize(70, 0))
+        self.pv_1.setMaximumSize(QSize(70, 16777215))
         self.pv_1.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_1.setMinimum(1)
         self.pv_1.setMaximum(100)
@@ -354,7 +373,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_19.addWidget(self.pv_1)
 
 
-        self.horizontalLayout_17.addLayout(self.horizontalLayout_19)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_19)
 
         self.horizontalLayout_20 = QHBoxLayout()
         self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
@@ -366,6 +385,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_2 = QSpinBox(self.groupBox_2)
         self.pv_2.setObjectName(u"pv_2")
         self.pv_2.setMinimumSize(QSize(70, 0))
+        self.pv_2.setMaximumSize(QSize(70, 16777215))
         self.pv_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_2.setMinimum(0)
         self.pv_2.setMaximum(9999)
@@ -373,14 +393,8 @@ class Ui_TandaPaySimulationWindow(object):
         self.horizontalLayout_20.addWidget(self.pv_2)
 
 
-        self.horizontalLayout_17.addLayout(self.horizontalLayout_20)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_20)
 
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_17)
-
-        self.horizontalLayout_21 = QHBoxLayout()
-        self.horizontalLayout_21.setSpacing(30)
-        self.horizontalLayout_21.setObjectName(u"horizontalLayout_21")
         self.horizontalLayout_22 = QHBoxLayout()
         self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
         self.label_16 = QLabel(self.groupBox_2)
@@ -391,14 +405,15 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_3 = QSpinBox(self.groupBox_2)
         self.pv_3.setObjectName(u"pv_3")
         self.pv_3.setMinimumSize(QSize(70, 0))
+        self.pv_3.setMaximumSize(QSize(70, 16777215))
         self.pv_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_3.setMinimum(0)
-        self.pv_3.setMaximum(9999)
+        self.pv_3.setMaximum(100)
 
         self.horizontalLayout_22.addWidget(self.pv_3)
 
 
-        self.horizontalLayout_21.addLayout(self.horizontalLayout_22)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_22)
 
         self.horizontalLayout_23 = QHBoxLayout()
         self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
@@ -410,14 +425,15 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_4 = QSpinBox(self.groupBox_2)
         self.pv_4.setObjectName(u"pv_4")
         self.pv_4.setMinimumSize(QSize(70, 0))
+        self.pv_4.setMaximumSize(QSize(70, 16777215))
         self.pv_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_4.setMinimum(0)
-        self.pv_4.setMaximum(9999)
+        self.pv_4.setMaximum(100)
 
         self.horizontalLayout_23.addWidget(self.pv_4)
 
 
-        self.horizontalLayout_21.addLayout(self.horizontalLayout_23)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_23)
 
         self.horizontalLayout_24 = QHBoxLayout()
         self.horizontalLayout_24.setObjectName(u"horizontalLayout_24")
@@ -429,17 +445,15 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_5 = QSpinBox(self.groupBox_2)
         self.pv_5.setObjectName(u"pv_5")
         self.pv_5.setMinimumSize(QSize(70, 0))
+        self.pv_5.setMaximumSize(QSize(70, 16777215))
         self.pv_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_5.setMinimum(0)
-        self.pv_5.setMaximum(9999)
+        self.pv_5.setMaximum(100)
 
         self.horizontalLayout_24.addWidget(self.pv_5)
 
 
-        self.horizontalLayout_21.addLayout(self.horizontalLayout_24)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_21)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_24)
 
         self.verticalSpacer = QSpacerItem(20, 29, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -505,23 +519,75 @@ class Ui_TandaPaySimulationWindow(object):
         self.btn_user_database.setText("")
         self.label_3.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Matrix Database File:", None))
         self.btn_matrix_database.setText("")
-        self.groupBox.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"EV", None))
-        self.label_4.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 1", None))
-        self.label_5.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 2", None))
-        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 3", None))
-        self.label_7.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 4", None))
-        self.label_8.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 5", None))
-        self.label_9.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 6", None))
-        self.label_10.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 7", None))
-        self.label_11.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 8", None))
+        self.groupBox.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"ENVIRONMENTAL VARIABLES", None))
+        self.label_4.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Members in group", None))
+#if QT_CONFIG(tooltip)
+        self.ev_0.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"How many members are in the group?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_5.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Average take-home pay for group members", None))
+#if QT_CONFIG(tooltip)
+        self.ev_1.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Average take-home pay for group members?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Chance of a claim each month", None))
+#if QT_CONFIG(tooltip)
+        self.ev_2.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the chance of a claim each month?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_7.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Honest defectors(%)", None))
+#if QT_CONFIG(tooltip)
+        self.ev_3.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the percentage of honest defectors?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_8.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Low-morale members(%)", None))
+#if QT_CONFIG(tooltip)
+        self.ev_4.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the percentage of low-morale members?", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.label_9.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the percentage of members who are unwilling to act alone? ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_9.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Members who are unwilling to act alone(%)", None))
+#if QT_CONFIG(tooltip)
+        self.ev_5.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the percentage of members who are unwilling to act alone?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_10.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Member threshold for dependent members to defect", None))
+#if QT_CONFIG(tooltip)
+        self.ev_6.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the member threshold needed for dependent members to defect?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_11.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Additional periods once the group stabilizes", None))
+#if QT_CONFIG(tooltip)
+        self.ev_7.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
+#endif // QT_CONFIG(tooltip)
         self.label_12.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 9", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"PV", None))
-        self.label_13.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 1", None))
-        self.label_14.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 2", None))
-        self.label_15.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 3", None))
-        self.label_16.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 4", None))
-        self.label_17.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 5", None))
-        self.label_18.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"PV 6", None))
+#if QT_CONFIG(tooltip)
+        self.ev_8.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_19.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 10", None))
+#if QT_CONFIG(tooltip)
+        self.ev_9.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
+#endif // QT_CONFIG(tooltip)
+        self.groupBox_2.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"PRICING VARIABLES", None))
+        self.label_13.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Lower threshold of premium price", None))
+#if QT_CONFIG(tooltip)
+        self.pv_0.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"The premium price must exceed this minimum threshold", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_14.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Policyholders decide to leave before:", None))
+#if QT_CONFIG(tooltip)
+        self.pv_1.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Before this many policyholders decide to leave", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.label_15.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"The maximum premium price increase threshold", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_15.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Upper threshold of premium price", None))
+        self.label_16.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Policyholders deciding to leave result in(%)", None))
+#if QT_CONFIG(tooltip)
+        self.pv_3.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Resulting in this percentage of policyholders deciding to leave", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_17.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Lower threshold of premium price sensitivity(%)", None))
+#if QT_CONFIG(tooltip)
+        self.pv_4.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u" If the premium increases beyond this percentage", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_18.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Policyholders leaving every period(%)", None))
+#if QT_CONFIG(tooltip)
+        self.pv_5.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Then this percentage of policyholders will leave every period", None))
+#endif // QT_CONFIG(tooltip)
         self.btn_start.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Start", None))
         self.btn_clear.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Clear", None))
         self.btn_exit.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Exit", None))
