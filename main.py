@@ -9,7 +9,7 @@ import qdarkstyle
 from PySide2.QtWidgets import QMainWindow, QApplication, QFileDialog
 from openpyxl import load_workbook
 
-from settings import LOG_DIR
+from settings import RESULT_DIR
 from ui.ui_tps import Ui_TandaPaySimulationWindow
 from utils.common import get_config, update_config_file
 from utils.logger import logger
@@ -65,7 +65,7 @@ class TandaPaySimulationApp(QMainWindow):
         db_file = self.conf['database'][db_type]
         self.wb[db_type] = load_workbook(db_file)
         self.sh[db_type] = self.wb[db_type].active
-        self.excel_files[db_type] = os.path.join(LOG_DIR, ntpath.basename(self.conf['database'][db_type]))
+        self.excel_files[db_type] = os.path.join(RESULT_DIR, ntpath.basename(self.conf['database'][db_type]))
         if db_type == 'user':
             for row in self.sh['user']['A2:N200']:
                 for cell in row:
@@ -118,11 +118,7 @@ class TandaPaySimulationApp(QMainWindow):
                 c_value = 0
 
     def _checksum_sr1(self, _sy_rec1_val: int, syfunc: int, period: int, line: int):
-        counter = 0
-        for i in range(self.ev[0]):
-            c_us_rec_3 = self.sh['user'].cell(i + 2, 4)
-            if c_us_rec_3.value == 0:
-                counter += 1
+        counter = len([i for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, 4).value == 0])
         if self.ev[0] - _sy_rec1_val != counter:
             logger.debug(f'______________ Period {period} -> Line {line}')
             msg = f'SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
@@ -536,7 +532,7 @@ class TandaPaySimulationApp(QMainWindow):
                 self.save_to_excel('user')
                 self.save_to_excel('system')
 
-                self._checksum(1, int(self.counter), 1080)
+                self._checksum(1, int(self.counter), 535)
 
                 #################
             # ___UsFunc2___
@@ -672,8 +668,8 @@ class TandaPaySimulationApp(QMainWindow):
             self.save_to_excel('user')
             self.save_to_excel('system')
 
-            self._checksum(3, int(self.counter), 1265)
-            self._checksum_sr1(self.sy_rec_p[1].value, 3, int(self.counter), 1265)
+            self._checksum(3, int(self.counter), 671)
+            self._checksum_sr1(self.sy_rec_p[1].value, 3, int(self.counter), 672)
 
             #################
             # ___SyFunc4___
@@ -716,7 +712,7 @@ class TandaPaySimulationApp(QMainWindow):
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh['system'].cell(4, 11).value = self.sy_rec_f[9].value
                 self.save_to_excel('system')
-            self._checksum(4, int(self.counter), 1480)
+            self._checksum(4, int(self.counter), 715)
             self.assign_variables()
 
             if self.current_period_list[self.start_iter] != 'Period Data 1':
@@ -825,8 +821,8 @@ class TandaPaySimulationApp(QMainWindow):
             self.save_to_excel('user')
             self.save_to_excel('system')
 
-            self._checksum(6, int(self.counter), 1520)
-            self._checksum_sr1(self.sy_rec_r[1].value, 6, int(self.counter), 1520)
+            self._checksum(6, int(self.counter), 824)
+            self._checksum_sr1(self.sy_rec_r[1].value, 6, int(self.counter), 825)
 
             #################
             # ___SyFunc7___
@@ -907,7 +903,7 @@ class TandaPaySimulationApp(QMainWindow):
                             invalid_loop = 0
                             loop_reset = False
             self.save_to_excel('user')
-            self._checksum(7, int(self.counter), 1761)
+            self._checksum(7, int(self.counter), 906)
 
             loop_reset = False
             invalid_loop = 0  # UsRec4 for group absorbing invalid member not reassigned twice
@@ -967,7 +963,7 @@ class TandaPaySimulationApp(QMainWindow):
                             invalid_loop = 0
                             loop_reset = False
             self.save_to_excel('user')
-            self._checksum(7, int(self.counter), 1761)
+            self._checksum(7, int(self.counter), 966)
 
             loop_reset = False
             invalid_loop = 0  # UsRec4 for group absorbing invalid member not reassigned twice
@@ -1075,7 +1071,7 @@ class TandaPaySimulationApp(QMainWindow):
 
             self.save_to_excel('user')
 
-            self._checksum(7, int(self.counter), 1761)
+            self._checksum(7, int(self.counter), 1074)
 
             #################
             # ___SyFunc8___    Claims / refunds function
@@ -1202,8 +1198,8 @@ class TandaPaySimulationApp(QMainWindow):
                         sy_rec_new_p[k].value = 0
                     self.save_to_excel('system')
 
-                    self._checksum_sr1(sy_rec_new_p[1].value, 11, int(self.counter), 2089)
-                    self._checksum(11, int(self.counter), 2088)
+                    self._checksum_sr1(sy_rec_new_p[1].value, 11, int(self.counter), 1201)
+                    self._checksum(11, int(self.counter), 1202)
 
             # logging to log file
             if self.current_period_list[self.start_iter] == 'Period Data 10' or _path == 2:
@@ -1211,8 +1207,8 @@ class TandaPaySimulationApp(QMainWindow):
                 try:
                     percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
                     inc_premium = round((self.sy_rec_f[19].value / self.sh["system"].cell(2, 21).value) * 100, 2)
-                    log_file = os.path.join(LOG_DIR, f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.txt")
-                    with open(log_file, 'w') as f:
+                    result_file = os.path.join(RESULT_DIR, f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.txt")
+                    with open(result_file, 'w') as f:
                         lines = [
                             f'{self.ev[0]} is the number of members at the start of the simulation\n',
                             f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
@@ -1224,7 +1220,7 @@ class TandaPaySimulationApp(QMainWindow):
                             f'{inc_premium} is the final premium members were asked to pay.\n',
                             f'Premiums increased by {inc_premium}% by end of simulation\n',
                             f'self.SyRec 3 (period 0 finalize) = {self.sh["system"].cell(3, 5).value}\n',
-                            f'{self.ev[0] * 100}% of policyholders who were assigned to defect\n',
+                            f'{self.ev[3] * 100}% of policyholders who were assigned to defect\n',
                             f'{round(percent, 2)}% of policyholders who actually defected\n',
                             f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
                         ]

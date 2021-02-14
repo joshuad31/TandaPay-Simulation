@@ -2,5 +2,5 @@
 note.txt
 local_settings.py
 local_config.json
-logs/
+result/
 databases/3 Matrix Database.xlsx
