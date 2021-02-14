@@ -533,8 +533,8 @@ class TandaPaySimulationApp(QMainWindow):
                             us_rec13.value = 0
                         if us_rec6.value == 'defector':
                             us_rec6.value = 'low-morale'
-                self.wb['user'].save(self.conf['database']['user'])
-                self.wb['system'].save(self.conf['database']['system'])
+                self.save_to_excel('user')
+                self.save_to_excel('system')
 
                 self._checksum(1, int(self.counter), 1080)
 
