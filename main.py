@@ -2,7 +2,6 @@ import ntpath
 import os
 from datetime import datetime
 import random
-import shutil
 import sys
 from functools import partial
 
@@ -25,7 +24,8 @@ class TandaPaySimulationApp(QMainWindow):
         self.conf = get_config()
         self.wb = {}
         self.sh = {}
-        for k in {"system", "user", "matrix"}:
+        self.excel_files = {}
+        for k in {"system", "user"}:
             getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
             getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
             self._init_sheet(k)
@@ -64,21 +64,20 @@ class TandaPaySimulationApp(QMainWindow):
     def _init_sheet(self, db_type):
         db_file = self.conf['database'][db_type]
         self.wb[db_type] = load_workbook(db_file)
-        if db_type != 'matrix':
-            self.sh[db_type] = self.wb[db_type].active
-        else:
-            self.sh['matrix_var_sh'] = self.wb[db_type]['Variable Map']
-            self.sh['matrix_sys_log'] = self.wb[db_type]['System Log']
+        self.sh[db_type] = self.wb[db_type].active
+        self.excel_files[db_type] = os.path.join(LOG_DIR, ntpath.basename(self.conf['database'][db_type]))
         if db_type == 'user':
             for row in self.sh['user']['A2:N200']:
                 for cell in row:
                     cell.value = None
-            self.wb['user'].save(db_file)
         elif db_type == 'system':
             for row in self.sh['system']['C2:U37']:
                 for cell in row:
                     cell.value = None
-            self.wb['system'].save(db_file)
+        self.save_to_excel(db_type)
+
+    def save_to_excel(self, db_type):
+        self.wb[db_type].save(self.excel_files[db_type])
 
     def _on_value_changed(self, v_type, index, value):
         # All PV values and EV3 ~ EV6 are percentage values.
@@ -111,13 +110,8 @@ class TandaPaySimulationApp(QMainWindow):
                         c_value += c_ur4_sub.value
                 if c_value % c_count != 0 or c_count != c_us_rec4_val.value:
                     logger.debug(f'______________ Period {period} -> Line {line}')
-                    if self._matrix:
-                        run_log_index = self.run - 1
-                        msg = f'Run {run_log_index}: SyFunc {syfunc} _checksum failed: c_value % c_count = ' \
-                              f'{c_value % c_count} - supposed to be 0.\nc_UsRec3_val:{c_us_rec3_val.value}'
-                    else:
-                        msg = f'SyFunc {syfunc} _checksum failed: c_value % c_count = {c_value % c_count} - ' \
-                              f'supposed to be 0.\nc_UsRec3_val:{c_us_rec3_val.value}'
+                    msg = f'SyFunc {syfunc} _checksum failed: c_value % c_count = {c_value % c_count} - ' \
+                          f'supposed to be 0.\nc_UsRec3_val:{c_us_rec3_val.value}'
                     logger.error(msg)
                 last_checked = c_us_rec3_val.value
                 c_count = 0
@@ -131,13 +125,8 @@ class TandaPaySimulationApp(QMainWindow):
                 counter += 1
         if self.ev[0] - _sy_rec1_val != counter:
             logger.debug(f'______________ Period {period} -> Line {line}')
-            if self._matrix:
-                run_log_index = self.run - 1
-                msg = f'Run {run_log_index}: SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
-                      f'supposed to be {self.ev[0] - _sy_rec1_val}'
-            else:
-                msg = f'SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
-                      f'supposed to be {self.ev[0] - _sy_rec1_val}'
+            msg = f'SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
+                  f'supposed to be {self.ev[0] - _sy_rec1_val}'
             logger.error(msg)
 
     def get_valid_users(self) -> list:
@@ -189,7 +178,7 @@ class TandaPaySimulationApp(QMainWindow):
                     # assigning UsRec13 into the database
                     val6 = self.sh['user'].cell(i + 2, 14)
                     val6.value = 0
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
                 logger.debug('Initial values for UsRec variables set!')
             # PAGE 8, 9
             if self.current_period_list[self.start_iter] == 'Period Data 1':
@@ -208,7 +197,7 @@ class TandaPaySimulationApp(QMainWindow):
                     for k in range(3, 21):
                         val = self.sh['system'].cell(i + 2, k)
                         val.value = 0
-                self.wb['system'].save(self.conf['database']['system'])
+                self.save_to_excel('system')
                 logger.debug('Initial values for SyRec variables set!')
 
                 # Subgroup  # FUNCTION FOR SUBGROUP EXECUTION
@@ -320,7 +309,7 @@ class TandaPaySimulationApp(QMainWindow):
                     if group_mem_count == 7:
                         group_num += 1
                         group_mem_count = 0
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
 
                 checksum = temp_val_four + temp_val_five + temp_val_six + temp_val_seven
                 if checksum != self.ev[0]:
@@ -331,7 +320,7 @@ class TandaPaySimulationApp(QMainWindow):
                 for i in range(self.ev[0]):
                     valid_value = self.sh['user'].cell(i + 2, 6)
                     valid_value.value = 'valid'
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
                 logger.debug(
                     f'group of four members: {step14}, five members: {step3}, six members: {step7}, '
                     f'seven members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
@@ -388,7 +377,7 @@ class TandaPaySimulationApp(QMainWindow):
                         us_rec7_init = self.sh['user'].cell(i + 2, 8)
                         us_rec7_init.value = 'independent'
                         assigned_indep += 1
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
                 for i in range(self.ev[0]):
                     us_rec6_init = self.sh['user'].cell(i + 2, 7)
                     if us_rec6_init.value != 'defector':
@@ -398,7 +387,7 @@ class TandaPaySimulationApp(QMainWindow):
                 if assigned_dep + assigned_indep != self.ev[0]:
                     logger.error(f'Dependent/independent assignment error')
 
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
                 logger.debug('Roles Assigned!')
 
             #################
@@ -465,7 +454,7 @@ class TandaPaySimulationApp(QMainWindow):
                                     defected_cache[current_group_num] = defector_count
                                 elif us_rec7.value == 'dependent':
                                     defected_subt[current_group_num] += 1
-                self.wb['user'].save(self.conf['database']['user'])
+                self.save_to_excel('user')
 
                 # PATH 2 & 3 (Part 2)
                 for i in range(self.ev[0]):
@@ -508,7 +497,7 @@ class TandaPaySimulationApp(QMainWindow):
                             us_rec5.value = 'NR'
                             us_rec8.value = 'NR'
                             us_rec12.value = 'NR'
-                            self.wb['user'].save(self.conf['database']['user'])
+                            self.save_to_excel('user')
 
                         if us_rec6.value == 'defector' and us_rec1.value in lm_def and us_rec7.value == 'independent':
                             # Defectors < ev7 and independent defectors exist
@@ -534,7 +523,7 @@ class TandaPaySimulationApp(QMainWindow):
                             us_rec5.value = 'NR'
                             us_rec8.value = 'NR'
                             us_rec12.value = 'NR'
-                            self.wb['user'].save(self.conf['database']['user'])
+                            self.save_to_excel('user')
 
                     if us_rec1.value in low_morale_cache and us_rec7.value == 'dependent':
                         # PATH 3 (Part 2)
@@ -596,7 +585,7 @@ class TandaPaySimulationApp(QMainWindow):
 
                 if inc_premium < self.pv[0]:
                     try:
-                        sy_recp_19 = self.sy_rec_p[19].value if self.sy_rec_p[19].value is not None else 0
+                        sy_recp_19 = self.sy_rec_p[19].value or 0
                         num = (sy_recp_19 / (float(self.ev[0] / self.ev[0])) - 1)
                         if num >= self.pv[4]:
                             skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
@@ -614,7 +603,7 @@ class TandaPaySimulationApp(QMainWindow):
                             for i in skip_users:
                                 us_rec12 = self.sh['user'].cell(i, 13)
                                 us_rec12.value = 'no'
-                            self.wb['user'].save(self.conf['database']['user'])
+                            self.save_to_excel('user')
                         if num < self.pv[4]:
                             # PATH3
                             if self.ev[7] == 0:
@@ -632,7 +621,7 @@ class TandaPaySimulationApp(QMainWindow):
                     except ZeroDivisionError:
                         pass
 
-                    self.wb['user'].save(self.conf['database']['user'])
+                    self.save_to_excel('user')
 
             #################
             # ___SyFunc3___                        #Validate premium function
@@ -676,13 +665,13 @@ class TandaPaySimulationApp(QMainWindow):
                     us_rec4.value = 0
                     us_rec5.value = "NR"
                     us_rec12.value = "NR"
-                    self.wb['user'].save(self.conf['database']['user'])
+                    self.save_to_excel('user')
 
                 elif us_rec12.value == 'yes':
                     us_rec8.value = 'paid'
 
-            self.wb['user'].save(self.conf['database']['user'])
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('user')
+            self.save_to_excel('system')
 
             self._checksum(3, int(self.counter), 1265)
             self._checksum_sr1(self.sy_rec_p[1].value, 3, int(self.counter), 1265)
@@ -712,8 +701,8 @@ class TandaPaySimulationApp(QMainWindow):
                         ur5.value = 'invalid'
                         ur10.value = ur11.value
                         self.sy_rec_p[6].value += 1
-            self.wb['user'].save(self.conf['database']['user'])
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('user')
+            self.save_to_excel('system')
 
             self.assign_variables()
             if self.current_period_list[self.start_iter] == 'Period Data 1':
@@ -727,7 +716,7 @@ class TandaPaySimulationApp(QMainWindow):
                 self.assign_variables()
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh['system'].cell(4, 11).value = self.sy_rec_f[9].value
-                self.wb['system'].save(self.conf['database']['system'])
+                self.save_to_excel('system')
             self._checksum(4, int(self.counter), 1480)
             self.assign_variables()
 
@@ -771,7 +760,6 @@ class TandaPaySimulationApp(QMainWindow):
                             else:
                                 _path = 2
 
-                            # wb_system.save(path_system)
                         if _path == 2:
                             us_rec8.value = 'quit'
                             self.sy_rec_r[1].value -= 1
@@ -792,8 +780,8 @@ class TandaPaySimulationApp(QMainWindow):
                             us_rec4.value = 0
                             us_rec5.value = "NR"
                             us_rec12.value = "NR"
-            self.wb['user'].save(self.conf['database']['user'])
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('user')
+            self.save_to_excel('system')
 
             for i in range(self.ev[0]):
                 _path = 0
@@ -815,7 +803,6 @@ class TandaPaySimulationApp(QMainWindow):
                         else:
                             _path = 2
 
-                        # wb_system.save(path_system)
                         if _path == 2:
                             us_rec8.value = 'quit'
                             self.sy_rec_r[1].value -= 1
@@ -836,8 +823,8 @@ class TandaPaySimulationApp(QMainWindow):
                             us_rec4.value = 0
                             us_rec5.value = "NR"
                             us_rec12.value = "NR"
-            self.wb['user'].save(self.conf['database']['user'])
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('user')
+            self.save_to_excel('system')
 
             self._checksum(6, int(self.counter), 1520)
             self._checksum_sr1(self.sy_rec_r[1].value, 6, int(self.counter), 1520)
@@ -920,7 +907,7 @@ class TandaPaySimulationApp(QMainWindow):
                         if loop_reset:
                             invalid_loop = 0
                             loop_reset = False
-            self.wb['user'].save(self.conf['database']['user'])
+            self.save_to_excel('user')
             self._checksum(7, int(self.counter), 1761)
 
             loop_reset = False
@@ -980,7 +967,7 @@ class TandaPaySimulationApp(QMainWindow):
                         if loop_reset:
                             invalid_loop = 0
                             loop_reset = False
-            self.wb['user'].save(self.conf['database']['user'])
+            self.save_to_excel('user')
             self._checksum(7, int(self.counter), 1761)
 
             loop_reset = False
@@ -1087,7 +1074,7 @@ class TandaPaySimulationApp(QMainWindow):
                             invalid_loop = 0
                             loop_reset = False
 
-            self.wb['user'].save(self.conf['database']['user'])
+            self.save_to_excel('user')
 
             self._checksum(7, int(self.counter), 1761)
 
@@ -1105,7 +1092,7 @@ class TandaPaySimulationApp(QMainWindow):
             elif self.ev[2] < prob:
                 self.sy_rec_r[16].value = "no"
                 self.sy_rec_r[17].value = self.sy_rec_r[2].value
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('system')
 
             #################
             # ___SyFunc8.5___
@@ -1116,7 +1103,7 @@ class TandaPaySimulationApp(QMainWindow):
             """
             self.sy_rec_r[11].value = self.sy_rec_r[5].value * self.sy_rec_r[19].value
             self.sy_rec_r[13].value = self.sy_rec_r[6].value * self.sy_rec_r[19].value
-            self.wb['system'].save(self.conf['database']['system'])
+            self.save_to_excel('system')
 
             #################
             # ___SyFunc9___
@@ -1151,8 +1138,8 @@ class TandaPaySimulationApp(QMainWindow):
                     sr18 = self.sy_rec_r[18].value
                     us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0
             self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
-            self.wb['system'].save(self.conf['database']['system'])
-            self.wb['user'].save(self.conf['database']['user'])
+            self.save_to_excel('user')
+            self.save_to_excel('system')
 
             #################
             # ___SyFunc11___
@@ -1214,7 +1201,7 @@ class TandaPaySimulationApp(QMainWindow):
                     sy_rec_new_p[18].value = sy_rec_new_p[17].value
                     for k in {3, 5, 6, 9, 10, 11, 13, 14, 15, 17}:
                         sy_rec_new_p[k].value = 0
-                    self.wb['system'].save(self.conf['database']['system'])
+                    self.save_to_excel('system')
 
                     self._checksum_sr1(sy_rec_new_p[1].value, 11, int(self.counter), 2089)
                     self._checksum(11, int(self.counter), 2088)
@@ -1223,30 +1210,28 @@ class TandaPaySimulationApp(QMainWindow):
             if self.current_period_list[self.start_iter] == 'Period Data 10' or _path == 2:
                 logger.info(f'Run complete, logging simulation results')
                 try:
-                    if not self._matrix:
-                        percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
-                        inc_premium = round((self.sy_rec_f[19].value / self.sh["system"].cell(2, 21).value) * 100, 2)
-                        with open(os.path.join(LOG_DIR, f"{datetime.now()}.txt"), 'w') as f:
-                            lines = [
-                                f'{self.ev[0]} is the number of members at the start of the simulation\n',
-                                f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
-                                f'of the simulation\n',
-                                f'{round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2)}% of '
-                                f'policyholders left the group by end of simulation\n',
-                                f'{round(self.sh["system"].cell(2, 21).value)} was the initial premium members were '
-                                f'asked to pay.\n',
-                                f'{self.sy_rec_f[19].value} is the final premium members were asked to pay.\n',
-                                f'Premiums increased by {inc_premium}% by end of simulation\n',
-                                f'self.SyRec 3 (period 0 finalize) = {self.sh["system"].cell(3, 5).value}\n',
-                                f'{self.ev[0] * 100}% of policyholders who were assigned to defect\n',
-                                (self.sh["system"].cell(3, 5).value / self.ev[0]) * 100,
-                                f'{round(percent, 2)}% of policyholders who actually defected\n',
-                                f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
-                            ]
-                            f.writelines(lines)
-                        new_sys_file = os.path.join(LOG_DIR, ntpath.basename(self.conf['database']['system']))
-                        shutil.copy(self.conf['database']['system'], new_sys_file)
-
+                    percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
+                    pre_val = self.sy_rec_f[19].value or 0
+                    inc_premium = round((pre_val / self.sh["system"].cell(2, 21).value) * 100, 2)
+                    log_file = os.path.join(LOG_DIR, f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.txt")
+                    with open(log_file, 'w') as f:
+                        lines = [
+                            f'{self.ev[0]} is the number of members at the start of the simulation\n',
+                            f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
+                            f'of the simulation\n',
+                            f'{round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2)}% of '
+                            f'policyholders left the group by end of simulation\n',
+                            f'{round(self.sh["system"].cell(2, 21).value)} was the initial premium members were '
+                            f'asked to pay.\n',
+                            f'{inc_premium} is the final premium members were asked to pay.\n',
+                            f'Premiums increased by {inc_premium}% by end of simulation\n',
+                            f'self.SyRec 3 (period 0 finalize) = {self.sh["system"].cell(3, 5).value}\n',
+                            f'{self.ev[0] * 100}% of policyholders who were assigned to defect\n',
+                            f'{round(percent, 2)}% of policyholders who actually defected\n',
+                            f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
+                        ]
+                        f.writelines(lines)
+                    logger.info(''.join(lines))
                 except Exception as e:
                     logger.exception(e)
 
