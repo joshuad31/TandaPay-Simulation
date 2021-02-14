@@ -270,6 +270,7 @@ class Simulator:
 
     def show_entry(self):
         self.entry1 = tk.Entry(self.app, width=20)
+        self.entry1.insert(0, "100")
         self.entry1.bind("<Key>", self.keypress1)
         self.entry1.grid(row=0, column=1, pady=10, sticky='w')
 

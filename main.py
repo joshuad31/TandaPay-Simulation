@@ -187,14 +187,14 @@ class TandaPaySimulationApp(QMainWindow):
                     val.value = self.ev[0]
                     val = self.sh['system'].cell(i + 2, 4)
                     val.value = self.ev[9] / self.ev[0]
-                    for k in range(5, 20):
+                    for k in range(5, 21):
                         val = self.sh['system'].cell(i + 2, k)
                         val.value = 0 if k != 18 else 'no'
                     val = self.sh['system'].cell(i + 2, 21)
                     val.value = self.ev[9] / self.ev[0]
 
                 for i in range(3, 30):
-                    for k in range(3, 21):
+                    for k in range(3, 22):
                         val = self.sh['system'].cell(i + 2, k)
                         val.value = 0
                 self.save_to_excel('system')
@@ -585,8 +585,7 @@ class TandaPaySimulationApp(QMainWindow):
 
                 if inc_premium < self.pv[0]:
                     try:
-                        sy_recp_19 = self.sy_rec_p[19].value or 0
-                        num = (sy_recp_19 / (float(self.ev[0] / self.ev[0])) - 1)
+                        num = (self.sy_rec_p[19].value / (float(self.ev[0] / self.ev[0])) - 1)
                         if num >= self.pv[4]:
                             skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
                             skip_users = random.sample(valid_users, skip_hash)
@@ -1211,8 +1210,7 @@ class TandaPaySimulationApp(QMainWindow):
                 logger.info(f'Run complete, logging simulation results')
                 try:
                     percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
-                    pre_val = self.sy_rec_f[19].value or 0
-                    inc_premium = round((pre_val / self.sh["system"].cell(2, 21).value) * 100, 2)
+                    inc_premium = round((self.sy_rec_f[19].value / self.sh["system"].cell(2, 21).value) * 100, 2)
                     log_file = os.path.join(LOG_DIR, f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.txt")
                     with open(log_file, 'w') as f:
                         lines = [

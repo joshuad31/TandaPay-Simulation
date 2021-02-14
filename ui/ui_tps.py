@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1086, 712)
+        TandaPaySimulationWindow.resize(1086, 717)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -192,7 +192,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_4.setMinimum(0)
         self.ev_4.setMaximum(100)
-        self.ev_4.setValue(40)
+        self.ev_4.setValue(64)
 
         self.horizontalLayout_9.addWidget(self.ev_4)
 
@@ -236,6 +236,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_6.setMinimum(2)
         self.ev_6.setMaximum(4)
+        self.ev_6.setValue(4)
 
         self.horizontalLayout_11.addWidget(self.ev_6)
 
