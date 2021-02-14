@@ -146,6 +146,7 @@ class TandaPaySimulationApp(QMainWindow):
             self.sy_rec_r[i] = self.sh['system'].cell(self.start_iter * 3 + 4, i + 2)
 
     def btn_start(self, count=10):
+        self.setEnabled(False)
         self.start_iter = 0
         self.counter = 0
         self.current_period_list = []
@@ -1233,6 +1234,7 @@ class TandaPaySimulationApp(QMainWindow):
             if self.start_iter == 11:
                 logger.info(f'Iteration {self.start_iter} times complete! Please run the entire application again.')
                 return
+        self.setEnabled(True)
 
     def btn_clear(self):
         pass
