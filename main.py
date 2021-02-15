@@ -1266,7 +1266,7 @@ class TandaPaySimulationApp(QMainWindow):
         getattr(self, 'finished').emit()
 
     def _on_process_finished(self):
-        self.ui.statusbar.showMessage("Finished, please check result folder!", 5)
+        self.ui.statusbar.showMessage("Finished, please check result folder!", 5000)
         self.ui.centralwidget.setEnabled(True)
 
     def btn_clear(self):
