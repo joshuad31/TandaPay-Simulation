@@ -1,21 +1,27 @@
 import ntpath
 import os
+import threading
 from datetime import datetime
 import random
 import sys
 from functools import partial
 
 import qdarkstyle
+from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMainWindow, QApplication, QFileDialog
 from openpyxl import load_workbook
 
 from settings import RESULT_DIR
 from ui.ui_tps import Ui_TandaPaySimulationWindow
 from utils.common import get_config, update_config_file
+from utils.graph import MplCanvas
 from utils.logger import logger
+from utils.message import show_message
 
 
 class TandaPaySimulationApp(QMainWindow):
+
+    finished = Signal()
 
     def __init__(self):
         super().__init__()
@@ -50,6 +56,10 @@ class TandaPaySimulationApp(QMainWindow):
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
         self.ui.btn_clear.released.connect(self.btn_clear)
+
+        self.canvas = MplCanvas(width=5, height=4, dpi=100)
+        self.ui.layout_graph.addWidget(self.canvas)
+        getattr(self, 'finished').connect(self._on_process_finished)
 
     def _on_btn_database(self, db_type: str):
         db_file, _ = QFileDialog.getOpenFileName(
@@ -146,7 +156,26 @@ class TandaPaySimulationApp(QMainWindow):
             self.sy_rec_r[i] = self.sh['system'].cell(self.start_iter * 3 + 4, i + 2)
 
     def btn_start(self, count=10):
+        if self.pv[2] < self.pv[0]:
+            show_message(msg="PV3 should be larger than PV1!", msg_type="Critical")
+            return
+        if self.pv[3] < self.pv[1]:
+            show_message(msg="PV4 should be larger than PV2!", msg_type="Critical")
+            return
+        self.canvas.axes.cla()  # Clear the canvas.
+        self.canvas.axes.set_xlim([0, 100])
+        self.canvas.axes.set_ylim([0, 25])
+        self.canvas.axes.plot([self.pv[0] * 100, self.pv[2] * 100], [self.pv[1] * 100, self.pv[3] * 100], 'b')
+        self.canvas.axes.annotate("(PV1, PV2)", xy=(self.pv[0] * 100, self.pv[1] * 100 - 1), color='b')
+        self.canvas.axes.annotate("(PV3, PV4)", xy=(self.pv[2] * 100, self.pv[3] * 100 - 1), color='b')
+        self.canvas.axes.scatter(self.pv[4] * 100, self.pv[5] * 100, color='r')
+        self.canvas.axes.annotate("(PV5, PV6)", xy=(self.pv[4] * 100, self.pv[5] * 100 - 2), color='r')
+        self.canvas.draw()
         self.setEnabled(False)
+        self.ui.statusbar.showMessage("Processing...")
+        threading.Thread(target=self._start_process, args=(count, )).start()
+
+    def _start_process(self, count):
         self.start_iter = 0
         self.counter = 0
         self.current_period_list = []
@@ -1233,7 +1262,11 @@ class TandaPaySimulationApp(QMainWindow):
             self.start_iter += 1
             if self.start_iter == 11:
                 logger.info(f'Iteration {self.start_iter} times complete! Please run the entire application again.')
-                return
+                break
+        getattr(self, 'finished').emit()
+
+    def _on_process_finished(self):
+        self.ui.statusbar.showMessage("Finished, please check result folder!", 5)
         self.setEnabled(True)
 
     def btn_clear(self):

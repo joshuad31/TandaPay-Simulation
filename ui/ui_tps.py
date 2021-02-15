@@ -18,14 +18,14 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1086, 717)
+        TandaPaySimulationWindow.resize(1086, 935)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
         self.centralwidget = QWidget(TandaPaySimulationWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setSpacing(30)
+        self.verticalLayout.setSpacing(20)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(20, 20, 20, 20)
         self.horizontalLayout = QHBoxLayout()
@@ -292,7 +292,7 @@ class Ui_TandaPaySimulationWindow(object):
         sizePolicy.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
         self.groupBox_2.setSizePolicy(sizePolicy)
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_2)
-        self.verticalLayout_3.setSpacing(15)
+        self.verticalLayout_3.setSpacing(20)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_18 = QHBoxLayout()
         self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
@@ -420,9 +420,17 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_24)
 
-        self.verticalSpacer = QSpacerItem(20, 29, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.groupBox_3 = QGroupBox(self.groupBox_2)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
+        self.groupBox_3.setSizePolicy(sizePolicy1)
+        self.layout_graph = QVBoxLayout(self.groupBox_3)
+        self.layout_graph.setObjectName(u"layout_graph")
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout_3.addWidget(self.groupBox_3)
 
 
         self.horizontalLayout_4.addWidget(self.groupBox_2)
@@ -544,6 +552,7 @@ class Ui_TandaPaySimulationWindow(object):
 #if QT_CONFIG(tooltip)
         self.pv_5.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Then this percentage of policyholders will leave every period", None))
 #endif // QT_CONFIG(tooltip)
+        self.groupBox_3.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"Pricing Graph", None))
         self.btn_start.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Start", None))
         self.btn_clear.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Clear", None))
         self.btn_exit.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Exit", None))
