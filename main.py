@@ -171,7 +171,7 @@ class TandaPaySimulationApp(QMainWindow):
         self.canvas.axes.scatter(self.pv[4] * 100, self.pv[5] * 100, color='r')
         self.canvas.axes.annotate("(PV5, PV6)", xy=(self.pv[4] * 100, self.pv[5] * 100 - 2), color='r')
         self.canvas.draw()
-        self.setEnabled(False)
+        self.ui.centralwidget.setEnabled(False)
         self.ui.statusbar.showMessage("Processing...")
         threading.Thread(target=self._start_process, args=(count, )).start()
 
@@ -1267,7 +1267,7 @@ class TandaPaySimulationApp(QMainWindow):
 
     def _on_process_finished(self):
         self.ui.statusbar.showMessage("Finished, please check result folder!", 5)
-        self.setEnabled(True)
+        self.ui.centralwidget.setEnabled(True)
 
     def btn_clear(self):
         pass
