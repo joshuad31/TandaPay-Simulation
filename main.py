@@ -31,9 +31,7 @@ class TandaPaySimulationApp(QMainWindow):
         self.wb = {}
         self.sh = {}
         self.excel_files = {}
-        for k in {"system", "user"}:
-            getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
-            getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
+
         self.ev = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.]
         self.pv = [0, 0, 0, 0, 0, 0]
         self.rows = [0, 0, 0]
@@ -55,6 +53,9 @@ class TandaPaySimulationApp(QMainWindow):
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
         self.ui.btn_clear.released.connect(self.btn_clear)
+        for k in {"system", "user"}:
+            getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
+            getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
 
         self.canvas = MplCanvas(width=5, height=4, dpi=100)
         self.ui.layout_graph.addWidget(self.canvas)
