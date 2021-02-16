@@ -37,10 +37,10 @@ class TandaPaySimulationApp(QMainWindow):
         self.rows = [0, 0, 0]
         for i in range(9):
             getattr(self.ui, f"ev_{i}").textChanged.connect(partial(self._on_value_changed, 'ev', i))
-            self._on_value_changed('ev', i, int(getattr(self.ui, f"ev_{i}").value()))
+            self._on_value_changed('ev', i, float(getattr(self.ui, f"ev_{i}").value()))
         for i in range(6):
             getattr(self.ui, f"pv_{i}").textChanged.connect(partial(self._on_value_changed, 'pv', i))
-            self._on_value_changed('pv', i, int(getattr(self.ui, f"pv_{i}").value()))
+            self._on_value_changed('pv', i, float(getattr(self.ui, f"pv_{i}").value()))
 
         self.start_iter = 0
         self.counter = 0
