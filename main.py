@@ -34,7 +34,6 @@ class TandaPaySimulationApp(QMainWindow):
         for k in {"system", "user"}:
             getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
             getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
-            self._init_sheet(k)
         self.ev = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.]
         self.pv = [0, 0, 0, 0, 0, 0]
         self.rows = [0, 0, 0]
@@ -69,13 +68,11 @@ class TandaPaySimulationApp(QMainWindow):
             self.conf['database'][db_type] = db_file
             update_config_file(self.conf)
             getattr(self.ui, f"{db_type}_database").setText(db_file)
-            self._init_sheet(db_type)
 
-    def _init_sheet(self, db_type):
+    def _init_sheet(self, target_dir, db_type):
         db_file = self.conf['database'][db_type]
         self.wb[db_type] = load_workbook(db_file)
         self.sh[db_type] = self.wb[db_type].active
-        self.excel_files[db_type] = os.path.join(RESULT_DIR, ntpath.basename(self.conf['database'][db_type]))
         if db_type == 'user':
             for row in self.sh['user']['A2:N200']:
                 for cell in row:
@@ -84,6 +81,7 @@ class TandaPaySimulationApp(QMainWindow):
             for row in self.sh['system']['C2:U37']:
                 for cell in row:
                     cell.value = None
+        self.excel_files[db_type] = os.path.join(target_dir, ntpath.basename(self.conf['database'][db_type]))
         self.save_to_excel(db_type)
 
     def save_to_excel(self, db_type):
@@ -155,13 +153,7 @@ class TandaPaySimulationApp(QMainWindow):
             self.sy_rec_f[i] = self.sh['system'].cell(self.start_iter * 3 + 3, i + 2)
             self.sy_rec_r[i] = self.sh['system'].cell(self.start_iter * 3 + 4, i + 2)
 
-    def btn_start(self, count=10):
-        if self.pv[2] < self.pv[0]:
-            show_message(msg="PV3 should be larger than PV1!", msg_type="Critical")
-            return
-        if self.pv[3] < self.pv[1]:
-            show_message(msg="PV4 should be larger than PV2!", msg_type="Critical")
-            return
+    def _draw_chart(self):
         self.canvas.axes.cla()  # Clear the canvas.
         self.canvas.axes.set_xlim([0, 100])
         self.canvas.axes.set_ylim([0, 25])
@@ -171,11 +163,25 @@ class TandaPaySimulationApp(QMainWindow):
         self.canvas.axes.scatter(self.pv[4] * 100, self.pv[5] * 100, color='r')
         self.canvas.axes.annotate("(PV5, PV6)", xy=(self.pv[4] * 100, self.pv[5] * 100 - 2), color='r')
         self.canvas.draw()
+
+    def btn_start(self, count=10):
+        if self.pv[2] < self.pv[0]:
+            show_message(msg="PV3 should be larger than PV1!", msg_type="Critical")
+            return
+        if self.pv[3] < self.pv[1]:
+            show_message(msg="PV4 should be larger than PV2!", msg_type="Critical")
+            return
+        self._draw_chart()
         self.ui.centralwidget.setEnabled(False)
         self.ui.statusbar.showMessage("Processing...")
         threading.Thread(target=self._start_process, args=(count, )).start()
 
     def _start_process(self, count):
+        target_dir = os.path.join(RESULT_DIR, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
+        os.makedirs(target_dir)
+        for k in {"system", "user"}:
+            self._init_sheet(target_dir, k)
+
         self.start_iter = 0
         self.counter = 0
         self.current_period_list = []
@@ -1237,7 +1243,7 @@ class TandaPaySimulationApp(QMainWindow):
                 try:
                     percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
                     inc_premium = round((self.sy_rec_f[19].value / self.sh["system"].cell(2, 21).value) * 100, 2)
-                    result_file = os.path.join(RESULT_DIR, f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.txt")
+                    result_file = os.path.join(target_dir, "result.txt")
                     with open(result_file, 'w') as f:
                         lines = [
                             f'{self.ev[0]} is the number of members at the start of the simulation\n',
