@@ -1189,44 +1189,16 @@ class TandaPaySimulationApp(QMainWindow):
                     _path = 2
 
                 if _path == 1:
-                    reorg_row = 1
-                    new_pay_row = 1
-                    if self.start_iter == 0:
-                        reorg_row = 4
-                        new_pay_row = 5
-                    if self.start_iter == 1:
-                        reorg_row = 7
-                        new_pay_row = 8
-                    if self.start_iter == 2:
-                        reorg_row = 10
-                        new_pay_row = 11
-                    if self.start_iter == 3:
-                        reorg_row = 13
-                        new_pay_row = 14
-                    if self.start_iter == 4:
-                        reorg_row = 16
-                        new_pay_row = 17
-                    if self.start_iter == 5:
-                        reorg_row = 19
-                        new_pay_row = 20
-                    if self.start_iter == 6:
-                        reorg_row = 22
-                        new_pay_row = 23
-                    if self.start_iter == 7:
-                        reorg_row = 25
-                        new_pay_row = 26
-                    if self.start_iter == 8:
-                        reorg_row = 28
-                        new_pay_row = 29
-                    if self.start_iter == 9:
-                        reorg_row = 31
-
+                    reorg_row = self.start_iter * 3 + 4
+                    new_pay_row = self.start_iter * 3 + 5
                     # copying values of previous to current
                     sy_rec_new_p = [None] * 21
+                    sy_rec_r = [None] * 21
                     for k in range(1, 20):
-                        sy_rec_r = self.sh['system'].cell(reorg_row, k + 2)
+                        sy_rec_r[k] = self.sh['system'].cell(reorg_row, k + 2)
                         sy_rec_new_p[k] = self.sh['system'].cell(new_pay_row, k + 2)
-                        sy_rec_new_p[k].value = sy_rec_r.value
+                        sy_rec_new_p[k].value = sy_rec_r[k].value
+                    self.save_to_excel('system')
 
                     # Overwriting values in new row
                     sy_rec_new_p[18].value = sy_rec_new_p[17].value
