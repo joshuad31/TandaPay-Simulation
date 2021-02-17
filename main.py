@@ -52,7 +52,6 @@ class TandaPaySimulationApp(QMainWindow):
 
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
-        self.ui.btn_clear.released.connect(self.btn_clear)
         for k in {"system", "user"}:
             getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
             getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
@@ -1247,9 +1246,6 @@ class TandaPaySimulationApp(QMainWindow):
     def _on_process_finished(self):
         self.ui.statusbar.showMessage("Finished, please check result folder!", 5000)
         self.ui.centralwidget.setEnabled(True)
-
-    def btn_clear(self):
-        pass
 
 
 if __name__ == '__main__':

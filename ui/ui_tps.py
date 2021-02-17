@@ -455,12 +455,6 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.horizontalLayout_25.addWidget(self.btn_start)
 
-        self.btn_clear = QPushButton(self.widget)
-        self.btn_clear.setObjectName(u"btn_clear")
-        self.btn_clear.setMinimumSize(QSize(0, 35))
-
-        self.horizontalLayout_25.addWidget(self.btn_clear)
-
         self.btn_exit = QPushButton(self.widget)
         self.btn_exit.setObjectName(u"btn_exit")
         self.btn_exit.setMinimumSize(QSize(0, 35))
@@ -554,7 +548,6 @@ class Ui_TandaPaySimulationWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.groupBox_3.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"Pricing Graph", None))
         self.btn_start.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Start", None))
-        self.btn_clear.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Clear", None))
         self.btn_exit.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Exit", None))
     # retranslateUi
 
