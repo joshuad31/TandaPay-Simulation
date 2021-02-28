@@ -1145,7 +1145,7 @@ class TandaPaySimulationApp(QMainWindow):
             """
 
             try:
-                self.sy_rec_r[2].value = float(self.ev[0]) / self.sy_rec_r[1].value
+                self.sy_rec_r[2].value = float(self.ev[9]) / self.sy_rec_r[1].value
             except ZeroDivisionError:
                 pass
 
