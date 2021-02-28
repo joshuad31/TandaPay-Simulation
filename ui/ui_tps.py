@@ -104,7 +104,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_0.setMinimumSize(QSize(70, 0))
         self.ev_0.setMaximumSize(QSize(70, 16777215))
         self.ev_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev_0.setMinimum(100)
+        self.ev_0.setMinimum(1)
         self.ev_0.setMaximum(9999)
 
         self.horizontalLayout_5.addWidget(self.ev_0)

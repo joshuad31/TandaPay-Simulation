@@ -170,7 +170,7 @@
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
              <property name="minimum">
-              <number>100</number>
+              <number>1</number>
              </property>
              <property name="maximum">
               <number>9999</number>
