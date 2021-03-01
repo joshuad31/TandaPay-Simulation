@@ -1041,9 +1041,7 @@ class Simulator:
                 # Assign 'dependent' to equal EV6
                 dependent_pct = dep_num / self.ev1
                 remaining_pct = ev6 - dependent_pct
-                if remaining_pct > 0:
-                    unassigned_dep = int(remaining_pct * self.ev1)
-
+                unassigned_dep = int(remaining_pct * self.ev1)
                 rand_dep_user = sorted(random.sample(range(dep_num + 1, self.ev1 + 1), unassigned_dep))
 
                 # ROLE1
