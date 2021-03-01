@@ -225,7 +225,7 @@ class Simulator:
                 messagebox.showinfo("Alert!", "Enter value 0, 1, 2, 3 as per your requirement.")
 
     def keypress9(self, event):
-        print(event)
+        pass
 
     def keypress1pv(self, event):
 
@@ -1041,7 +1041,7 @@ class Simulator:
                 # Assign 'dependent' to equal EV6
                 dependent_pct = dep_num / self.ev1
                 remaining_pct = ev6 - dependent_pct
-                unassigned_dep = int(remaining_pct * self.ev1)
+                unassigned_dep = max(int(remaining_pct * self.ev1), 0)
                 rand_dep_user = sorted(random.sample(range(dep_num + 1, self.ev1 + 1), unassigned_dep))
 
                 # ROLE1
