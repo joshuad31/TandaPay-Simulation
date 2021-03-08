@@ -351,7 +351,7 @@ The 2nd role consists of EV6 and EV12.
 
 - EV 4 % * EV 1 = EV4_members with the role of defector
 - Assign the defector 1st role to participants at random
-- Remove these participants from steps 8 - 10
+- Remove these participants from the following 4 steps after they are assigned a 1st role of defector
 - EV 5 % * EV 1 = EV5_members with the role of low-morale
 - Assign the low-morale 1st role to participants at random
 - Any members who are not assigned a role are assigned with the role of unity
