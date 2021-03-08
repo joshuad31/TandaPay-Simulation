@@ -60,19 +60,19 @@ The simulation specifies a number of different variables, but the purpose of the
 
 Pricing Variable (PV)5 translates premium prices into group collapse. As members leave, premiums rise for the remaining participants. A group is only allowed to lower the cost of their monthly premiums if no members have left the group in the past 30 days as a result of defections, skipped payments, or a failure to reorg (i.e., quit). PV5 specifies a threshold that the group is unable to stop members from skipping out on paying premiums. Although the variable specifies the degree that premiums are required to rise, this can be directly translated to the number of members remaining once the PV5 threshold is crossed by using the following formula:
 
-$$ \frac{Coverage~Requirement}{(PV5 + 1) \times Initial~Premium} = Number~of~Members~Remaining $$
+<img src="f1.png" height="45">
 
 The above formula can be derived from:
 
-$$ \frac{Coverage~Requirement}{Members} = Premium $$
+<img src="f2.png" height="45">
 
 or
 
-$$ \frac{Coverage~Requirement}{Members} = Members $$
+<img src="f3.png" height="45">
 
 and
 
-$$ \Big(\frac{Final~Premium}{Initial~Premium}\Big) - 1 = PV5 $$
+<img src="f4.png" height="45">
 
 ## Definition of EV4
 
@@ -101,7 +101,7 @@ _**Table 1. Environmental Variables (EVs)**_
 | EV7 | What is the member threshold needed for dependent members to defect? | 2, 3, 4 |
 | EV8 | Poison group for x periods | 0, 1, 2, 3 Default = 3 |
 | EV9 | Probability a low-morale member will quit if forced to reorg | 0.3333 |
-| EV10 | Coverage requirement | $ EV2 \times 0.025 \times EV1 $ |
+| EV10 | Coverage requirement | <img src="f5.png" height="20"> |
 | EV11 | Number of remaining members that play a unity role |  |
 | EV12 | Number of remaining members that play a role of independent |  |
 
@@ -128,15 +128,15 @@ The following outlines the different PVs used in the simulation, what questions 
 
 **Note:** Auto populate suggestions for PV3 and PV4 based on PV1 and PV2. Suggestions may be modified by the user.
 
-$$ PV3 = PV1 \times 1.5 $$
+<img src="f6.png" height=25>
 
-$$ PV4 = PV2 + 5 $$
+<img src="f7.png" height=25>
 
 **Note:** Auto populate suggestions for PV5 and PV6 based on PV1 and PV2. Suggestions may be modified by the user.
 
-$$ PV5 = (1.70 \times PV1) + 30 $$
+<img src="f8.png" height=25>
 
-$$ PV6 = PV2 $$
+<img src="f9.png" height=25>
 
 **Note:** When automating multiple runs, variables are ranked in order of importance as seen here.
 
@@ -242,7 +242,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | **Variable Name** | **Variable Definition** | **Initial Values** |
 | --- | --- | --- |
 | SyRec1 | Valid members remaining | EV1 |
-| SyRec2 | Premium for a single member | $\frac{EV10}{EV1}$ |
+| SyRec2 | Premium for a single member | <img src="f10.png" height=30> |
 | SyRec3 | Number of defected members | 0 |
 | SyRec4 | Number of paid members | 0 |
 | SyRec5 | Number of members skipped | 0 |
@@ -259,7 +259,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | SyRec16 | Claims this period | 0 |
 | SyRec17 | Refund value available for new members | 0 |
 | SyRec18 | Refund value available for prior members | 0 |
-| SyRec19 | Generic total payment | $\frac{EV10}{EV1}$ |
+| SyRec19 | Generic total payment | <img src="f10.png" height=30> |
 
 ## User database
 
@@ -349,22 +349,22 @@ The 2nd role consists of EV6 and EV12.
 
 #### Instructions for 1st role assignment 
 
-1. $EV4 \times EV1 = EV4_{members}$ with the role of Defector
+1. <img src="f11.png" width=20> with the role of Defector
 2. Assign the Defector 1st role to participants at random.
   a. Remove these participants from 1st role assignment pool.
-3. $EV5 \times EV1 = EV5_{members}$ with the role of Low-Morale
+3. <img src="f12.png" width=20> with the role of Low-Morale
   a. Assign the Low-Morale 1st role to remaining participants at random.
 4. Any members who are not assigned a role are assigned with the role of Unity.
-5. $EV1 - EV4_{members} - EV5_{members} = EV11_{members}$
+5. <img src="f13.png" width=20>
 
 #### Instructions for 2nd role assignment
 
-6. $EV6 \times EV1 = Initial~EV6_{members}$ with the role of Dependent
+6. <img src="f14.png" width=20> with the role of Dependent
   a. Assign the Dependent 2nd role to members of any group where UsRec4 = 4.
-  b. If UsRec4 = 4 &gt; $ EV6_{members} $ then stop assigning any members the Dependent role.
-  c. If UsRec4 = 4 members &lt; $EV6_{members}$, then assign any remaining $EV6_{members}$ assignments at random.
+  b. If UsRec4 = 4 &gt; <img src="f15.png" width=20> then stop assigning any members the Dependent role.
+  c. If UsRec4 = 4 members &lt; <img src="f15.png" width=20>, then assign any remaining <img src="f15.png" width=20> assignments at random.
 7. Assign remaining members the role of Independent.
-8. $EV1 - EV6_{members} = EV12_{members}$
+8. <img src="f16.png" width=20>
 
 #### Update user record based on role assignment
 
@@ -487,7 +487,7 @@ _Path 4_
 **At start of simulation:** PV1, PV2, PV3, and PV4
 
 - Find the slope of price sensitivity relative to the previous month.
-- Pricing slope = $\frac{PV4-PV2}{PV3-PV1}$
+- Pricing slope = <img src="f17.png" width=30>
 
 **Note:** The y-axis represents the percentage of people who will skip their premiums. The x-axis represents the amount (in percent) that the premium price has increased.
 
@@ -502,15 +502,15 @@ _Run each period_
 
 - a = SyRec19 for the current period pay stage
 - b = SyRec19 for the previous period pay stage
-- $\frac{a}{b-1}$ = % Increase in Premiums
+- <img src="f18.png" width=20> = % Increase in Premiums
 - If % Increase in Premiums &lt; PV1, then continue to Path 2
 - If % Increase in Premiums ≥ PV1, then continue to Path 1
 
 _Path 1_
 
-- $y-y_1 = m (x-x_1)$ where:
+- <img src="f19.png" width=20> where:
   - y - PV2 = m(% Increase in Premiums - PV1)
-  - y = (m $\times$ % Increase in Premiums - m $\times$ PV1) = PV2
+  - y = (m <img src="f20.png" width=20> % Increase in Premiums - m <img src="f20.png" width=20> PV1) = PV2
   - y = Skip% = Percent of users who will skip
 
 **Path 1 input:** SyRec1 and Skip%
@@ -524,9 +524,9 @@ _Path 1_
 
 _Path 2_
 
-1. If $\Big(\frac{SyRec19}{\frac{EV10}{EV1}}\Big)$ &lt; PV5, then continue to Path 3.
-2. If $\Big(\frac{SyRec19}{\frac{EV10}{EV1}}\Big)$ ≥ PV5, then determine Skip# to the nearest whole number.
-  1. Skip# = SyRec1 $\times$ PV6
+1. If <img src="f21.png" width=30"> &lt; PV5, then continue to Path 3.
+2. If <img src="f22.png" width=30"> ≥ PV5, then determine Skip# to the nearest whole number.
+  1. Skip# = SyRec1 <img src="f20.png" width=20> PV6
 3. Identify group where UsRec5 = Valid.
 4. Randomly select (Skip#) number of users where UsRec5 = Valid.
 5. Group of skip users = Set of users.
@@ -632,7 +632,7 @@ _Path 1_
 
 1. Calculate SyRec9.
 
-  1. SyRec9 = SyRec3 $\times$ SyRec13
+  1. SyRec9 = SyRec3 <img src="f20.png" width=20> SyRec13
 
 1. Advance values in current System Record row to Reorg Stage Period 1 row.
 2. Advance to UsFunc6.
@@ -1068,11 +1068,11 @@ Evaluate the period number as follows:
 **Stage:** Reorg Stage 5
 
 1. Calculate SyRec2.
-  1. $SyRec2 = \frac{EV10}{SyRec1}$
+  1. <img src="f22.png" height="30">
 2. Calculate SyRec14.
   1. SyRec14 = SyRec9 + SyRec11 + SyRec13
 3. Calculate SyRec15.
-  1. $SyRec15 = \frac{SyRec14}{SyRec1}$
+  1. <img src="f23.png" height="30">
 4. Calculate UsRec11.
   1. UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10
   2. If UsRec10 is used to calculate UsRec11, then assign UsRec10 = 0 after calculating UsRec11.
@@ -1093,9 +1093,9 @@ Evaluate the period number as follows:
 **Stage:** Reorg Stage 6
 
 1. Calculate SyRec10.
-  1. SyRec10 = SyRec5 $\times$ SyRec19
+  1. SyRec10 = SyRec5 <img src="f20.png" width=20> SyRec19
 2. Calculate SyRec12.
-  1. SyRec12 = SyRec6 $\times$ SyRec19
+  1. SyRec12 = SyRec6 <img src="f20.png" width=20> SyRec19
 3. Continue to SyFunc11.
 
 #### SyFunc11 Detailed Description
@@ -1139,13 +1139,13 @@ _Path 2_
 1. Write the following to a log file:
   1. Log1 = EV1 = Z, where &lt;x&gt; is the number of members at the start of the simulation
   2. Log2 = SyRec1 (final period) = Y, where &lt;x&gt; is the number of valid members remaining at the end of the simulation
-  3. $Log3 = 1 - \frac{Z-Y}{Z}$ = &lt;x&gt;% of policyholders that left the group by end of simulation
+  3. <img src="f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation
   4. Log4 = SyRec19 (Period 1) = B, where &lt;x&gt; was the initial premium members were asked to pay
   5. Log5 = SyRec19 (final period) = A, where &lt;x&gt; is the final premium members were asked to pay
-  6. $Log6 = \frac{a}{b}$ = &lt;x&gt;% increase of premiums by the end of the simulation
+  6. <img src="f25.png" height=30> = &lt;x&gt;% increase of premiums by the end of the simulation
   7. Log7 = SyRec3 (Period 0 Finalize) = C
   8. Log8 = EV4 = &lt;x&gt;% of policyholders who were assigned to Defect
-  9. $Log9 = \frac{C}{EV1}$ = &lt;x&gt;% of policyholders who actually defected
+  9. <img src="f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected
   10. Log10 = PV5 = &lt;x&gt;% of the initial collapse threshold set for PV5
 2. For single runs, store the table of system record as a .csv file.
 
