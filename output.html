@@ -41,19 +41,19 @@
 <h1 id="conclusion"><span class="header-section-number">5</span> Conclusion</h1>
 <p>The virtue of architecture that can deterministically produce collapse when a group's consensus is fractured is underappreciated. There are thousands of valid configurations for these types of groups. Finding the optimal configuration for collapse will require research, modeling, and the creation of simulations.</p>
 <div class="figure">
-<img src="conclusion.png" />
+<img src="images/conclusion.png" />
 </div>
 <h1 id="relationship-between-ev4-and-pv5"><span class="header-section-number">6</span> Relationship between ev4 and pv5</h1>
 <p>The simulation specifies a number of different variables, but the purpose of the simulation is to derive the relationship between the initial number of defectors and the number of members remaining once the group collapses.</p>
 <h2 id="definition-of-pv5"><span class="header-section-number">6.1</span> Definition of PV5</h2>
 <p>Pricing Variable (PV)5 translates premium prices into group collapse. As members leave, premiums rise for the remaining participants. A group is only allowed to lower the cost of their monthly premiums if no members have left the group in the past 30 days as a result of defections, skipped payments, or a failure to reorg (i.e., quit). PV5 specifies a threshold that the group is unable to stop members from skipping out on paying premiums. Although the variable specifies the degree that premiums are required to rise, this can be directly translated to the number of members remaining once the PV5 threshold is crossed by using the following formula:</p>
-<p><img src="f1.png" height="45"></p>
+<p><img src="images/f1.png" height="45"></p>
 <p>The above formula can be derived from:</p>
-<p><img src="f2.png" height="45"></p>
+<p><img src="images/f2.png" height="45"></p>
 <p>or</p>
-<p><img src="f3.png" height="45"></p>
+<p><img src="images/f3.png" height="45"></p>
 <p>and</p>
-<p><img src="f4.png" height="45"></p>
+<p><img src="images/f4.png" height="45"></p>
 <h2 id="definition-of-ev4"><span class="header-section-number">6.2</span> Definition of EV4</h2>
 <p>Environmental Variable (EV)4 is the number of members who act as honest defectors at the start of the simulation. If enough members defect in the initial wave, their actions result in a chain of events that can push the group over the PV5 threshold. If this happens, the group is effectively unable to continue.</p>
 <p>If the number of members specified in PV4 is insufficient, the group will not cross the PV5 threshold and will be capable of changing their coverage requirement thereby enabling members to lower their premiums and avert group collapse.</p>
@@ -119,7 +119,7 @@
 <tr class="even">
 <td align="left">EV10</td>
 <td align="left">Coverage requirement</td>
-<td align="left"><img src="f5.png" height="20"></td>
+<td align="left"><img src="images/f5.png" height="20"></td>
 </tr>
 <tr class="odd">
 <td align="left">EV11</td>
@@ -152,11 +152,11 @@
 <li>PV6 = Then <strong>&lt;insert percentage&gt;</strong> of policyholders leave</li>
 </ul>
 <p><strong>Note:</strong> Auto populate suggestions for PV3 and PV4 based on PV1 and PV2. Suggestions may be modified by the user.</p>
-<p><img src="f6.png" height=25></p>
-<p><img src="f7.png" height=25></p>
+<p><img src="images/f6.png" height=25></p>
+<p><img src="images/f7.png" height=25></p>
 <p><strong>Note:</strong> Auto populate suggestions for PV5 and PV6 based on PV1 and PV2. Suggestions may be modified by the user.</p>
-<p><img src="f8.png" height=25></p>
-<p><img src="f9.png" height=25></p>
+<p><img src="images/f8.png" height=25></p>
+<p><img src="images/f9.png" height=25></p>
 <p><strong>Note:</strong> When automating multiple runs, variables are ranked in order of importance as seen here.</p>
 <h2 id="pv-rules"><span class="header-section-number">9.1</span> PV Rules</h2>
 <p>Rules for PVs include the following:</p>
@@ -232,7 +232,7 @@
 <tr class="even">
 <td align="left">SyRec2</td>
 <td align="left">Premium for a single member</td>
-<td align="left"><img src="f10.png" height=30></td>
+<td align="left"><img src="images/f10.png" height=30></td>
 </tr>
 <tr class="odd">
 <td align="left">SyRec3</td>
@@ -317,7 +317,7 @@
 <tr class="odd">
 <td align="left">SyRec19</td>
 <td align="left">Generic total payment</td>
-<td align="left"><img src="f10.png" height=30></td>
+<td align="left"><img src="images/f10.png" height=30></td>
 </tr>
 </tbody>
 </table>
@@ -461,34 +461,34 @@
 </ul>
 <h4 id="instructions-for-1st-role-assignment"><span class="header-section-number">10.4.2.1</span> Instructions for 1st role assignment</h4>
 <ol style="list-style-type: decimal">
-<li><img src="f11.png" width=20> with the role of Defector</li>
+<li><img src="images/f11.png" width=20> with the role of Defector</li>
 <li>Assign the Defector 1st role to participants at random.</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Remove these participants from 1st role assignment pool.</li>
 </ol>
 <ol start="3" style="list-style-type: decimal">
-<li><img src="f12.png" width=20> with the role of Low-Morale</li>
+<li><img src="images/f12.png" width=20> with the role of Low-Morale</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Assign the Low-Morale 1st role to remaining participants at random.</li>
 </ol>
 <ol start="4" style="list-style-type: decimal">
 <li>Any members who are not assigned a role are assigned with the role of Unity.</li>
-<li><img src="f13.png" width=20></li>
+<li><img src="images/f13.png" width=20></li>
 </ol>
 <h4 id="instructions-for-2nd-role-assignment"><span class="header-section-number">10.4.2.2</span> Instructions for 2nd role assignment</h4>
 <ol start="6" style="list-style-type: decimal">
-<li><img src="f14.png" width=20> with the role of Dependent</li>
+<li><img src="images/f14.png" width=20> with the role of Dependent</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Assign the Dependent 2nd role to members of any group where UsRec4 = 4.</li>
-<li>If UsRec4 = 4 &gt; <img src="f15.png" width=20> then stop assigning any members the Dependent role.</li>
-<li>If UsRec4 = 4 members &lt; <img src="f15.png" width=20>, then assign any remaining <img src="f15.png" width=20> assignments at random.</li>
+<li>If UsRec4 = 4 &gt; <img src="images/f15.png" width=20> then stop assigning any members the Dependent role.</li>
+<li>If UsRec4 = 4 members &lt; <img src="images/f15.png" width=20>, then assign any remaining <img src="images/f15.png" width=20> assignments at random.</li>
 </ol>
 <ol start="7" style="list-style-type: decimal">
 <li>Assign remaining members the role of Independent.</li>
-<li><img src="f16.png" width=20></li>
+<li><img src="images/f16.png" width=20></li>
 </ol>
 <h4 id="update-user-record-based-on-role-assignment"><span class="header-section-number">10.4.2.3</span> Update user record based on role assignment</h4>
 <ol style="list-style-type: decimal">
@@ -498,12 +498,12 @@
 <h2 id="how-funds-move-through-the-system"><span class="header-section-number">10.5</span> How funds move through the system</h2>
 <p>Coverage requirements mandate that the cost of members who defect or skip their premium payments become deficits for any remaining group members. Figure 1 below charts how payments, which were removed by defectors in Function 1, or were never paid by skipped members in Function 2 become accounted for as debt. This debt is then realized as increased premiums calculated in Function 9 and carried forward to the next period by Function 11. If this debt is high enough, it will produce additional members who skip payment of their premiums in Function 2 and the cycle will repeat.</p>
 <div class="figure">
-<img src="figure1.png" />
+<img src="images/figure1.png" />
 </div>
 <p><strong>Figure 1. How Defections Generate Group Debt</strong></p>
 <p>If a group has no claims in a given month, the premiums must be returned to members as refunds. The process of returning premiums back to members takes about one month before these refunds become available to lower the cost of future premiums. As show in Figure 2 below, Function 8 determines if the current period has a claim, and Function 11 moves that credit forward into the next period. Finally, the credit reduces the members premiums in Function 2 and thus the likelihood that members will skip payment of their premium.</p>
 <div class="figure">
-<img src="figure2.png" />
+<img src="images/figure2.png" />
 </div>
 <p><strong>Figure 2. How Refunds Generate Credits</strong></p>
 <h2 id="system-and-user-functions-module"><span class="header-section-number">10.6</span> System and user functions module</h2>
@@ -594,13 +594,13 @@
 <p><strong>Stage:</strong> Pay Stage 2</p>
 <p><strong>UsFunc2 workflow:</strong> The workflow of UsFunc2 is shown below in Figure 3.</p>
 <div class="figure">
-<img src="figure3.png" />
+<img src="images/figure3.png" />
 </div>
 <p><strong>Figure 3. Workflow of UsFunc2</strong></p>
 <p><strong>At start of simulation:</strong> PV1, PV2, PV3, and PV4</p>
 <ul>
 <li>Find the slope of price sensitivity relative to the previous month.</li>
-<li>Pricing slope = <img src="f17.png" width=30></li>
+<li>Pricing slope = <img src="images/f17.png" width=30></li>
 </ul>
 <p><strong>Note:</strong> The y-axis represents the percentage of people who will skip their premiums. The x-axis represents the amount (in percent) that the premium price has increased.</p>
 <p><em>Run each period</em></p>
@@ -613,15 +613,15 @@
 <ul>
 <li>a = SyRec19 for the current period pay stage</li>
 <li>b = SyRec19 for the previous period pay stage</li>
-<li><img src="f18.png" width=20> = % Increase in Premiums</li>
+<li><img src="images/f18.png" width=20> = % Increase in Premiums</li>
 <li>If % Increase in Premiums &lt; PV1, then continue to Path 2</li>
 <li>If % Increase in Premiums ≥ PV1, then continue to Path 1</li>
 </ul>
 <p><em>Path 1</em></p>
 <ul>
-<li><img src="f19.png" width=20> where:</li>
+<li><img src="images/f19.png" width=20> where:</li>
 <li>y - PV2 = m(% Increase in Premiums - PV1)</li>
-<li>y = (m <img src="f20.png" width=20> % Increase in Premiums - m <img src="f20.png" width=20> PV1) = PV2</li>
+<li>y = (m * % Increase in Premiums - m * PV1) = PV2</li>
 <li>y = Skip% = Percent of users who will skip</li>
 </ul>
 <p><strong>Path 1 input:</strong> SyRec1 and Skip%</p>
@@ -634,9 +634,9 @@
 </ol>
 <p><em>Path 2</em></p>
 <ol style="list-style-type: decimal">
-<li>If <img src="f21.png" width=30"> &lt; PV5, then continue to Path 3.</li>
-<li>If <img src="f22.png" width=30"> ≥ PV5, then determine Skip# to the nearest whole number.</li>
-<li>Skip# = SyRec1 <img src="f20.png" width=20> PV6</li>
+<li>If <img src="images/f21.png" width=30"> &lt; PV5, then continue to Path 3.</li>
+<li>If <img src="images/f22.png" width=30"> ≥ PV5, then determine Skip# to the nearest whole number.</li>
+<li>Skip# = SyRec1 * PV6</li>
 <li>Identify group where UsRec5 = Valid.</li>
 <li>Randomly select (Skip#) number of users where UsRec5 = Valid.</li>
 <li>Group of skip users = Set of users.</li>
@@ -731,7 +731,7 @@
 <p><strong>SyFunc5 output:</strong> SyRec9</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculate SyRec9.</p></li>
-<li><p>SyRec9 = SyRec3 <img src="f20.png" width=20> SyRec13</p></li>
+<li><p>SyRec9 = SyRec3 * SyRec13</p></li>
 <li>Advance values in current System Record row to Reorg Stage Period 1 row.</li>
 <li><p>Advance to UsFunc6.</p></li>
 </ol>
@@ -739,7 +739,7 @@
 <p><strong>Function name:</strong> UsFunc6 – User quit function</p>
 <p><strong>UsFunc6 workflow:</strong> The workflow of UsFunc6 is shown below in Figure 4.</p>
 <div class="figure">
-<img src="figure4.png" />
+<img src="images/figure4.png" />
 </div>
 <p><strong>Figure 4. UsFunc6 Workflow</strong></p>
 <p><em>Path 0 Initialization</em></p>
@@ -896,7 +896,7 @@
 <p><strong>Stage:</strong> Reorg Stage 2</p>
 <p><strong>SyFunc7 workflow:</strong> The workflow of SyFunc7 is shown below in Figure 5.</p>
 <div class="figure">
-<img src="figure5.png" />
+<img src="images/figure5.png" />
 </div>
 <p><strong>Figure 5. SyFunc7 Workflow</strong></p>
 <p><em>Path 0 Initialization</em></p>
@@ -1181,11 +1181,11 @@
 <p><strong>Stage:</strong> Reorg Stage 5</p>
 <ol style="list-style-type: decimal">
 <li>Calculate SyRec2.</li>
-<li><img src="f22.png" height="30"></li>
+<li><img src="images/f22.png" height="30"></li>
 <li>Calculate SyRec14.</li>
 <li>SyRec14 = SyRec9 + SyRec11 + SyRec13</li>
 <li>Calculate SyRec15.</li>
-<li><img src="f23.png" height="30"></li>
+<li><img src="images/f23.png" height="30"></li>
 <li>Calculate UsRec11.</li>
 <li>UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10</li>
 <li>If UsRec10 is used to calculate UsRec11, then assign UsRec10 = 0 after calculating UsRec11.</li>
@@ -1201,9 +1201,9 @@
 <p><strong>Stage:</strong> Reorg Stage 6</p>
 <ol style="list-style-type: decimal">
 <li>Calculate SyRec10.</li>
-<li>SyRec10 = SyRec5 <img src="f20.png" width=20> SyRec19</li>
+<li>SyRec10 = SyRec5 * SyRec19</li>
 <li>Calculate SyRec12.</li>
-<li>SyRec12 = SyRec6 <img src="f20.png" width=20> SyRec19</li>
+<li>SyRec12 = SyRec6 * SyRec19</li>
 <li>Continue to SyFunc11.</li>
 </ol>
 <h4 id="syfunc11-detailed-description"><span class="header-section-number">10.6.1.11</span> SyFunc11 Detailed Description</h4>
@@ -1245,13 +1245,13 @@
 <li>Write the following to a log file:</li>
 <li>Log1 = EV1 = Z, where &lt;x&gt; is the number of members at the start of the simulation</li>
 <li>Log2 = SyRec1 (final period) = Y, where &lt;x&gt; is the number of valid members remaining at the end of the simulation</li>
-<li><img src="f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation</li>
+<li><img src="images/f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation</li>
 <li>Log4 = SyRec19 (Period 1) = B, where &lt;x&gt; was the initial premium members were asked to pay</li>
 <li>Log5 = SyRec19 (final period) = A, where &lt;x&gt; is the final premium members were asked to pay</li>
-<li><img src="f25.png" height=30> = &lt;x&gt;% increase of premiums by the end of the simulation</li>
+<li><img src="images/f25.png" height=30> = &lt;x&gt;% increase of premiums by the end of the simulation</li>
 <li>Log7 = SyRec3 (Period 0 Finalize) = C</li>
 <li>Log8 = EV4 = &lt;x&gt;% of policyholders who were assigned to Defect</li>
-<li><img src="f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected</li>
+<li><img src="images/f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected</li>
 <li>Log10 = PV5 = &lt;x&gt;% of the initial collapse threshold set for PV5</li>
 <li>For single runs, store the table of system record as a .csv file.</li>
 </ol>
