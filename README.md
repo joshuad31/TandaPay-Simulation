@@ -349,24 +349,24 @@ The 2nd role consists of EV6 and EV12.
 
 #### Instructions for 1st role assignment 
 
-EV 4 % * EV 1 = EV4_members with the role of defector
-Assign the defector 1st role to participants at random
-Remove these participants from steps 8 - 10
-EV 5 % * EV 1 = EV5_members with the role of low-morale
-Assign the low-morale 1st role to participants at random
-Any members who are not assigned a role are assigned with the role of unity
-EV 1 - EV4_members - EV5_members = EV11_members
+- EV 4 % * EV 1 = EV4_members with the role of defector
+- Assign the defector 1st role to participants at random
+- Remove these participants from steps 8 - 10
+- EV 5 % * EV 1 = EV5_members with the role of low-morale
+- Assign the low-morale 1st role to participants at random
+- Any members who are not assigned a role are assigned with the role of unity
+- EV 1 - EV4_members - EV5_members = EV11_members
 
 #### Instructions for 2nd role assignment
 
-EV 6 % * EV 1 = initial EV6_members with the role of dependant
-Assign the dependant 2nd role to members of any group where UsRec 4 = 4
-If UsRec 4 = 4 members > EV6_members 
-Then stop assigning any members as dependant
-If If UsRec 4 = 4 members < EV6_members
-Then any remaining EV6_members assignments assign at random
-Assign remaining members the role of independent
-EV 1 - EV6_members = EV12_members
+- EV 6 % * EV 1 = initial EV6_members with the role of dependant
+- Assign the dependant 2nd role to members of any group where UsRec 4 = 4
+- If UsRec 4 = 4 members > EV6_members 
+- Then stop assigning any members as dependant
+- If If UsRec 4 = 4 members < EV6_members
+- Then any remaining EV6_members assignments assign at random
+- Assign remaining members the role of independent
+- EV 1 - EV6_members = EV12_members
 
 #### Update user record based on role assignment
 
