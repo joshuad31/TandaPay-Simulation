@@ -349,26 +349,26 @@ The 2nd role consists of EV6 and EV12.
 
 #### Instructions for 1st role assignment 
 
-1. <img src="images/f11.png" width=20> with the role of Defector
+1. <img src="images/f11.png" height=20> with the role of Defector
 2. Assign the Defector 1st role to participants at random.
   a. Remove these participants from 1st role assignment pool.
-3. <img src="images/f12.png" width=20> with the role of Low-Morale
+3. <img src="images/f12.png" height=20> with the role of Low-Morale
   a. Assign the Low-Morale 1st role to remaining participants at random.
 4. Any members who are not assigned a role are assigned with the role of Unity.
-5. <img src="images/f13.png" width=20>
+5. <img src="images/f13.png" height=20>
 
 #### Instructions for 2nd role assignment
 
-6. <img src="images/f14.png" width=20> with the role of Dependent
+6. <img src="images/f14.png" height=20> with the role of Dependent
   a. Assign the Dependent 2nd role to members of any group where UsRec4 = 4.
-  b. If UsRec4 = 4 &gt; <img src="images/f15.png" width=20> then stop assigning any members the Dependent role.
-  c. If UsRec4 = 4 members &lt; <img src="images/f15.png" width=20>, then assign any remaining <img src="images/f15.png" width=20> assignments at random.
+  b. If UsRec4 = 4 &gt; <img src="images/f15.png" height=20> then stop assigning any members the Dependent role.
+  c. If UsRec4 = 4 members &lt; <img src="images/f15.png" height=20>, then assign any remaining <img src="images/f15.png" height=20> assignments at random.
 7. Assign remaining members the role of Independent.
-8. <img src="images/f16.png" width=20>
+8. <img src="images/f16.png" height=20>
 
 #### Update user record based on role assignment
 
-1. Determine the value of UsRec6from assigning EV4, EV5, and EV11.
+1. Determine the value of UsRec6 from assigning EV4, EV5, and EV11.
 2. Determine the value of UsRec7 from assigning EV6 and EV12.
 
 ## How funds move through the system
@@ -415,55 +415,70 @@ _Path 0_
 
 1. Path 0 start. Load user record.
 2. Count total users in user record = &lt;end of user list&gt;
-3. Start with user &lt; **current user #&gt;**.
-  1. If user &lt; **current user #&gt;** = Defector, then continue to Path 0.5.
-  2. Else if, **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then continue to Path 1.5.
-  3. Else, move to **&lt;current user #&gt; + 1** and go to Path 0 start.
+3. Start with user **&lt;current user #&gt;**.
+4. If user **&lt;current user #&gt;** = Defector, then:
+	- continue to Path 0.5.
+5. Elseif **&lt;current user #&gt;** = **&lt;end of user list&gt;** then: 
+	- continue to Path 1.5.
+6. Else: 
+	- continue with **&lt;current user #&gt; + 1** 
+	- go to Path 0 start.
 
 _Path 0.5_
 
-- If user **&lt;current user #&gt;** UsRec7 = Dependent, then evaluate Path 1.
-  - Else, add to Path 2 Run Set.
-- If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then continue to Path 1.5.
-  - Else, move to **&lt;current user #&gt; + 1** and go to Path 0 start.
+1. If user **&lt;current user #&gt;** UsRec7 = Dependent, then:
+	- evaluate Path 1.
+2. Else: 
+	- add to Path 2 Run Set.
+3. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** then: 
+	- continue to Path 1.5.
+4. Else: 
+	- continue with **&lt;current user #&gt; + 1**
+	- go to Path 0 start.
 
 _Path 1_
 
-1. For all users where UsRec6 = Defector and UsRec7 = Dependent,
-  1. Read **&lt;current user #&gt;** UsRec3 = Load into **&lt;GroupRead&gt;**.
-2. For every user where UsRec3 = **&lt;GroupRead&gt;** ,
-  1. Increment UsRec13 by 1.
+1. For all users where UsRec6 = Defector and UsRec7 = Dependent do:
+	- Read **&lt;current user #&gt;** UsRec3 = Load into **&lt;GroupRead&gt;**.
+2. For every user where UsRec3 = **&lt;GroupRead&gt;** do:
+	- Increment UsRec13 by 1.
 3. Clear **&lt;GroupRead&gt;**.
-4. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then continue to Path 1.5.
-5. Else, move to **&lt;current user #&gt; + 1** and go to Path 0 start.
+4. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** then: 
+	- continue to Path 1.5.
+5. Else: 
+	- continue with **&lt;current user #&gt; + 1** 
+	- go to Path 0 start.
 
 _Path 1.5_
 
-- For all users where UsRec6 = Defector and UsRec7 = Dependent,
-  - If UsRec13 ≥ EV7, then add to Path 2 Run Set.
-  - Else, add to Path 3 run set, then load Path 2 Run Set.
+1. For all users where UsRec6 = Defector and UsRec7 = Dependent do:
+	- If UsRec13 ≥ EV7 then:
+		- add to Path 2 Run Set.
+	- Else: 
+		- add to Path 3 run set, 
+		- load Path 2 Run Set.
 
 _Path 2 Run Set_
 
 1. Decrement SyRec1 by 1.
 2. Defecting for previous period.
-  1. Increment SyRec3 by 1.
+	- Increment SyRec3 by 1.
 3. Skipping for current period.
-  1. Increment SyRec5 by 1.
+	- Increment SyRec5 by 1.
 4. Referencing UsRec3,
-  1. Decrease UsRec4 by 1 for all users with same UsRec3 value.
-  2. Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.
-    1. UsRec3 = 0
-    2. UsRec4 = 0
-    3. UsRec5 = NR
-    4. UsRec8 = NR
-    5. UsRec12 = NR
+	- Decrease UsRec4 by 1 for all users with same UsRec3 value.
+	- Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.
+	- UsRec3 = 0
+	- UsRec4 = 0
+	- UsRec5 = NR
+	- UsRec8 = NR
+	- UsRec12 = NR
 
 _Path 3 Run Set_
 
 1. Load Path 3 Run Set.
-2. For all users in Path 3 Run Set,
-  1. UsRec6 = Low-Morale
+2. For all users in Path 3 Run Set do:
+	- UsRec6 = Low-Morale
 3. Continue to Path 4.
 
 _Path 4_
@@ -486,8 +501,8 @@ _Path 4_
 
 **At start of simulation:** PV1, PV2, PV3, and PV4
 
-- Find the slope of price sensitivity relative to the previous month.
-- Pricing slope = <img src="images/f17.png" width=30>
+1. Find the slope of price sensitivity relative to the previous month.
+2. Pricing slope = <img src="images/f17.png" height=30>
 
 **Note:** The y-axis represents the percentage of people who will skip their premiums. The x-axis represents the amount (in percent) that the premium price has increased.
 
@@ -495,23 +510,27 @@ _Run each period_
 
 **Initial check:** Is the simulation currently on Period 1?
 
-- If yes, then end the function.
-- If no, then continue.
+1. If yes, then: 
+	- end the function.
+2. Else:
+	- continue.
 
 **UsFunc2 input:** SyRec19 for the current period pay stage and SyRec19 for the previous period pay stage.
 
-- a = SyRec19 for the current period pay stage
-- b = SyRec19 for the previous period pay stage
-- <img src="images/f18.png" width=20> = % Increase in Premiums
-- If % Increase in Premiums &lt; PV1, then continue to Path 2
-- If % Increase in Premiums ≥ PV1, then continue to Path 1
+1. a = SyRec19 for the current period pay stage
+2. b = SyRec19 for the previous period pay stage
+3. <img src="images/f18.png" height=20> = % Increase in Premiums
+4. If % Increase in Premiums &lt; PV1, then: 
+	- continue to Path 2
+5. If % Increase in Premiums ≥ PV1, then: 
+	- continue to Path 1
 
 _Path 1_
 
-- <img src="images/f19.png" width=20> where:
-  - y - PV2 = m(% Increase in Premiums - PV1)
-  - y = (m * % Increase in Premiums - m * PV1) = PV2
-  - y = Skip% = Percent of users who will skip
+1. <img src="images/f19.png" height=20> where:
+	- y - PV2 = m(% Increase in Premiums - PV1)
+	- y = (m * % Increase in Premiums - m * PV1) = PV2
+	- y = Skip% = Percent of users who will skip
 
 **Path 1 input:** SyRec1 and Skip%
 
@@ -524,9 +543,11 @@ _Path 1_
 
 _Path 2_
 
-1. If <img src="images/f21.png" width=30"> &lt; PV5, then continue to Path 3.
-2. If <img src="images/f22.png" width=30"> ≥ PV5, then determine Skip# to the nearest whole number.
-  1. Skip# = SyRec1 * PV6
+1. If <img src="images/f21.png" height=30"> &lt; PV5, then: 
+	- continue to Path 3.
+2. If <img src="images/f22.png" height=30"> ≥ PV5, then: 
+	- determine Skip# to the nearest whole number.
+	- Skip# = SyRec1 * PV6
 3. Identify group where UsRec5 = Valid.
 4. Randomly select (Skip#) number of users where UsRec5 = Valid.
 5. Group of skip users = Set of users.
@@ -534,11 +555,13 @@ _Path 2_
 
 _Path 3_
 
-1. If EV8 = 0, then do nothing.
-2. If EV8 = 1, 2, or 3, then decrease EV8 by 1.
-  1. At random, select 1 user record where UsRec5 = Valid.
-  2. Update user.
-  3. UsRec12 = No
+1. If EV8 = 0, then:
+	- do nothing.
+2. If EV8 in 1, 2, or 3, then: 
+	- decrease EV8 by 1.
+	- At random, select 1 user record where UsRec5 = Valid.
+	- Update user.
+	- UsRec12 = No
 
 **Note:** Once Path 1, Path 2, and Path 3 are completed for all records, continue to SyFunc3.
 
@@ -562,20 +585,27 @@ _Path 0 Initialization_
 _Path 0 Start_
 
 1. Evaluate user **&lt;current user #&gt;**.
-2. If UsRec12 = No, then update UsRec8 = Skipped and add to Path 1 Run Set.
-  1. Else (UsRec12 must be yes), update UsRec8 = Paid.
-3. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then load Path 1.
-  1. Else, move to **&lt;current user #&gt; + 1** and go to Path 0 Start.
+2. If UsRec12 = No, then: 
+	- update UsRec8 = Skipped
+	- add to Path 1 Run Set.
+3. Else: 
+	- If (UsRec12 must be yes), then: 
+		- update UsRec8 = Paid.
+4. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then: 
+	- load Path 1.
+5. Else: 
+	- continue with **&lt;current user #&gt; + 1** 
+	- go to Path 0 Start.
 
 _Path 1_
 
-1. If UsRec12 = No, then complete the following:
-  1. Update UsRec8 = Skipped.
-  2. Decrement SyRec1 by 1.
-  3. Increment SyRec5 by 1.
-  4. Referencing UsRec3,
-    1. Decrease UsRec4 by 1 for all users with same UsRec3 value.
-    2. Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.
+1. If UsRec12 = No, then: 
+	- Update UsRec8 = Skipped.
+	- Decrement SyRec1 by 1.
+	- Increment SyRec5 by 1.
+	- Referencing UsRec3,
+		- Decrease UsRec4 by 1 for all users with same UsRec3 value.
+		- Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.
 2. UsRec3 = 0
 3. UsRec4 = 0
 4. UsRec5 = NR
@@ -595,22 +625,25 @@ _Path 2_
 
 **SyFunc4 input:** UsRec4, UsRec8, and UsRec11
 
-- If UsRec4 = 1, 2, or 3 and UsRec8 = Paid, then complete the following:
-  - Assign UsRec8 = Paid-Invalid
-  - Assign UsRec5 = Invalid
-  - Assign UsRec10 = UsRec11
-  - Increase SyRec6 by 1
-  - Continue to Path 1.
-- If UsRec4 = 4, 5, 6, or 7, then continue to Path 1.
+1. If UsRec4 = 1, 2, or 3 and UsRec8 = Paid, then: 
+	- Assign UsRec8 = Paid-Invalid
+	- Assign UsRec5 = Invalid
+	- Assign UsRec10 = UsRec11
+	- Increase SyRec6 by 1
+	- Continue to Path 1.
+2. If UsRec4 = 4, 5, 6, or 7, then: 
+	- continue to Path 1.
 
 _Path 1_
 
 **Initial check:** Is the simulation currently on Period 1?
 
-- If yes, then advance to SyFunc5.
-  - Advance (copy) values in current System Record row to finalize stage Period 0.
-- If no, then period = x advance to SyFunc6
-  - Advance (copy) values in current System Record row to Reorg Stage Period x row.
+1. If yes, then: 
+	- Advance to SyFunc5.
+	- Advance (copy) values in current System Record row to finalize stage Period 0.
+2. If no, then: 
+	- period = x advance to SyFunc6
+	- Advance (copy) values in current System Record row to Reorg Stage Period x row.
 
 #### SyFunc5 Detailed Description
 
@@ -620,22 +653,24 @@ _Path 1_
 
 **Initial check:** Is the simulation currently on Period 0?
 
-- If yes, then continue to SyFunc5 input.
-- Else, then do nothing.
+1. If yes, then:
+	- continue to SyFunc5 input.
+2. Else: 
+	- do nothing.
 
 **SyFunc5 input:** UsRec8 = Defected
 
-- If UsRec8 = Defected, then increase SyRec3 by 1.
-- Otherwise, do nothing.
+1. If UsRec8 = Defected, then: 
+	- increase SyRec3 by 1.
+2. Otherwise: 
+	- do nothing.
 
 **SyFunc5 output:** SyRec9
 
 1. Calculate SyRec9.
-
-  1. SyRec9 = SyRec3 * SyRec13
-
-1. Advance values in current System Record row to Reorg Stage Period 1 row.
-2. Advance to UsFunc6.
+	- SyRec9 = SyRec3 * SyRec13
+2. Advance values in current System Record row to Reorg Stage Period 1 row.
+3. Advance to UsFunc6.
 
 #### UsFunc6 Detailed Description
 
@@ -650,49 +685,55 @@ _Path 1_
 _Path 0 Initialization_
 
 1. Load user record.
-
 2. Create user list from user record where UsRec8 = Paid-Invalid.
-
-  1. Count users in list = **&lt;end of user list&gt;**.
-
-3. Load user list.
-
-  1. Start with first user in user list **&lt;current user #&gt;**.
+3. Count users in list = **&lt;end of user list&gt;**.
+4. Load user list.
+5. Start with first user in user list **&lt;current user #&gt;**.
 
 _Path 0 Start_
 
-- Evaluate &lt;current user #&gt;.
-  - If user **&lt;current user #&gt;** UsRec6 = Low-Morale, then add to Path 1 Run Set.
-    - Else, add to Path 3 Run Set
-  - If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then load Path 1.
-    - Else, continue to **&lt;current user #&gt;** + 1 and go to Path 0 Start.
+1. Evaluate &lt;current user #&gt;.
+	- If user **&lt;current user #&gt;** UsRec6 = Low-Morale, then:
+		- add to Path 1 Run Set.
+	- Else:
+		- add to Path 3 Run Set
+	- If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then:
+		- load Path 1.
+	- Else: 
+		- continue to **&lt;current user #&gt;** + 1 
+		- go to Path 0 Start.
 
 _Path 1_
 
 1. Load Path 1 Run Set.
 2. For all users where UsRec6 = Low-Morale and UsRec8 = Paid-Invalid:
-  1. Count users in set = **&lt;end of path 1 set list&gt;**.
+	- Count users in set = **&lt;end of path 1 set list&gt;**.
 3. Continue Path 1 User Evaluation.
 
 _Path 1 User Evaluation_
 
 1. Start with user **&lt;current user # path 1&gt;** in set Path 1 Run Set.
 2. Calculate a random number in the range of 0 to 1 = **&lt;probability&gt;**.
-  1. If **&lt;probability&gt;** ≥ EV9, then add user to Path 3 Set List.
-    1. Else, add user to Path 2a Set List and update UsRec8 = Quit.
-3. If **&lt;current user #&gt;** = **&lt;end of path 1 set list&gt;** , then load Path 2a.
-  1. Else, increment value for **&lt;current user # path 1&gt;** by 1 in set Path 1 Run.
-4. Clear **&lt;probability&gt;**.
-5. Go to Path 1 User Evaluation.
+3. If **&lt;probability&gt;** ≥ EV9, then:
+	- add user to Path 3 Set List.
+4. Else:
+	- add user to Path 2a Set List
+	- update UsRec8 = Quit.
+5. If **&lt;current user #&gt;** = **&lt;end of path 1 set list&gt;** , then: 
+	- load Path 2a.
+6. Else: 
+	- increment value for **&lt;current user # path 1&gt;** by 1 in set Path 1 Run.
+7. Clear **&lt;probability&gt;**.
+8. Go to Path 1 User Evaluation.
 
 _Path 2a_
 
 1. Load Path 2a Run Set list.
-2. For all users where UsRec8 = Quit,
-  1. Count users in set = **&lt;end of path 2 set list&gt;**.
-3. For each user in Path 2 Run Set.
-  1. Decrement SyRec1 by 1.
-  2. Increment SyRec 7 by 1
+2. For all users where UsRec8 = Quit:
+	- Count users in set = **&lt;end of path 2 set list&gt;**.
+3. For each user in Path 2 Run Set:
+	- Decrement SyRec1 by 1.
+	- Increment SyRec 7 by 1
 4. Continue to Path 2a User Evaluation.
 
 _Path 2a User Evaluation_
@@ -700,25 +741,26 @@ _Path 2a User Evaluation_
 1. Start with user **&lt;current user # path 2&gt;** in set Path 2 Run Set list.
 2. Read **&lt;current user #&gt;** UsRec3 = Load into **&lt;GRead A&gt;**.
 3. Read **&lt;current user #&gt;** UsRec1 = Load into **&lt;GRead B&gt;**.
-4. For every user in record where UsRec3 = **&lt;GRead A&gt;** ,
-  1. Decrease UsRec4 by 1.
-5. For every user in record where UsRec3 = **&lt;GRead A&gt;** and UsRec1 = **&lt;GRead B&gt;** ,
-  1. Decrease UsRec2 by 1.
-6. Assign the current values for **&lt;current user # path 2&gt;** as follows:
-  1. UsRec3 = 0
-  2. UsRec4 = 0
-  3. UsRec5 = NR
-  4. UsRec8 = NR
-  5. UsRec12 = NR
-7. If **&lt;current user # path 2&gt;** = **&lt;end of path 2 set list&gt;** , then
-  1. Clear **&lt;GRead A&gt;** ,
-  2. Clear **&lt;GRead B&gt;** ,
-  3. Clear Path 2 Run Set, and
-  4. Continue to Path 3.
-  5. Else, increment value for **&lt;current user # path 2&gt;** by 1 in set Path 2a Run Set,
-  6. Clear **&lt;GRead A&gt;** ,
-  7. Clear **&lt;GRead B&gt;** , and
-  8. Go to Path 2a User Evaluation.
+4. For every user in record where UsRec3 = **&lt;GRead A&gt;**:
+	- Decrease UsRec4 by 1.
+5. For every user in record where UsRec3 = **&lt;GRead A&gt;** and UsRec1 = **&lt;GRead B&gt;**:
+6.  Decrease UsRec2 by 1.
+7. Assign the current values for **&lt;current user # path 2&gt;** as follows:
+	- UsRec3 = 0
+	- UsRec4 = 0
+	- UsRec5 = NR
+	- UsRec8 = NR
+	- UsRec12 = NR
+8. If **&lt;current user # path 2&gt;** = **&lt;end of path 2 set list&gt;** , then:
+	- Clear **&lt;GRead A&gt;** ,
+	- Clear **&lt;GRead B&gt;** ,
+	- Clear Path 2 Run Set, and
+	- Continue to Path 3.
+9. Else:
+	- increment value for **&lt;current user # path 2&gt;** by 1 in set Path 2a Run Set
+	- Clear **&lt;GRead A&gt;**
+	- Clear **&lt;GRead B&gt;** , and
+	- Go to Path 2a User Evaluation.
 
 _Path 3_
 
@@ -728,64 +770,74 @@ _Path 3_
 _Path 3 User Evaluation_
 
 1. Evaluate user **&lt;current user # path 3 set list&gt;**.
-  1. If user **&lt;current user #&gt;** UsRec7 = Dependent, then evaluate the following:
-    1. If UsRec2 ≥ 2, then add user to Path 4 Set List.
-    2. Else, add user to Path 2b Set List and update UsRec8 = Quit.
-  2. Else (UsRec7 = Independent), then add user to Path 4 Set List.
-2. Then,
-  1. If **&lt;current user #&gt;** = **&lt;end of path 3 set list&gt;** , then go to Path 2b.
-  2. Else, continue to **&lt;current user #&gt;** + 1 and go to Path 3 User Evaluation.
+2. If user **&lt;current user #&gt;** UsRec7 = Dependent, then:
+	- evaluate the following:
+		- If UsRec2 ≥ 2, then:
+			- add user to Path 4 Set List.
+		- Else:
+			- add user to Path 2b Set List
+			- update UsRec8 = Quit.
+3. Elseif (UsRec7 = Independent), then: 
+	- add user to Path 4 Set List.
+4. If **&lt;current user #&gt;** = **&lt;end of path 3 set list&gt;** , then:
+	- go to Path 2b.
+5. Else: 
+	- continue to **&lt;current user #&gt;** + 1
+	- go to Path 3 User Evaluation.
 
 _Path 2_
 
 1. Decrement SyRec1 by 1.
 2. Increment SyRec7 by 1.
 3. Referencing UsRec3,
-
-  1. Decrease UsRec4 by 1 for all users with same UsRec3 value.
-  2. Decrease UsRec2 by 1 for all users with same UsRec 1 and UsRec3.
-
-1. If UsRec8 = Quit, then:
-  1. UsRec3 = 0
-  2. UsRec4 = 0
-  3. UsRec5 = NR
-  4. UsRec8 = NR
-  5. UsRec12 = NR
-2. Continue to Path 2b User Evaluation.
+	- Decrease UsRec4 by 1 for all users with same UsRec3 value.
+	- Decrease UsRec2 by 1 for all users with same UsRec 1 and UsRec3.
+4. If UsRec8 = Quit, then:
+	- UsRec3 = 0
+	- UsRec4 = 0
+	- UsRec5 = NR
+	- UsRec8 = NR
+	- UsRec12 = NR
+5. Continue to Path 2b User Evaluation.
 
 _Path 2b User Evaluation_
 
 1. Start with user **&lt;current user # path 2&gt;** in set Path 2b Run Set.
 2. Read **&lt;current user #&gt;** UsRec3 = Load into **&lt;GRead A&gt;**.
 3. Read **&lt;current user #&gt;** UsRec1 = Load into **&lt;GRead B&gt;**.
-4. For every user in record where UsRec3 = **&lt;GRead A&gt;** , decrease UsRec4 by 1.
-5. For every user in record where UsRec 3 = &lt;GRead A&gt; and UsRec 1 = &lt;GRead B&gt;, decrease UsRec2 by 1.
+4. For every user in record where UsRec3 = **&lt;GRead A&gt;** do:
+	- decrease UsRec4 by 1.
+5. For every user in record where UsRec 3 = &lt;GRead A&gt; and UsRec 1 = &lt;GRead B&gt;, do:
+	- decrease UsRec2 by 1.
 6. Assign the current values for &lt;current user # path 2&gt; as follows:
-  1. UsRec3 = 0
-  2. UsRec4 = 0
-  3. UsRec5 = NR
-  4. UsRec8 = NR
-  5. UsRec12 = NR
-7. If **&lt;current user # path 2&gt;** = **&lt;end of path 2 set list&gt;** , then
-  1. Clear **&lt;GRead A&gt;** ,
-  2. Clear **&lt;GRead B&gt;** ,
-  3. Clear Path 2 Run Set, and
-  4. Continue to Path 4.
-8. Else, increment value for **&lt;current user # path 2&gt;** by 1 in set Path 2b Run Set,
-  1. Clear **&lt;GRead A&gt;** ,
-  2. Clear **&lt;GRead B&gt;** , and
-  3. Go to Path 2b User Evaluation.
+	- UsRec3 = 0
+	- UsRec4 = 0
+	- UsRec5 = NR
+	- UsRec8 = NR
+	- UsRec12 = NR
+7. If **&lt;current user # path 2&gt;** = **&lt;end of path 2 set list&gt;** then:
+	- Clear **&lt;GRead A&gt;** ,
+	- Clear **&lt;GRead B&gt;** ,
+	- Clear Path 2 Run Set, and
+	- Continue to Path 4.
+8. Else: 
+	- Increment value for **&lt;current user # path 2&gt;** by 1 in set Path 2b Run Set,
+	- Clear **&lt;GRead A&gt;** ,
+	- Clear **&lt;GRead B&gt;** , and
+	- Go to Path 2b User Evaluation.
 
 _Path 4_
 
 1. Load Path 4 Set List.
 2. Count users in set = **&lt;path 4 set list&gt;**.
-3. For all users in Path 4 Set List,
-  1. Increment SyRec8 by 1.
-  2. Check if UsRec8 = Paid-Invalid.
-    1. If UsRec8 ≠ Paid-Invalid, then throw error and terminate.
-  3. Check if UsRec2 ≥ 2.
-    1. If UsRec2 &lt; 2, then throw error and terminate.
+3. For all users in Path 4 Set List do:
+	- Increment SyRec8 by 1.
+	- If UsRec8 is not Paid-Invalid, then: 
+		- throw error
+		- terminate.
+	- If UsRec2 &lt; 2, then: 
+		- throw error 
+		- terminate.
 4. Clear Path 2 Run Set.
 5. Clear Path 3 Run Set.
 6. Continue to SyFunc7.
@@ -806,37 +858,48 @@ _Path 0 Initialization_
 
 1. Load user record.
 2. Create user list from user record where UsRec8 = Paid-Invalid.
-  1. Count users in list = **&lt;end of user list&gt;**.
+	- Count users in list = **&lt;end of user list&gt;**.
 3. Load user list.
 4. Start with first user in user list **&lt;current user #&gt;**.
 
 _Path 0 Start_
 
 1. Evaluate **&lt;current user #&gt;**.
-  1. If user **&lt;current user #&gt;** UsRec4 = 1, then add to Path 1 Run Set.
-  2. Else, continue.
-  3. If user **&lt;current user #&gt;** UsRec4 = 2, then add to Path 2 Run Set.
-  4. Else, continue.
-  5. If user **&lt;current user #&gt;** UsRec4 = 3, then add to Path 3 Run Set.
-  6. Else, throw error if UsRec4 = 4, 5, 6, or 7, and terminate.
-2. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then load Path 1.
-3. Else, continue to **&lt;current user #&gt;** + 1 and go to Path 0 Start.
+2. If user **&lt;current user #&gt;** UsRec4 = 1, then: 
+	- add to Path 1 Run Set.
+3. Else: 
+	- continue.
+4. If user **&lt;current user #&gt;** UsRec4 = 2, then: 
+	- add to Path 2 Run Set.
+5. Else: 
+	- continue.
+6. If user **&lt;current user #&gt;** UsRec4 = 3, then: 
+	- add to Path 3 Run Set.
+7. Else: 
+	- if UsRec4 = 4, 5, 6, or 7, then:
+		- throw error
+		- terminate.
+8. If **&lt;current user #&gt;** = **&lt;end of user list&gt;** , then: 
+	- load Path 1.
+9. Else: 
+	- continue to **&lt;current user #&gt;** + 1 
+	- go to Path 0 Start.
 
 _Path 1_
 
 **Path 1 First Attempt**
 
-1. For all users where UsRec4 = 1,
-  1. Load Path 1 Run Set.
-  2. Create a list from set.
-    1. Add all UsRec3 values to **&lt;P1 UsRec3 invalid list&gt;**.
-    2. Eliminate all duplicates.
+1. For all users where UsRec4 = 1 do:
+	- Load Path 1 Run Set.
+	- Create a list from set.
+		- Add all UsRec3 values to **&lt;P1 UsRec3 invalid list&gt;**.
+		- Eliminate all duplicates.
 2. Load user record.
 3. Filter records that satisfy the following requirements:
-  1. User record UsRec5 = Valid and user record UsRec4 = 6.
-  2. Create a list from record.
-    1. Add all UsRec3 values to **&lt;P1 UsRec3 valid list&gt;**.
-    2. Eliminate all duplicates.
+	- User record UsRec5 = Valid and user record UsRec4 = 6.
+	- Create a list from record.
+		- Add all UsRec3 values to **&lt;P1 UsRec3 valid list&gt;**.
+		- Eliminate all duplicates.
 
 **Path 1 Assignment First Attempt**
 
@@ -845,34 +908,39 @@ _Path 1_
 3. Match with random entry from **&lt;P1 UsRec3 valid list&gt;** = **&lt;UsRec3 GiveMatch&gt;**.
 4. Find users from Path 1 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 5. Update with the following values:
-  1. UsRec3 = &lt;UsRec3 GiveMatch&gt;
-  2. UsRec4 = 7
-  3. UsRec5 = Valid
-  4. UsRec8 = Reorg
-  5. UsRec9 = UsRec9 + 1
-6. Remove:
-  1. Entry on **&lt;P1 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;** and
-  2. Users from Path 1 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
-7. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-8. Assign UsRec4 = 7.
-9. Remove entry on **&lt;P1 UsRec3 valid list&gt;** where UsRec 3 = **&lt;UsRec3 GiveMatch&gt;**.
-10. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
-11. If **&lt;P1 UsRec3 invalid list&gt;** is empty, then check if Path 1 Run Set is empty.
-  1. If Path 1 Run Set is empty, then clear **&lt;P1 UsRec3 valid list&gt;** and continue to Path 2.
-  2. Else, throw an error.
-12. Else, check if **&lt;P1 UsRec3 valid list&gt;** is empty.
-  1. If **&lt;P1 UsRec3 valid list&gt;** is empty, then try Path 1 Second Attempt.
-  2. Else, return to Path 1 Assignment First Attempt.
+	- UsRec3 = &lt;UsRec3 GiveMatch&gt;
+		- UsRec4 = 7
+		- UsRec5 = Valid
+		- UsRec8 = Reorg
+		- UsRec9 = UsRec9 + 1
+6. Remove entry on **&lt;P1 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**
+7. Remove users from Path 1 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
+8. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
+9. Assign UsRec4 = 7.
+10. Remove entry on **&lt;P1 UsRec3 valid list&gt;** where UsRec 3 = **&lt;UsRec3 GiveMatch&gt;**.
+11. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
+12. If **&lt;P1 UsRec3 invalid list&gt;** is empty, then:
+	- check if Path 1 Run Set is empty.
+	- If Path 1 Run Set is empty, then: 
+		- clear **&lt;P1 UsRec3 valid list&gt;** 
+		- continue to Path 2.
+13. Else:
+	- throw an error.
+14. Check if **&lt;P1 UsRec3 valid list&gt;** is empty.
+	- If **&lt;P1 UsRec3 valid list&gt;** is empty, then: 
+		- try Path 1 Second Attempt.
+	- Else: 
+		- return to Path 1 Assignment First Attempt.
 
 **Path 1 Second Attempt**
 
 1. Load user record.
 2. Filter records that satisfy the following requirements:
-  1. User record UsRec5 = Valid and
-  2. User record UsRec4 = 5.
+	- User record UsRec5 = Valid and
+	- User record UsRec4 = 5.
 3. Create a list from record.
-  1. Add all UsRec3 values to **&lt;P1 UsRec3 valid list&gt;**.
-  2. Eliminate all duplicates.
+	- Add all UsRec3 values to **&lt;P1 UsRec3 valid list&gt;**.
+	- Eliminate all duplicates.
 
 **Path 1 Assignment Second Attempt**
 
@@ -880,172 +948,199 @@ _Path 1_
 2. Current entry = **&lt;UsRec3 NeedMatch&gt;**.
 3. Match with random entry from **&lt;P1 UsRec3 valid list&gt;** = **&lt;UsRec3 GiveMatch&gt;**.
 4. Find users from Path 1 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
-  1. Update with the following values:
-    1. UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
-    2. UsRec4 = 6
-    3. UsRec 5 = Valid
-    4. UsRec 8 = Reorg
-    5. Increment UsRec9 by 1.
+	- Update with the following values:
+		- UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
+		- UsRec4 = 6
+		- UsRec 5 = Valid
+		- UsRec 8 = Reorg
+		- Increment UsRec9 by 1.
 5. Remove entry on **&lt;P1 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 6. Remove users from Path 1 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 7. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-  1. Update UsRec4 = 6.
+	- Update UsRec4 = 6.
 8. Remove entry on **&lt;P1 UsRec3 valid list&gt;** where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
 9. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
-10. If **&lt;P1 UsRec3 invalid list&gt;** is empty, then check if Path 1 Run Set is empty.
-  1. If Path 1 Run Set is empty, then clear **&lt;P1 UsRec3 valid list&gt;** and proceed to Path 2.
-  2. Else, throw an error.
-11. Else, return to Path 1 Assignment Second Attempt.
+10. If **&lt;P1 UsRec3 invalid list&gt;** is empty, then: 
+	- If Path 1 Run Set is empty, then:
+		- clear **&lt;P1 UsRec3 valid list&gt;** 
+		- proceed to Path 2.
+	- Else: 
+		- throw an error.
+11. Else: 
+	- return to Path 1 Assignment Second Attempt.
 
 **Path 2**
 
 **Path 2 First Attempt**
 
-1. For all users where UsRec4 = 2, load Path 2 Run Set.
+1. For all users where UsRec4 = 2 do:
+	- load Path 2 Run Set.
 2. Create a list from Path 2 Run Set.
-  1. Add all UsRec3 values to **&lt;P2 UsRec3 invalid list&gt;**.
-  2. Eliminate all duplicates.
+	- Add all UsRec3 values to **&lt;P2 UsRec3 invalid list&gt;**.
+	- Eliminate all duplicates.
 3. Load user record.
-  1. Filter records that satisfy the following requirements:
-    1. UsRec5 = Valid and
-    2. UsRec4 = 5.
-  2. Create a list from record.
-    1. Add all UsRec3 values to **&lt;P2 UsRec3 valid list&gt;**.
-    2. Eliminate all duplicates.
+	- Filter records that satisfy the following requirements:
+		- UsRec5 = Valid and
+		- UsRec4 = 5.
+	- Create a list from record.
+		- Add all UsRec3 values to **&lt;P2 UsRec3 valid list&gt;**.
+		- Eliminate all duplicates.
 
 **Path 2 Assignment First Attempt**
 
 1. Start at current entry on list **&lt;P2 UsRec3 invalid list&gt;**.
 2. Current entry = **&lt;UsRec3 NeedMatch&gt;**.
 3. Match with random entry from **&lt;P2 UsRec3 valid list&gt;** = **&lt;UsRec3 GiveMatch&gt;**.
-  1. Find users from Path 2 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
-  2. Update with the following values:
-    1. UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-    2. UsRec4 = 7
-    3. UsRec 5 = Valid
-    4. UsRec 8 = Reorg
-    5. Increment UsRec9 by 1.
+	- Find users from Path 2 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
+	- Update with the following values:
+		- UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
+		- UsRec4 = 7
+		- UsRec 5 = Valid
+		- UsRec 8 = Reorg
+		- Increment UsRec9 by 1.
 4. Remove entry on **&lt;P2 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 5. Remove users from Path 2 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 6. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-  1. Update UsRec4 = 7.
+	- Update UsRec4 = 7.
 7. Remove entry on **&lt;P2 UsRec3 valid list&gt;** where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-8. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
-9. If &lt;P2 UsRec3 invalid list&gt; is empty, then check if Path 2 Run Set is empty.
-  1. If Path 2 Run Set is empty, then clear **&lt;P2 UsRec3 valid list&gt;** and proceed to Path 3.
-  2. Else, throw an error.
-10. Else, check if **&lt;P2 UsRec3 valid list&gt;** is empty.
-  1. If **&lt;P2 UsRec3 valid list&gt;** is empty, then try Path 2 Second Attempt.
-  2. Else, return to Path 2 Assignment First Attempt.
+8. Reset **&lt;UsRec3 GiveMatch&gt;**.
+9. Reset **&lt;UsRec3 NeedMatch&gt;**.
+10. If &lt;P2 UsRec3 invalid list&gt; is empty, then: 
+	- If Path 2 Run Set is empty, then:
+		- clear **&lt;P2 UsRec3 valid list&gt;**
+		- proceed to Path 3.
+	- Else: 
+		- throw an error.
+11. Else: 
+	- If **&lt;P2 UsRec3 valid list&gt;** is empty, then: 
+		- try Path 2 Second Attempt.
+	- Else: 
+		- return to Path 2 Assignment First Attempt.
 
 **Path 2 Second Attempt**
 
 1. Load user record.
 2. Filter records that satisfy the following requirements:
-  1. UsRec5 = Valid and
-  2. UsRec4 = 4.
+	- UsRec5 = Valid and
+	- UsRec4 = 4.
 3. Create a list from record.
-  1. Add all UsRec3 values to **&lt;P2 UsRec3 valid list&gt;**.
-  2. Eliminate all duplicates.
+	- Add all UsRec3 values to **&lt;P2 UsRec3 valid list&gt;**.
+	- Eliminate all duplicates.
 
 **Path 2 Assignment Second Attempt**
 
 1. Start at current entry on list **&lt;P2 UsRec3 invalid list&gt;**.
-  1. Current entry = **&lt;UsRec3 NeedMatch&gt;**.
+	- Current entry = **&lt;UsRec3 NeedMatch&gt;**.
 2. Match with random entry from **&lt;P2 UsRec3 valid list&gt;** = **&lt;UsRec3 GiveMatch&gt;**.
 3. Find users from Path 2 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
-  1. Update the following values:
-    1. UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
-    2. UsRec4 = 6
-    3. UsRec5 = Valid
-    4. UsRec8 = Reorg
-    5. Increment UsRec9 by 1.
+	- Update the following values:
+		- UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
+		- UsRec4 = 6
+		- UsRec5 = Valid
+		- UsRec8 = Reorg
+		- Increment UsRec9 by 1.
 4. Remove entry on **&lt;P2 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 5. Remove users from Path 2 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 6. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-  1. Update UsRec4 = 6.
+	- Update UsRec4 = 6.
 7. Remove entry on **&lt;P2 UsRec3 valid list&gt;** where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-8. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
-9. If **&lt;P2 UsRec3 invalid list&gt;** is empty, then check if Path 2 Run Set is empty.
-  1. If Path 2 Run Set is empty, then clear **&lt;P2 UsRec3 valid list&gt;** and proceed to Path 3.
-  2. Else, throw an error.
-10. Else, return to Path 2 Assignment Second Attempt.
+8. Reset **&lt;UsRec3 GiveMatch&gt;**.
+9. Reset **&lt;UsRec3 NeedMatch&gt;**.
+10. If **&lt;P2 UsRec3 invalid list&gt;** is empty, then: 
+	- If Path 2 Run Set is empty, then: 
+		- clear **&lt;P2 UsRec3 valid list&gt;**
+		- proceed to Path 3.
+	- Else: 
+		- throw an error.
+11. Else: 
+	- return to Path 2 Assignment Second Attempt.
 
 **Path 3**
 
 **Path 3 First Attempt**
 
 1. For all users where UsRec4 = 3, load Path 3 Run Set.
-  1. Create a list from set.
-  2. Add all UsRec3 values to **&lt;P3 UsRec3 invalid list&gt;**.
-  3. Eliminate all duplicates.
+	-. Create a list from set.
+	-. Add all UsRec3 values to **&lt;P3 UsRec3 invalid list&gt;**.
+	-. Eliminate all duplicates.
 2. If set has two or more values, then go to Path 3 Assignment First Attempt.
 3. Else, go to Path 3 Assignment Second Attempt.
 
 **Path 3 Assignment First Attempt**
 
 1. Start at current entry on list **&lt;P3 UsRec3 invalid list&gt;**.
-  1. Current entry = **&lt;UsRec3 NeedMatch&gt;.**
+	- Current entry = **&lt;UsRec3 NeedMatch&gt;.**
 2. Match with next entry from **&lt;P3 UsRec3 invalid list&gt;** = **&lt;UsRec3 GiveMatch&gt;**.
 3. Find users from Path 3 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
-  1. Update with the following values:
-    1. UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
-    2. UsRec4 = 6
-    3. UsRec5 = Valid
-    4. UsRec8 = Reorg
-    5. Increment UsRec9 by 1.
+	- Update with the following values:
+		- UsRec3 = **&lt;UsRec3 GiveMatch&gt;**
+		- UsRec4 = 6
+		- UsRec5 = Valid
+		- UsRec8 = Reorg
+		- Increment UsRec9 by 1.
 4. Remove entry on **&lt;P3 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 5. Remove users from Path 3 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch&gt;**.
 6. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-  1. Update the following:
-    1. UsRec4 = 6
-    2. UsRec5 = Valid
-    3. UsRec8 = Reorg
-    4. Increment UsRec9 by 1.
+	- Update the following:
+		- UsRec4 = 6
+		- UsRec5 = Valid
+		- UsRec8 = Reorg
+		- Increment UsRec9 by 1.
 7. Remove entry on **&lt;P3 UsRec3 invalid list&gt;** where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
 8. Remove users from Path 3 Run Set where UsRec3 = **&lt;UsRec3 GiveMatch&gt;**.
-9. Reset **&lt;UsRec3 GiveMatch&gt;** and **&lt;UsRec3 NeedMatch&gt;**.
-10. If **&lt;P3 UsRec3 invalid list&gt;** is empty, then check if Path 3 Run Set is empty.
-  1. If Path 3 Run Set is empty, then END FUNCTION.
-  2. Else, throw an error.
-11. Else, check if **&lt;P3 UsRec3 invalid list&gt;** has two or more values.
-  1. If **&lt;P3 UsRec3 invalid list&gt;** has two or more values, then return to Path 3 Assignment First Attempt.
-  2. Else, go to Path 3 Second Attempt.
+9. Reset **&lt;UsRec3 GiveMatch&gt;**. 
+10. Reset **&lt;UsRec3 NeedMatch&gt;**.
+11. If **&lt;P3 UsRec3 invalid list&gt;** is empty, then: 
+	- If Path 3 Run Set is empty, then: 
+		- END FUNCTION.
+	- Else: 
+		- throw an error.
+12. Else: 
+	- If **&lt;P3 UsRec3 invalid list&gt;** has two or more values, then: 
+		- return to Path 3 Assignment First Attempt.
+	- Else: 
+		- go to Path 3 Second Attempt.
 
 **Path 3 Second Attempt**
 
 1. Load user record.
 2. Filter records that satisfy the following requirements:
-  1. UsRec5 = Valid and
-  2. UsRec4 = 4.
+	- UsRec5 = Valid and
+	- UsRec4 = 4.
 3. Create a list from record.
-  1. Add all UsRec3 values to **&lt;P3 UsRec3 valid list&gt;**.
-  2. Eliminate all duplicates.
+	- Add all UsRec3 values to **&lt;P3 UsRec3 valid list&gt;**.
+	- Eliminate all duplicates.
 
 **Path 3 Assignment Second Attempt**
 
 1. Start at current entry on list **&lt;P3 UsRec3 invalid list&gt;**.
-  1. Current entry = **&lt;UsRec3 NeedMatch\&gt;**.
+	- Current entry = **&lt;UsRec3 NeedMatch\&gt;**.
 2. Match with random entry from **&lt;P3 UsRec3 valid list\&gt;** = **&lt;UsRec3 GiveMatch\&gt;**.
 3. Find users from Path 3 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch\&gt;**.
-  1. Update with the following values:
-    1. UsRec3 = **&lt;UsRec3 GiveMatch\&gt;**
-    2. UsRec4 = 7
-    3. UsRec5 = Valid
-    4. UsRec8 = Reorg
-    5. Increment UsRec9 by 1.
+	- Update with the following values:
+		- UsRec3 = **&lt;UsRec3 GiveMatch\&gt;**
+		- UsRec4 = 7
+		- UsRec5 = Valid
+		- UsRec8 = Reorg
+		- Increment UsRec9 by 1.
 4. Remove entry on **&lt;P3 UsRec3 invalid list\&gt;** where UsRec3 = **&lt;UsRec3 NeedMatch\&gt;**.
 5. Remove users from Path 3 Run Set where UsRec3 = **&lt;UsRec3 NeedMatch\&gt;**.
 6. Find users from user record where UsRec3 = **&lt;UsRec3 GiveMatch\&gt;**.
-  1. Update UsRec4 = 7.
+	- Update UsRec4 = 7.
 7. Remove entry on **&lt;P3 UsRec3 valid list\&gt;** where UsRec3 = **&lt;UsRec3 GiveMatch\&gt;**.
-8. Reset **&lt;UsRec3 GiveMatch\&gt;** and **&lt;UsRec3 NeedMatch\&gt;**.
-9. If **&lt;P3 UsRec3 invalid list\&gt;** is empty, then check if Path 3 Run Set is empty.
-  1. If Path 3 Run Set is empty, then clear **&lt;P3 UsRec3 valid list\&gt;** and END FUNCTION.
-  2. Else, throw an error.
-10. Else, check if **&lt;P3 UsRec3 valid list\&gt;** is empty.
-  1. If **&lt;P3 UsRec3 valid list\&gt;** is empty, then throw an error.
-  2. Else, return to Path 3 Assignment Second Attempt.
+8. Reset **&lt;UsRec3 GiveMatch\&gt;**.
+9. Reset **&lt;UsRec3 NeedMatch\&gt;**.
+10. If **&lt;P3 UsRec3 invalid list\&gt;** is empty, then: 
+	- If Path 3 Run Set is empty, then: 
+		- clear **&lt;P3 UsRec3 valid list\&gt;**
+		- END FUNCTION.
+	- Else: 
+		- throw an error.
+11. Else: 
+	- If **&lt;P3 UsRec3 valid list\&gt;** is empty, then:
+		- throw an error.
+	- Else: 
+		- return to Path 3 Assignment Second Attempt.
 
 #### SyFunc8 Detailed Description
 
@@ -1057,13 +1152,17 @@ _Path 1_
 
 Evaluate the period number as follows:
 
-- If the Period Number = 0, then end the function.
-- If the Period Number ≠ 0, then continue SyFunc8.
+1. If the Period Number = 0, then: 
+	- end the function.
+2. Else: 
+	- continue SyFunc8.
 
-1. Calculate the probability of SyRec16 (Boolean), given EV3 as follows:
-  1. If no, then write SyRec2 to SyRec17.
-  2. If yes, then do nothing.
-2. Continue to SyFunc9.
+3. Calculate the probability of SyRec16 (Boolean), given EV3 as follows:
+	- If no, then: 
+		- write SyRec2 to SyRec17.
+	- If yes, then:
+		- do nothing.
+4. Continue to SyFunc9.
 
 #### SyFunc9 Detailed Description
 
@@ -1072,16 +1171,17 @@ Evaluate the period number as follows:
 **Stage:** Reorg Stage 5
 
 1. Calculate SyRec2.
-  1. <img src="images/f22.png" height="30">
+	- <img src="images/f22.png" height="30">
 2. Calculate SyRec14.
-  1. SyRec14 = SyRec9 + SyRec11 + SyRec13
+	- SyRec14 = SyRec9 + SyRec11 + SyRec13
 3. Calculate SyRec15.
-  1. <img src="images/f23.png" height="30">
+	- <img src="images/f23.png" height="30">
 4. Calculate UsRec11.
-  1. UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10
-  2. If UsRec10 is used to calculate UsRec11, then assign UsRec10 = 0 after calculating UsRec11.
+	- UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10
+	- If UsRec10 is used to calculate UsRec11, then: 
+		- assign UsRec10 = 0 after calculating UsRec11.
 5. Calculate SyRec19.
-  1. SyRec19 = SyRec2 + SyRec15
+	- SyRec19 = SyRec2 + SyRec15
 6. Continue to SyFunc10.
 
 **Note:** SyFunc9 provides output for individual user.
@@ -1097,9 +1197,9 @@ Evaluate the period number as follows:
 **Stage:** Reorg Stage 6
 
 1. Calculate SyRec10.
-  1. SyRec10 = SyRec5 * SyRec19
+	- SyRec10 = SyRec5 * SyRec19
 2. Calculate SyRec12.
-  1. SyRec12 = SyRec6 * SyRec19
+	- SyRec12 = SyRec6 * SyRec19
 3. Continue to SyFunc11.
 
 #### SyFunc11 Detailed Description
@@ -1110,48 +1210,55 @@ Evaluate the period number as follows:
 
 **Initial check:** Is the current period 10?
 
-- If the current period = 10, then terminate and continue to **Path 2**.
-- If the current period ≠ 10, then continue.
+1. If the current period = 10, then: 
+	- Terminate
+	- continue to **Path 2**.
+2. Else:
+	- continue.
 
-1. Calculate Total.
-  1. Total = SyRec3 + SyRec5 + SyRec7 
-2. If Total &gt; 0, then continue to Path 1.
-3. If Total = 0, then terminate and continue to Path 2.
+3. Calculate Total.
+	- Total = SyRec3 + SyRec5 + SyRec7 
+4. If Total &gt; 0, then: 
+	- continue to Path 1.
+5. If Total = 0, then: 
+	- terminate 
+	- continue to Path 2.
 
 _Path 1_
 
 **Variable introduced:**
 
-- x = Current period
+1. x = Current period
 
-1. Advance to the next row in system record of simulation pay stage for Period x +1.
-2. Copy all values from previous row.
-3. Assign SyRec11 the value of SyRec10.
-4. Assign SyRec13 the value of SyRec12.
-5. Assign SyRec18 the value of SyRec17.
-6. Assign SyRec10, SyRec12, and SyRec17 = 0.
-7. Assign SyRec3, SyRec5, and SyRec6 = 0.
-8. If UsRec8 = Defected, Skipped, or Quit, then:
-  1. UsRec8 = NR
-  2. UsRec3 = 0
-  3. UsRec5 = NR
-  4. UsRec12 = NR
-9. Go to UsFunc
+2. Advance to the next row in system record of simulation pay stage for Period x +1.
+3. Copy all values from previous row.
+4. Assign SyRec11 the value of SyRec10.
+5. Assign SyRec13 the value of SyRec12.
+6. Assign SyRec18 the value of SyRec17.
+7. Assign SyRec10, SyRec12, and SyRec17 = 0.
+8. Assign SyRec3, SyRec5, and SyRec6 = 0.
+9. If UsRec8 is either Defected, Skipped, or Quit, then:
+	- UsRec8 = NR
+	- UsRec3 = 0
+	- UsRec5 = NR
+	- UsRec12 = NR
+10. Go to UsFunc
 
 _Path 2_
 
 1. Write the following to a log file:
-  1. Log1 = EV1 = Z, where &lt;x&gt; is the number of members at the start of the simulation
-  2. Log2 = SyRec1 (final period) = Y, where &lt;x&gt; is the number of valid members remaining at the end of the simulation
-  3. <img src="images/f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation
-  4. Log4 = SyRec19 (Period 1) = B, where &lt;x&gt; was the initial premium members were asked to pay
-  5. Log5 = SyRec19 (final period) = A, where &lt;x&gt; is the final premium members were asked to pay
-  6. <img src="images/f25.png" height=30> = &lt;x&gt;% increase of premiums by the end of the simulation
-  7. Log7 = SyRec3 (Period 0 Finalize) = C
-  8. Log8 = EV4 = &lt;x&gt;% of policyholders who were assigned to Defect
-  9. <img src="images/f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected
-  10. Log10 = PV5 = &lt;x&gt;% of the initial collapse threshold set for PV5
-2. For single runs, store the table of system record as a .csv file.
+	- Log1 = EV1 = Z, where &lt;x&gt; is the number of members at the start of the simulation
+	- Log2 = SyRec1 (final period) = Y, where &lt;x&gt; is the number of valid members remaining at the end of the simulation
+	- <img src="images/f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation
+	- Log4 = SyRec19 (Period 1) = B, where &lt;x&gt; was the initial premium members were asked to pay
+	- Log5 = SyRec19 (final period) = A, where &lt;x&gt; is the final premium members were asked to pay
+	- <img src="images/f25.png" height=30> = &lt;x&gt;% increase of premiums by the end of the simulation
+	- Log7 = SyRec3 (Period 0 Finalize) = C
+	- Log8 = EV4 = &lt;x&gt;% of policyholders who were assigned to Defect
+	- <img src="images/f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected
+	- Log10 = PV5 = &lt;x&gt;% of the initial collapse threshold set for PV5
+2. For single runs do:
+	- store the table of system record as a .csv file.
 
 See the additional specification for automating the simulation and performing cumulative runs testing the collapse threshold:
 
@@ -1162,8 +1269,8 @@ See the additional specification for automating the simulation and performing cu
 Questions the simulation might be able to answer are as follows:
 
 1. Chart the cumulative number of defections over the course of the simulation. At termination, did the community collapse?
-  1. Iterative runs = the boundary condition for system input variables that produce community collapse.
+	- Iterative runs = the boundary condition for system input variables that produce community collapse.
 2. What percentage of honest participants are required to produce groups which collapse?
 3. How do the different variable inputs contribute to changing the collapse threshold?
-  1. Collapse is x% likely to occur with x% of initial defectors = modifying all other variables
+	- Collapse is x% likely to occur with x% of initial defectors = modifying all other variables
 
