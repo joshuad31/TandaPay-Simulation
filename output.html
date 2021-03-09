@@ -461,38 +461,38 @@
 </ul>
 <h4 id="instructions-for-1st-role-assignment"><span class="header-section-number">10.4.2.1</span> Instructions for 1st role assignment</h4>
 <ol style="list-style-type: decimal">
-<li><img src="images/f11.png" width=20> with the role of Defector</li>
+<li><img src="images/f11.png" height=20> with the role of Defector</li>
 <li>Assign the Defector 1st role to participants at random.</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Remove these participants from 1st role assignment pool.</li>
 </ol>
 <ol start="3" style="list-style-type: decimal">
-<li><img src="images/f12.png" width=20> with the role of Low-Morale</li>
+<li><img src="images/f12.png" height=20> with the role of Low-Morale</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Assign the Low-Morale 1st role to remaining participants at random.</li>
 </ol>
 <ol start="4" style="list-style-type: decimal">
 <li>Any members who are not assigned a role are assigned with the role of Unity.</li>
-<li><img src="images/f13.png" width=20></li>
+<li><img src="images/f13.png" height=20></li>
 </ol>
 <h4 id="instructions-for-2nd-role-assignment"><span class="header-section-number">10.4.2.2</span> Instructions for 2nd role assignment</h4>
 <ol start="6" style="list-style-type: decimal">
-<li><img src="images/f14.png" width=20> with the role of Dependent</li>
+<li><img src="images/f14.png" height=20> with the role of Dependent</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>Assign the Dependent 2nd role to members of any group where UsRec4 = 4.</li>
-<li>If UsRec4 = 4 &gt; <img src="images/f15.png" width=20> then stop assigning any members the Dependent role.</li>
-<li>If UsRec4 = 4 members &lt; <img src="images/f15.png" width=20>, then assign any remaining <img src="images/f15.png" width=20> assignments at random.</li>
+<li>If UsRec4 = 4 &gt; <img src="images/f15.png" height=20> then stop assigning any members the Dependent role.</li>
+<li>If UsRec4 = 4 members &lt; <img src="images/f15.png" height=20>, then assign any remaining <img src="images/f15.png" height=20> assignments at random.</li>
 </ol>
 <ol start="7" style="list-style-type: decimal">
 <li>Assign remaining members the role of Independent.</li>
-<li><img src="images/f16.png" width=20></li>
+<li><img src="images/f16.png" height=20></li>
 </ol>
 <h4 id="update-user-record-based-on-role-assignment"><span class="header-section-number">10.4.2.3</span> Update user record based on role assignment</h4>
 <ol style="list-style-type: decimal">
-<li>Determine the value of UsRec6from assigning EV4, EV5, and EV11.</li>
+<li>Determine the value of UsRec6 from assigning EV4, EV5, and EV11.</li>
 <li>Determine the value of UsRec7 from assigning EV6 and EV12.</li>
 </ol>
 <h2 id="how-funds-move-through-the-system"><span class="header-section-number">10.5</span> How funds move through the system</h2>
@@ -530,57 +530,106 @@
 <ol style="list-style-type: decimal">
 <li>Path 0 start. Load user record.</li>
 <li>Count total users in user record = &lt;end of user list&gt;</li>
-<li>Start with user &lt; <strong>current user #&gt;</strong>.</li>
-<li>If user &lt; <strong>current user #&gt;</strong> = Defector, then continue to Path 0.5.</li>
-<li>Else if, <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then continue to Path 1.5.</li>
-<li>Else, move to <strong>&lt;current user #&gt; + 1</strong> and go to Path 0 start.</li>
+<li>Start with user <strong>&lt;current user #&gt;</strong>.</li>
+<li>If user <strong>&lt;current user #&gt;</strong> = Defector, then:
+<ul>
+<li>continue to Path 0.5.</li>
+</ul></li>
+<li>Elseif <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> then:
+<ul>
+<li>continue to Path 1.5.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue with <strong>&lt;current user #&gt; + 1</strong></li>
+<li>go to Path 0 start.</li>
+</ul></li>
 </ol>
 <p><em>Path 0.5</em></p>
+<ol style="list-style-type: decimal">
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec7 = Dependent, then:
 <ul>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec7 = Dependent, then evaluate Path 1.</li>
-<li>Else, add to Path 2 Run Set.</li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then continue to Path 1.5.</li>
-<li>Else, move to <strong>&lt;current user #&gt; + 1</strong> and go to Path 0 start.</li>
-</ul>
+<li>evaluate Path 1.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>add to Path 2 Run Set.</li>
+</ul></li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> then:
+<ul>
+<li>continue to Path 1.5.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue with <strong>&lt;current user #&gt; + 1</strong></li>
+<li>go to Path 0 start.</li>
+</ul></li>
+</ol>
 <p><em>Path 1</em></p>
 <ol style="list-style-type: decimal">
-<li>For all users where UsRec6 = Defector and UsRec7 = Dependent,</li>
+<li>For all users where UsRec6 = Defector and UsRec7 = Dependent do:
+<ul>
 <li>Read <strong>&lt;current user #&gt;</strong> UsRec3 = Load into <strong>&lt;GroupRead&gt;</strong>.</li>
-<li>For every user where UsRec3 = <strong>&lt;GroupRead&gt;</strong> ,</li>
+</ul></li>
+<li>For every user where UsRec3 = <strong>&lt;GroupRead&gt;</strong> do:
+<ul>
 <li>Increment UsRec13 by 1.</li>
+</ul></li>
 <li>Clear <strong>&lt;GroupRead&gt;</strong>.</li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then continue to Path 1.5.</li>
-<li>Else, move to <strong>&lt;current user #&gt; + 1</strong> and go to Path 0 start.</li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> then:
+<ul>
+<li>continue to Path 1.5.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue with <strong>&lt;current user #&gt; + 1</strong></li>
+<li>go to Path 0 start.</li>
+</ul></li>
 </ol>
 <p><em>Path 1.5</em></p>
+<ol style="list-style-type: decimal">
+<li>For all users where UsRec6 = Defector and UsRec7 = Dependent do:
 <ul>
-<li>For all users where UsRec6 = Defector and UsRec7 = Dependent,</li>
-<li>If UsRec13 ≥ EV7, then add to Path 2 Run Set.</li>
-<li>Else, add to Path 3 run set, then load Path 2 Run Set.</li>
-</ul>
+<li>If UsRec13 ≥ EV7 then:
+<ul>
+<li>add to Path 2 Run Set.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>add to Path 3 run set,</li>
+<li>load Path 2 Run Set.</li>
+</ul></li>
+</ul></li>
+</ol>
 <p><em>Path 2 Run Set</em></p>
 <ol style="list-style-type: decimal">
 <li>Decrement SyRec1 by 1.</li>
-<li>Defecting for previous period.</li>
+<li>Defecting for previous period.
+<ul>
 <li>Increment SyRec3 by 1.</li>
-<li>Skipping for current period.</li>
+</ul></li>
+<li>Skipping for current period.
+<ul>
 <li>Increment SyRec5 by 1.</li>
-<li>Referencing UsRec3,</li>
+</ul></li>
+<li>Referencing UsRec3,
+<ul>
 <li>Decrease UsRec4 by 1 for all users with same UsRec3 value.</li>
-<li>Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.
-<ol style="list-style-type: decimal">
+<li>Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.</li>
 <li>UsRec3 = 0</li>
 <li>UsRec4 = 0</li>
 <li>UsRec5 = NR</li>
 <li>UsRec8 = NR</li>
 <li>UsRec12 = NR</li>
-</ol></li>
+</ul></li>
 </ol>
 <p><em>Path 3 Run Set</em></p>
 <ol style="list-style-type: decimal">
 <li>Load Path 3 Run Set.</li>
-<li>For all users in Path 3 Run Set,</li>
+<li>For all users in Path 3 Run Set do:
+<ul>
 <li>UsRec6 = Low-Morale</li>
+</ul></li>
 <li>Continue to Path 4.</li>
 </ol>
 <p><em>Path 4</em></p>
@@ -598,32 +647,46 @@
 </div>
 <p><strong>Figure 3. Workflow of UsFunc2</strong></p>
 <p><strong>At start of simulation:</strong> PV1, PV2, PV3, and PV4</p>
-<ul>
+<ol style="list-style-type: decimal">
 <li>Find the slope of price sensitivity relative to the previous month.</li>
-<li>Pricing slope = <img src="images/f17.png" width=30></li>
-</ul>
+<li>Pricing slope = <img src="images/f17.png" height=30></li>
+</ol>
 <p><strong>Note:</strong> The y-axis represents the percentage of people who will skip their premiums. The x-axis represents the amount (in percent) that the premium price has increased.</p>
 <p><em>Run each period</em></p>
 <p><strong>Initial check:</strong> Is the simulation currently on Period 1?</p>
+<ol style="list-style-type: decimal">
+<li>If yes, then:
 <ul>
-<li>If yes, then end the function.</li>
-<li>If no, then continue.</li>
-</ul>
+<li>end the function.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue.</li>
+</ul></li>
+</ol>
 <p><strong>UsFunc2 input:</strong> SyRec19 for the current period pay stage and SyRec19 for the previous period pay stage.</p>
-<ul>
+<ol style="list-style-type: decimal">
 <li>a = SyRec19 for the current period pay stage</li>
 <li>b = SyRec19 for the previous period pay stage</li>
-<li><img src="images/f18.png" width=20> = % Increase in Premiums</li>
-<li>If % Increase in Premiums &lt; PV1, then continue to Path 2</li>
-<li>If % Increase in Premiums ≥ PV1, then continue to Path 1</li>
-</ul>
-<p><em>Path 1</em></p>
+<li><img src="images/f18.png" height=20> = % Increase in Premiums</li>
+<li>If % Increase in Premiums &lt; PV1, then:
 <ul>
-<li><img src="images/f19.png" width=20> where:</li>
+<li>continue to Path 2</li>
+</ul></li>
+<li>If % Increase in Premiums ≥ PV1, then:
+<ul>
+<li>continue to Path 1</li>
+</ul></li>
+</ol>
+<p><em>Path 1</em></p>
+<ol style="list-style-type: decimal">
+<li><img src="images/f19.png" height=20> where:
+<ul>
 <li>y - PV2 = m(% Increase in Premiums - PV1)</li>
 <li>y = (m * % Increase in Premiums - m * PV1) = PV2</li>
 <li>y = Skip% = Percent of users who will skip</li>
-</ul>
+</ul></li>
+</ol>
 <p><strong>Path 1 input:</strong> SyRec1 and Skip%</p>
 <p><strong>Path 1</strong> <strong>Output:</strong> Skip#</p>
 <ol style="list-style-type: decimal">
@@ -634,9 +697,15 @@
 </ol>
 <p><em>Path 2</em></p>
 <ol style="list-style-type: decimal">
-<li>If <img src="images/f21.png" width=30"> &lt; PV5, then continue to Path 3.</li>
-<li>If <img src="images/f22.png" width=30"> ≥ PV5, then determine Skip# to the nearest whole number.</li>
+<li>If <img src="images/f21.png" height=30"> &lt; PV5, then:
+<ul>
+<li>continue to Path 3.</li>
+</ul></li>
+<li>If <img src="images/f22.png" height=30"> ≥ PV5, then:
+<ul>
+<li>determine Skip# to the nearest whole number.</li>
 <li>Skip# = SyRec1 * PV6</li>
+</ul></li>
 <li>Identify group where UsRec5 = Valid.</li>
 <li>Randomly select (Skip#) number of users where UsRec5 = Valid.</li>
 <li>Group of skip users = Set of users.</li>
@@ -644,11 +713,17 @@
 </ol>
 <p><em>Path 3</em></p>
 <ol style="list-style-type: decimal">
-<li>If EV8 = 0, then do nothing.</li>
-<li>If EV8 = 1, 2, or 3, then decrease EV8 by 1.</li>
+<li>If EV8 = 0, then:
+<ul>
+<li>do nothing.</li>
+</ul></li>
+<li>If EV8 in 1, 2, or 3, then:
+<ul>
+<li>decrease EV8 by 1.</li>
 <li>At random, select 1 user record where UsRec5 = Valid.</li>
 <li>Update user.</li>
 <li>UsRec12 = No</li>
+</ul></li>
 </ol>
 <p><strong>Note:</strong> Once Path 1, Path 2, and Path 3 are completed for all records, continue to SyFunc3.</p>
 <h4 id="syfunc3-detailed-description"><span class="header-section-number">10.6.1.3</span> SyFunc3 Detailed Description</h4>
@@ -667,22 +742,41 @@
 <p><em>Path 0 Start</em></p>
 <ol style="list-style-type: decimal">
 <li>Evaluate user <strong>&lt;current user #&gt;</strong>.</li>
-<li>If UsRec12 = No, then update UsRec8 = Skipped and add to Path 1 Run Set.</li>
-<li>Else (UsRec12 must be yes), update UsRec8 = Paid.</li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then load Path 1.</li>
-<li>Else, move to <strong>&lt;current user #&gt; + 1</strong> and go to Path 0 Start.</li>
+<li>If UsRec12 = No, then:
+<ul>
+<li>update UsRec8 = Skipped</li>
+<li>add to Path 1 Run Set.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>If (UsRec12 must be yes), then:
+<ul>
+<li>update UsRec8 = Paid.</li>
+</ul></li>
+</ul></li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then:
+<ul>
+<li>load Path 1.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue with <strong>&lt;current user #&gt; + 1</strong></li>
+<li>go to Path 0 Start.</li>
+</ul></li>
 </ol>
 <p><em>Path 1</em></p>
 <ol style="list-style-type: decimal">
-<li>If UsRec12 = No, then complete the following:</li>
+<li>If UsRec12 = No, then:
+<ul>
 <li>Update UsRec8 = Skipped.</li>
 <li>Decrement SyRec1 by 1.</li>
 <li>Increment SyRec5 by 1.</li>
 <li>Referencing UsRec3,
-<ol style="list-style-type: decimal">
+<ul>
 <li>Decrease UsRec4 by 1 for all users with same UsRec3 value.</li>
 <li>Decrease UsRec2 by 1 for all users with same UsRec1 and UsRec3.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>UsRec3 = 0</li>
 <li>UsRec4 = 0</li>
 <li>UsRec5 = NR</li>
@@ -698,42 +792,67 @@
 <p><strong>Function name:</strong> SyFunc4 – Invalidate subgroup function</p>
 <p><strong>Stage:</strong> Pay Stage 4</p>
 <p><strong>SyFunc4 input:</strong> UsRec4, UsRec8, and UsRec11</p>
+<ol style="list-style-type: decimal">
+<li>If UsRec4 = 1, 2, or 3 and UsRec8 = Paid, then:
 <ul>
-<li>If UsRec4 = 1, 2, or 3 and UsRec8 = Paid, then complete the following:</li>
 <li>Assign UsRec8 = Paid-Invalid</li>
 <li>Assign UsRec5 = Invalid</li>
 <li>Assign UsRec10 = UsRec11</li>
 <li>Increase SyRec6 by 1</li>
 <li>Continue to Path 1.</li>
-<li>If UsRec4 = 4, 5, 6, or 7, then continue to Path 1.</li>
-</ul>
+</ul></li>
+<li>If UsRec4 = 4, 5, 6, or 7, then:
+<ul>
+<li>continue to Path 1.</li>
+</ul></li>
+</ol>
 <p><em>Path 1</em></p>
 <p><strong>Initial check:</strong> Is the simulation currently on Period 1?</p>
+<ol style="list-style-type: decimal">
+<li>If yes, then:
 <ul>
-<li>If yes, then advance to SyFunc5.</li>
+<li>Advance to SyFunc5.</li>
 <li>Advance (copy) values in current System Record row to finalize stage Period 0.</li>
-<li>If no, then period = x advance to SyFunc6</li>
+</ul></li>
+<li>If no, then:
+<ul>
+<li>period = x advance to SyFunc6</li>
 <li>Advance (copy) values in current System Record row to Reorg Stage Period x row.</li>
-</ul>
+</ul></li>
+</ol>
 <h4 id="syfunc5-detailed-description"><span class="header-section-number">10.6.1.5</span> SyFunc5 Detailed Description</h4>
 <p><strong>Function name:</strong> SyFunc5 – Finalize premium function</p>
 <p><strong>Stage and period:</strong> Finalize Stare – only run for Period 0</p>
 <p><strong>Initial check:</strong> Is the simulation currently on Period 0?</p>
+<ol style="list-style-type: decimal">
+<li>If yes, then:
 <ul>
-<li>If yes, then continue to SyFunc5 input.</li>
-<li>Else, then do nothing.</li>
-</ul>
+<li>continue to SyFunc5 input.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>do nothing.</li>
+</ul></li>
+</ol>
 <p><strong>SyFunc5 input:</strong> UsRec8 = Defected</p>
+<ol style="list-style-type: decimal">
+<li>If UsRec8 = Defected, then:
 <ul>
-<li>If UsRec8 = Defected, then increase SyRec3 by 1.</li>
-<li>Otherwise, do nothing.</li>
-</ul>
+<li>increase SyRec3 by 1.</li>
+</ul></li>
+<li>Otherwise:
+<ul>
+<li>do nothing.</li>
+</ul></li>
+</ol>
 <p><strong>SyFunc5 output:</strong> SyRec9</p>
 <ol style="list-style-type: decimal">
-<li><p>Calculate SyRec9.</p></li>
-<li><p>SyRec9 = SyRec3 * SyRec13</p></li>
+<li>Calculate SyRec9.
+<ul>
+<li>SyRec9 = SyRec3 * SyRec13</li>
+</ul></li>
 <li>Advance values in current System Record row to Reorg Stage Period 1 row.</li>
-<li><p>Advance to UsFunc6.</p></li>
+<li>Advance to UsFunc6.</li>
 </ol>
 <h4 id="usfunc6-detailed-description"><span class="header-section-number">10.6.1.6</span> UsFunc6 Detailed Description</h4>
 <p><strong>Function name:</strong> UsFunc6 – User quit function</p>
@@ -751,45 +870,73 @@
 <li>Start with first user in user list <strong>&lt;current user #&gt;</strong>.</li>
 </ol>
 <p><em>Path 0 Start</em></p>
+<ol style="list-style-type: decimal">
+<li>Evaluate &lt;current user #&gt;.
 <ul>
-<li>Evaluate &lt;current user #&gt;.</li>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec6 = Low-Morale, then add to Path 1 Run Set.
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec6 = Low-Morale, then:
 <ul>
-<li>Else, add to Path 3 Run Set</li>
+<li>add to Path 1 Run Set.</li>
 </ul></li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then load Path 1.
+<li>Else:
 <ul>
-<li>Else, continue to <strong>&lt;current user #&gt;</strong> + 1 and go to Path 0 Start.</li>
+<li>add to Path 3 Run Set</li>
 </ul></li>
-</ul>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then:
+<ul>
+<li>load Path 1.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue to <strong>&lt;current user #&gt;</strong> + 1</li>
+<li>go to Path 0 Start.</li>
+</ul></li>
+</ul></li>
+</ol>
 <p><em>Path 1</em></p>
 <ol style="list-style-type: decimal">
 <li>Load Path 1 Run Set.</li>
-<li>For all users where UsRec6 = Low-Morale and UsRec8 = Paid-Invalid,</li>
+<li>For all users where UsRec6 = Low-Morale and UsRec8 = Paid-Invalid:
+<ul>
 <li>Count users in set = <strong>&lt;end of path 1 set list&gt;</strong>.</li>
+</ul></li>
 <li>Continue Path 1 User Evaluation.</li>
 </ol>
 <p><em>Path 1 User Evaluation</em></p>
 <ol style="list-style-type: decimal">
 <li>Start with user <strong>&lt;current user # path 1&gt;</strong> in set Path 1 Run Set.</li>
 <li>Calculate a random number in the range of 0 to 1 = <strong>&lt;probability&gt;</strong>.</li>
-<li>If <strong>&lt;probability&gt;</strong> ≥ EV9, then add user to Path 3 Set List.
-<ol style="list-style-type: decimal">
-<li>Else, add user to Path 2a Set List and update UsRec8 = Quit.</li>
-</ol></li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of path 1 set list&gt;</strong> , then load Path 2a.</li>
-<li>Else, increment value for <strong>&lt;current user # path 1&gt;</strong> by 1 in set Path 1 Run.</li>
+<li>If <strong>&lt;probability&gt;</strong> ≥ EV9, then:
+<ul>
+<li>add user to Path 3 Set List.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>add user to Path 2a Set List</li>
+<li>update UsRec8 = Quit.</li>
+</ul></li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of path 1 set list&gt;</strong> , then:
+<ul>
+<li>load Path 2a.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>increment value for <strong>&lt;current user # path 1&gt;</strong> by 1 in set Path 1 Run.</li>
+</ul></li>
 <li>Clear <strong>&lt;probability&gt;</strong>.</li>
 <li>Go to Path 1 User Evaluation.</li>
 </ol>
 <p><em>Path 2a</em></p>
 <ol style="list-style-type: decimal">
 <li>Load Path 2a Run Set list.</li>
-<li>For all users where UsRec8 = Quit,</li>
+<li>For all users where UsRec8 = Quit:
+<ul>
 <li>Count users in set = <strong>&lt;end of path 2 set list&gt;</strong>.</li>
-<li>For each user in Path 2 Run Set.</li>
+</ul></li>
+<li>For each user in Path 2 Run Set:
+<ul>
 <li>Decrement SyRec1 by 1.</li>
 <li>Increment SyRec 7 by 1</li>
+</ul></li>
 <li>Continue to Path 2a User Evaluation.</li>
 </ol>
 <p><em>Path 2a User Evaluation</em></p>
@@ -797,25 +944,34 @@
 <li>Start with user <strong>&lt;current user # path 2&gt;</strong> in set Path 2 Run Set list.</li>
 <li>Read <strong>&lt;current user #&gt;</strong> UsRec3 = Load into <strong>&lt;GRead A&gt;</strong>.</li>
 <li>Read <strong>&lt;current user #&gt;</strong> UsRec1 = Load into <strong>&lt;GRead B&gt;</strong>.</li>
-<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong> ,</li>
+<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong>:
+<ul>
 <li>Decrease UsRec4 by 1.</li>
-<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong> and UsRec1 = <strong>&lt;GRead B&gt;</strong> ,</li>
+</ul></li>
+<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong> and UsRec1 = <strong>&lt;GRead B&gt;</strong>:</li>
 <li>Decrease UsRec2 by 1.</li>
-<li>Assign the current values for <strong>&lt;current user # path 2&gt;</strong> as follows:</li>
+<li>Assign the current values for <strong>&lt;current user # path 2&gt;</strong> as follows:
+<ul>
 <li>UsRec3 = 0</li>
 <li>UsRec4 = 0</li>
 <li>UsRec5 = NR</li>
 <li>UsRec8 = NR</li>
 <li>UsRec12 = NR</li>
-<li>If <strong>&lt;current user # path 2&gt;</strong> = <strong>&lt;end of path 2 set list&gt;</strong> , then</li>
+</ul></li>
+<li>If <strong>&lt;current user # path 2&gt;</strong> = <strong>&lt;end of path 2 set list&gt;</strong> , then:
+<ul>
 <li>Clear <strong>&lt;GRead A&gt;</strong> ,</li>
 <li>Clear <strong>&lt;GRead B&gt;</strong> ,</li>
 <li>Clear Path 2 Run Set, and</li>
 <li>Continue to Path 3.</li>
-<li>Else, increment value for <strong>&lt;current user # path 2&gt;</strong> by 1 in set Path 2a Run Set,</li>
-<li>Clear <strong>&lt;GRead A&gt;</strong> ,</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>increment value for <strong>&lt;current user # path 2&gt;</strong> by 1 in set Path 2a Run Set</li>
+<li>Clear <strong>&lt;GRead A&gt;</strong></li>
 <li>Clear <strong>&lt;GRead B&gt;</strong> , and</li>
 <li>Go to Path 2a User Evaluation.</li>
+</ul></li>
 </ol>
 <p><em>Path 3</em></p>
 <ol style="list-style-type: decimal">
@@ -825,68 +981,108 @@
 <p><em>Path 3 User Evaluation</em></p>
 <ol style="list-style-type: decimal">
 <li>Evaluate user <strong>&lt;current user # path 3 set list&gt;</strong>.</li>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec7 = Dependent, then evaluate the following:
-<ol style="list-style-type: decimal">
-<li>If UsRec2 ≥ 2, then add user to Path 4 Set List.</li>
-<li>Else, add user to Path 2b Set List and update UsRec8 = Quit.</li>
-</ol></li>
-<li>Else (UsRec7 = Independent), then add user to Path 4 Set List.</li>
-<li>Then,</li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of path 3 set list&gt;</strong> , then go to Path 2b.</li>
-<li>Else, continue to <strong>&lt;current user #&gt;</strong> + 1 and go to Path 3 User Evaluation.</li>
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec7 = Dependent, then:
+<ul>
+<li>evaluate the following:
+<ul>
+<li>If UsRec2 ≥ 2, then:
+<ul>
+<li>add user to Path 4 Set List.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>add user to Path 2b Set List</li>
+<li>update UsRec8 = Quit.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Elseif (UsRec7 = Independent), then:
+<ul>
+<li>add user to Path 4 Set List.</li>
+</ul></li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of path 3 set list&gt;</strong> , then:
+<ul>
+<li>go to Path 2b.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue to <strong>&lt;current user #&gt;</strong> + 1</li>
+<li>go to Path 3 User Evaluation.</li>
+</ul></li>
 </ol>
 <p><em>Path 2</em></p>
 <ol style="list-style-type: decimal">
 <li>Decrement SyRec1 by 1.</li>
 <li>Increment SyRec7 by 1.</li>
-<li><p>Referencing UsRec3,</p></li>
+<li>Referencing UsRec3,
+<ul>
 <li>Decrease UsRec4 by 1 for all users with same UsRec3 value.</li>
-<li><p>Decrease UsRec2 by 1 for all users with same UsRec 1 and UsRec3.</p></li>
-<li>If UsRec8 = Quit, then:</li>
+<li>Decrease UsRec2 by 1 for all users with same UsRec 1 and UsRec3.</li>
+</ul></li>
+<li>If UsRec8 = Quit, then:
+<ul>
 <li>UsRec3 = 0</li>
 <li>UsRec4 = 0</li>
 <li>UsRec5 = NR</li>
 <li>UsRec8 = NR</li>
 <li>UsRec12 = NR</li>
-<li><p>Continue to Path 2b User Evaluation.</p></li>
+</ul></li>
+<li>Continue to Path 2b User Evaluation.</li>
 </ol>
 <p><em>Path 2b User Evaluation</em></p>
 <ol style="list-style-type: decimal">
 <li>Start with user <strong>&lt;current user # path 2&gt;</strong> in set Path 2b Run Set.</li>
 <li>Read <strong>&lt;current user #&gt;</strong> UsRec3 = Load into <strong>&lt;GRead A&gt;</strong>.</li>
 <li>Read <strong>&lt;current user #&gt;</strong> UsRec1 = Load into <strong>&lt;GRead B&gt;</strong>.</li>
-<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong> , decrease UsRec4 by 1.</li>
-<li>For every user in record where UsRec 3 = &lt;GRead A&gt; and UsRec 1 = &lt;GRead B&gt;, decrease UsRec2 by 1.</li>
-<li>Assign the current values for &lt;current user # path 2&gt; as follows:</li>
+<li>For every user in record where UsRec3 = <strong>&lt;GRead A&gt;</strong> do:
+<ul>
+<li>decrease UsRec4 by 1.</li>
+</ul></li>
+<li>For every user in record where UsRec 3 = &lt;GRead A&gt; and UsRec 1 = &lt;GRead B&gt;, do:
+<ul>
+<li>decrease UsRec2 by 1.</li>
+</ul></li>
+<li>Assign the current values for &lt;current user # path 2&gt; as follows:
+<ul>
 <li>UsRec3 = 0</li>
 <li>UsRec4 = 0</li>
 <li>UsRec5 = NR</li>
 <li>UsRec8 = NR</li>
 <li>UsRec12 = NR</li>
-<li>If <strong>&lt;current user # path 2&gt;</strong> = <strong>&lt;end of path 2 set list&gt;</strong> , then</li>
+</ul></li>
+<li>If <strong>&lt;current user # path 2&gt;</strong> = <strong>&lt;end of path 2 set list&gt;</strong> then:
+<ul>
 <li>Clear <strong>&lt;GRead A&gt;</strong> ,</li>
 <li>Clear <strong>&lt;GRead B&gt;</strong> ,</li>
 <li>Clear Path 2 Run Set, and</li>
 <li>Continue to Path 4.</li>
-<li>Else, increment value for <strong>&lt;current user # path 2&gt;</strong> by 1 in set Path 2b Run Set,</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>Increment value for <strong>&lt;current user # path 2&gt;</strong> by 1 in set Path 2b Run Set,</li>
 <li>Clear <strong>&lt;GRead A&gt;</strong> ,</li>
 <li>Clear <strong>&lt;GRead B&gt;</strong> , and</li>
 <li>Go to Path 2b User Evaluation.</li>
+</ul></li>
 </ol>
 <p><em>Path 4</em></p>
 <ol style="list-style-type: decimal">
 <li>Load Path 4 Set List.</li>
 <li>Count users in set = <strong>&lt;path 4 set list&gt;</strong>.</li>
-<li>For all users in Path 4 Set List,</li>
+<li>For all users in Path 4 Set List do:
+<ul>
 <li>Increment SyRec8 by 1.</li>
-<li>Check if UsRec8 = Paid-Invalid.
-<ol style="list-style-type: decimal">
-<li>If UsRec8 ≠ Paid-Invalid, then throw error and terminate.</li>
-</ol></li>
-<li>Check if UsRec2 ≥ 2.
-<ol style="list-style-type: decimal">
-<li>If UsRec2 &lt; 2, then throw error and terminate.</li>
-</ol></li>
+<li>If UsRec8 is not Paid-Invalid, then:
+<ul>
+<li>throw error</li>
+<li>terminate.</li>
+</ul></li>
+<li>If UsRec2 &lt; 2, then:
+<ul>
+<li>throw error</li>
+<li>terminate.</li>
+</ul></li>
+</ul></li>
 <li>Clear Path 2 Run Set.</li>
 <li>Clear Path 3 Run Set.</li>
 <li>Continue to SyFunc7.</li>
@@ -902,41 +1098,76 @@
 <p><em>Path 0 Initialization</em></p>
 <ol style="list-style-type: decimal">
 <li>Load user record.</li>
-<li>Create user list from user record where UsRec8 = Paid-Invalid.</li>
+<li>Create user list from user record where UsRec8 = Paid-Invalid.
+<ul>
 <li>Count users in list = <strong>&lt;end of user list&gt;</strong>.</li>
+</ul></li>
 <li>Load user list.</li>
 <li>Start with first user in user list <strong>&lt;current user #&gt;</strong>.</li>
 </ol>
 <p><em>Path 0 Start</em></p>
 <ol style="list-style-type: decimal">
 <li>Evaluate <strong>&lt;current user #&gt;</strong>.</li>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 1, then add to Path 1 Run Set.</li>
-<li>Else, continue.</li>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 2, then add to Path 2 Run Set.</li>
-<li>Else, continue.</li>
-<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 3, then add to Path 3 Run Set.</li>
-<li>Else, throw error if UsRec4 = 4, 5, 6, or 7, and terminate.</li>
-<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then load Path 1.</li>
-<li>Else, continue to <strong>&lt;current user #&gt;</strong> + 1 and go to Path 0 Start.</li>
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 1, then:
+<ul>
+<li>add to Path 1 Run Set.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue.</li>
+</ul></li>
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 2, then:
+<ul>
+<li>add to Path 2 Run Set.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue.</li>
+</ul></li>
+<li>If user <strong>&lt;current user #&gt;</strong> UsRec4 = 3, then:
+<ul>
+<li>add to Path 3 Run Set.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>if UsRec4 = 4, 5, 6, or 7, then:
+<ul>
+<li>throw error</li>
+<li>terminate.</li>
+</ul></li>
+</ul></li>
+<li>If <strong>&lt;current user #&gt;</strong> = <strong>&lt;end of user list&gt;</strong> , then:
+<ul>
+<li>load Path 1.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue to <strong>&lt;current user #&gt;</strong> + 1</li>
+<li>go to Path 0 Start.</li>
+</ul></li>
 </ol>
 <p><em>Path 1</em></p>
 <p><strong>Path 1 First Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>For all users where UsRec4 = 1,</li>
+<li>For all users where UsRec4 = 1 do:
+<ul>
 <li>Load Path 1 Run Set.</li>
 <li>Create a list from set.
-<ol style="list-style-type: decimal">
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P1 UsRec3 invalid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Load user record.</li>
-<li>Filter records that satisfy the following requirements:</li>
+<li>Filter records that satisfy the following requirements:
+<ul>
 <li>User record UsRec5 = Valid and user record UsRec4 = 6.</li>
 <li>Create a list from record.
-<ol style="list-style-type: decimal">
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P1 UsRec3 valid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 </ol>
 <p><strong>Path 1 Assignment First Attempt</strong></p>
 <ol style="list-style-type: decimal">
@@ -944,253 +1175,419 @@
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Match with random entry from <strong>&lt;P1 UsRec3 valid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>Find users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Update with the following values:</li>
-<li>UsRec3 = &lt;UsRec3 GiveMatch&gt;</li>
+<li>Update with the following values:
+<ul>
+<li>UsRec3 = &lt;UsRec3 GiveMatch&gt;
+<ul>
 <li>UsRec4 = 7</li>
 <li>UsRec5 = Valid</li>
 <li>UsRec8 = Reorg</li>
 <li>UsRec9 = UsRec9 + 1</li>
-<li>Remove:</li>
-<li>Entry on <strong>&lt;P1 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong> and</li>
-<li>Users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+</ul></li>
+</ul></li>
+<li>Remove entry on <strong>&lt;P1 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong></li>
+<li>Remove users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>Assign UsRec4 = 7.</li>
 <li>Remove entry on <strong>&lt;P1 UsRec3 valid list&gt;</strong> where UsRec 3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong> and <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>If <strong>&lt;P1 UsRec3 invalid list&gt;</strong> is empty, then check if Path 1 Run Set is empty.</li>
-<li>If Path 1 Run Set is empty, then clear <strong>&lt;P1 UsRec3 valid list&gt;</strong> and continue to Path 2.</li>
-<li>Else, throw an error.</li>
-<li>Else, check if <strong>&lt;P1 UsRec3 valid list&gt;</strong> is empty.</li>
-<li>If <strong>&lt;P1 UsRec3 valid list&gt;</strong> is empty, then try Path 1 Second Attempt.</li>
-<li>Else, return to Path 1 Assignment First Attempt.</li>
+<li>If <strong>&lt;P1 UsRec3 invalid list&gt;</strong> is empty, then:
+<ul>
+<li>check if Path 1 Run Set is empty.</li>
+<li>If Path 1 Run Set is empty, then:
+<ul>
+<li>clear <strong>&lt;P1 UsRec3 valid list&gt;</strong></li>
+<li>continue to Path 2.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+<li>Check if <strong>&lt;P1 UsRec3 valid list&gt;</strong> is empty.
+<ul>
+<li>If <strong>&lt;P1 UsRec3 valid list&gt;</strong> is empty, then:
+<ul>
+<li>try Path 1 Second Attempt.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>return to Path 1 Assignment First Attempt.</li>
+</ul></li>
+</ul></li>
 </ol>
 <p><strong>Path 1 Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
 <li>Load user record.</li>
-<li>Filter records that satisfy the following requirements:</li>
+<li>Filter records that satisfy the following requirements:
+<ul>
 <li>User record UsRec5 = Valid and</li>
 <li>User record UsRec4 = 5.</li>
-<li>Create a list from record.</li>
+</ul></li>
+<li>Create a list from record.
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P1 UsRec3 valid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
+</ul></li>
 </ol>
 <p><strong>Path 1 Assignment Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
 <li>Start at current entry on list <strong>&lt;P1 UsRec3 invalid list&gt;</strong>.</li>
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Match with random entry from <strong>&lt;P1 UsRec3 valid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Find users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>Find users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.
+<ul>
 <li>Update with the following values:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong></li>
 <li>UsRec4 = 6</li>
 <li>UsRec 5 = Valid</li>
 <li>UsRec 8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P1 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Remove users from Path 1 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.
+<ul>
 <li>Update UsRec4 = 6.</li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P1 UsRec3 valid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong> and <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>If <strong>&lt;P1 UsRec3 invalid list&gt;</strong> is empty, then check if Path 1 Run Set is empty.</li>
-<li>If Path 1 Run Set is empty, then clear <strong>&lt;P1 UsRec3 valid list&gt;</strong> and proceed to Path 2.</li>
-<li>Else, throw an error.</li>
-<li>Else, return to Path 1 Assignment Second Attempt.</li>
+<li>If <strong>&lt;P1 UsRec3 invalid list&gt;</strong> is empty, then:
+<ul>
+<li>If Path 1 Run Set is empty, then:
+<ul>
+<li>clear <strong>&lt;P1 UsRec3 valid list&gt;</strong></li>
+<li>proceed to Path 2.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>return to Path 1 Assignment Second Attempt.</li>
+</ul></li>
 </ol>
 <p><strong>Path 2</strong></p>
 <p><strong>Path 2 First Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>For all users where UsRec4 = 2, load Path 2 Run Set.</li>
-<li>Create a list from Path 2 Run Set.</li>
+<li>For all users where UsRec4 = 2 do:
+<ul>
+<li>load Path 2 Run Set.</li>
+</ul></li>
+<li>Create a list from Path 2 Run Set.
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P2 UsRec3 invalid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
-<li>Load user record.</li>
+</ul></li>
+<li>Load user record.
+<ul>
 <li>Filter records that satisfy the following requirements:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec5 = Valid and</li>
 <li>UsRec4 = 5.</li>
-</ol></li>
+</ul></li>
 <li>Create a list from record.
-<ol style="list-style-type: decimal">
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P2 UsRec3 valid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 </ol>
 <p><strong>Path 2 Assignment First Attempt</strong></p>
 <ol style="list-style-type: decimal">
 <li>Start at current entry on list <strong>&lt;P2 UsRec3 invalid list&gt;</strong>.</li>
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Match with random entry from <strong>&lt;P2 UsRec3 valid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Match with random entry from <strong>&lt;P2 UsRec3 valid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.
+<ul>
 <li>Find users from Path 2 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Update with the following values:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>UsRec4 = 7</li>
 <li>UsRec 5 = Valid</li>
 <li>UsRec 8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P2 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Remove users from Path 2 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.
+<ul>
 <li>Update UsRec4 = 7.</li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P2 UsRec3 valid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong> and <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>If &lt;P2 UsRec3 invalid list&gt; is empty, then check if Path 2 Run Set is empty.</li>
-<li>If Path 2 Run Set is empty, then clear <strong>&lt;P2 UsRec3 valid list&gt;</strong> and proceed to Path 3.</li>
-<li>Else, throw an error.</li>
-<li>Else, check if <strong>&lt;P2 UsRec3 valid list&gt;</strong> is empty.</li>
-<li>If <strong>&lt;P2 UsRec3 valid list&gt;</strong> is empty, then try Path 2 Second Attempt.</li>
-<li>Else, return to Path 2 Assignment First Attempt.</li>
+<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Reset <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>If &lt;P2 UsRec3 invalid list&gt; is empty, then:
+<ul>
+<li>If Path 2 Run Set is empty, then:
+<ul>
+<li>clear <strong>&lt;P2 UsRec3 valid list&gt;</strong></li>
+<li>proceed to Path 3.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>If <strong>&lt;P2 UsRec3 valid list&gt;</strong> is empty, then:
+<ul>
+<li>try Path 2 Second Attempt.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>return to Path 2 Assignment First Attempt.</li>
+</ul></li>
+</ul></li>
 </ol>
 <p><strong>Path 2 Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
 <li>Load user record.</li>
-<li>Filter records that satisfy the following requirements:</li>
+<li>Filter records that satisfy the following requirements:
+<ul>
 <li>UsRec5 = Valid and</li>
 <li>UsRec4 = 4.</li>
-<li>Create a list from record.</li>
+</ul></li>
+<li>Create a list from record.
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P2 UsRec3 valid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
+</ul></li>
 </ol>
 <p><strong>Path 2 Assignment Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>Start at current entry on list <strong>&lt;P2 UsRec3 invalid list&gt;</strong>.</li>
+<li>Start at current entry on list <strong>&lt;P2 UsRec3 invalid list&gt;</strong>.
+<ul>
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+</ul></li>
 <li>Match with random entry from <strong>&lt;P2 UsRec3 valid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Find users from Path 2 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>Find users from Path 2 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.
+<ul>
 <li>Update the following values:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong></li>
 <li>UsRec4 = 6</li>
 <li>UsRec5 = Valid</li>
 <li>UsRec8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P2 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Remove users from Path 2 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.
+<ul>
 <li>Update UsRec4 = 6.</li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P2 UsRec3 valid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong> and <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>If <strong>&lt;P2 UsRec3 invalid list&gt;</strong> is empty, then check if Path 2 Run Set is empty.</li>
-<li>If Path 2 Run Set is empty, then clear <strong>&lt;P2 UsRec3 valid list&gt;</strong> and proceed to Path 3.</li>
-<li>Else, throw an error.</li>
-<li>Else, return to Path 2 Assignment Second Attempt.</li>
+<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Reset <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>If <strong>&lt;P2 UsRec3 invalid list&gt;</strong> is empty, then:
+<ul>
+<li>If Path 2 Run Set is empty, then:
+<ul>
+<li>clear <strong>&lt;P2 UsRec3 valid list&gt;</strong></li>
+<li>proceed to Path 3.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>return to Path 2 Assignment Second Attempt.</li>
+</ul></li>
 </ol>
 <p><strong>Path 3</strong></p>
 <p><strong>Path 3 First Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>For all users where UsRec4 = 3, load Path 3 Run Set.</li>
-<li>Create a list from set.</li>
-<li>Add all UsRec3 values to <strong>&lt;P3 UsRec3 invalid list&gt;</strong>.</li>
-<li>Eliminate all duplicates.</li>
+<li>For all users where UsRec4 = 3, load Path 3 Run Set. -. Create a list from set. -. Add all UsRec3 values to <strong>&lt;P3 UsRec3 invalid list&gt;</strong>. -. Eliminate all duplicates.</li>
 <li>If set has two or more values, then go to Path 3 Assignment First Attempt.</li>
 <li>Else, go to Path 3 Assignment Second Attempt.</li>
 </ol>
 <p><strong>Path 3 Assignment First Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>Start at current entry on list <strong>&lt;P3 UsRec3 invalid list&gt;</strong>.</li>
+<li>Start at current entry on list <strong>&lt;P3 UsRec3 invalid list&gt;</strong>.
+<ul>
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&gt;.</strong></li>
+</ul></li>
 <li>Match with next entry from <strong>&lt;P3 UsRec3 invalid list&gt;</strong> = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Find users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>Find users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.
+<ul>
 <li>Update with the following values:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong></li>
 <li>UsRec4 = 6</li>
 <li>UsRec5 = Valid</li>
 <li>UsRec8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P3 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
 <li>Remove users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.
+<ul>
 <li>Update the following:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec4 = 6</li>
 <li>UsRec5 = Valid</li>
 <li>UsRec8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P3 UsRec3 invalid list&gt;</strong> where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
 <li>Remove users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
-<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong> and <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
-<li>If <strong>&lt;P3 UsRec3 invalid list&gt;</strong> is empty, then check if Path 3 Run Set is empty.</li>
-<li>If Path 3 Run Set is empty, then END FUNCTION.</li>
-<li>Else, throw an error.</li>
-<li>Else, check if <strong>&lt;P3 UsRec3 invalid list&gt;</strong> has two or more values.</li>
-<li>If <strong>&lt;P3 UsRec3 invalid list&gt;</strong> has two or more values, then return to Path 3 Assignment First Attempt.</li>
-<li>Else, go to Path 3 Second Attempt.</li>
+<li>Reset <strong>&lt;UsRec3 GiveMatch&gt;</strong>.</li>
+<li>Reset <strong>&lt;UsRec3 NeedMatch&gt;</strong>.</li>
+<li>If <strong>&lt;P3 UsRec3 invalid list&gt;</strong> is empty, then:
+<ul>
+<li>If Path 3 Run Set is empty, then:
+<ul>
+<li>END FUNCTION.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>If <strong>&lt;P3 UsRec3 invalid list&gt;</strong> has two or more values, then:
+<ul>
+<li>return to Path 3 Assignment First Attempt.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>go to Path 3 Second Attempt.</li>
+</ul></li>
+</ul></li>
 </ol>
 <p><strong>Path 3 Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
 <li>Load user record.</li>
-<li>Filter records that satisfy the following requirements:</li>
+<li>Filter records that satisfy the following requirements:
+<ul>
 <li>UsRec5 = Valid and</li>
 <li>UsRec4 = 4.</li>
-<li>Create a list from record.</li>
+</ul></li>
+<li>Create a list from record.
+<ul>
 <li>Add all UsRec3 values to <strong>&lt;P3 UsRec3 valid list&gt;</strong>.</li>
 <li>Eliminate all duplicates.</li>
+</ul></li>
 </ol>
 <p><strong>Path 3 Assignment Second Attempt</strong></p>
 <ol style="list-style-type: decimal">
-<li>Start at current entry on list <strong>&lt;P3 UsRec3 invalid list&gt;</strong>.</li>
+<li>Start at current entry on list <strong>&lt;P3 UsRec3 invalid list&gt;</strong>.
+<ul>
 <li>Current entry = <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
+</ul></li>
 <li>Match with random entry from <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> = <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong>.</li>
-<li>Find users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
+<li>Find users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.
+<ul>
 <li>Update with the following values:
-<ol style="list-style-type: decimal">
+<ul>
 <li>UsRec3 = <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong></li>
 <li>UsRec4 = 7</li>
 <li>UsRec5 = Valid</li>
 <li>UsRec8 = Reorg</li>
 <li>Increment UsRec9 by 1.</li>
-</ol></li>
+</ul></li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P3 UsRec3 invalid list&amp;gt;</strong> where UsRec3 = <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
 <li>Remove users from Path 3 Run Set where UsRec3 = <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
-<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong>.</li>
+<li>Find users from user record where UsRec3 = <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong>.
+<ul>
 <li>Update UsRec4 = 7.</li>
+</ul></li>
 <li>Remove entry on <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> where UsRec3 = <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong>.</li>
-<li>Reset <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong> and <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
-<li>If <strong>&lt;P3 UsRec3 invalid list&amp;gt;</strong> is empty, then check if Path 3 Run Set is empty.</li>
-<li>If Path 3 Run Set is empty, then clear <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> and END FUNCTION.</li>
-<li>Else, throw an error.</li>
-<li>Else, check if <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> is empty.</li>
-<li>If <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> is empty, then throw an error.</li>
-<li>Else, return to Path 3 Assignment Second Attempt.</li>
+<li>Reset <strong>&lt;UsRec3 GiveMatch&amp;gt;</strong>.</li>
+<li>Reset <strong>&lt;UsRec3 NeedMatch&amp;gt;</strong>.</li>
+<li>If <strong>&lt;P3 UsRec3 invalid list&amp;gt;</strong> is empty, then:
+<ul>
+<li>If Path 3 Run Set is empty, then:
+<ul>
+<li>clear <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong></li>
+<li>END FUNCTION.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+</ul></li>
+<li>Else:
+<ul>
+<li>If <strong>&lt;P3 UsRec3 valid list&amp;gt;</strong> is empty, then:
+<ul>
+<li>throw an error.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>return to Path 3 Assignment Second Attempt.</li>
+</ul></li>
+</ul></li>
 </ol>
 <h4 id="syfunc8-detailed-description"><span class="header-section-number">10.6.1.8</span> SyFunc8 Detailed Description</h4>
 <p><strong>Function name:</strong> SyFunc8 – Claims/refunds function</p>
 <p><strong>Stage:</strong> Reorg Stage 4</p>
 <p><strong>SyFunc8 input:</strong> EV3 and the Period Number</p>
 <p>Evaluate the period number as follows:</p>
-<ul>
-<li>If the Period Number = 0, then end the function.</li>
-<li>If the Period Number ≠ 0, then continue SyFunc8.</li>
-</ul>
 <ol style="list-style-type: decimal">
-<li>Calculate the probability of SyRec16 (Boolean), given EV3 as follows:</li>
-<li>If no, then write SyRec2 to SyRec17.</li>
-<li>If yes, then do nothing.</li>
+<li>If the Period Number = 0, then:
+<ul>
+<li>end the function.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue SyFunc8.</li>
+</ul></li>
+<li>Calculate the probability of SyRec16 (Boolean), given EV3 as follows:
+<ul>
+<li>If no, then:
+<ul>
+<li>write SyRec2 to SyRec17.</li>
+</ul></li>
+<li>If yes, then:
+<ul>
+<li>do nothing.</li>
+</ul></li>
+</ul></li>
 <li>Continue to SyFunc9.</li>
 </ol>
 <h4 id="syfunc9-detailed-description"><span class="header-section-number">10.6.1.9</span> SyFunc9 Detailed Description</h4>
 <p><strong>Function name:</strong> SyFunc9 – Pricing function</p>
 <p><strong>Stage:</strong> Reorg Stage 5</p>
 <ol style="list-style-type: decimal">
-<li>Calculate SyRec2.</li>
+<li>Calculate SyRec2.
+<ul>
 <li><img src="images/f22.png" height="30"></li>
-<li>Calculate SyRec14.</li>
+</ul></li>
+<li>Calculate SyRec14.
+<ul>
 <li>SyRec14 = SyRec9 + SyRec11 + SyRec13</li>
-<li>Calculate SyRec15.</li>
+</ul></li>
+<li>Calculate SyRec15.
+<ul>
 <li><img src="images/f23.png" height="30"></li>
-<li>Calculate UsRec11.</li>
+</ul></li>
+<li>Calculate UsRec11.
+<ul>
 <li>UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10</li>
-<li>If UsRec10 is used to calculate UsRec11, then assign UsRec10 = 0 after calculating UsRec11.</li>
-<li>Calculate SyRec19.</li>
+<li>If UsRec10 is used to calculate UsRec11, then:
+<ul>
+<li>assign UsRec10 = 0 after calculating UsRec11.</li>
+</ul></li>
+</ul></li>
+<li>Calculate SyRec19.
+<ul>
 <li>SyRec19 = SyRec2 + SyRec15</li>
+</ul></li>
 <li>Continue to SyFunc10.</li>
 </ol>
 <p><strong>Note:</strong> SyFunc9 provides output for individual user.</p>
@@ -1200,32 +1597,48 @@
 <p><strong>Function name:</strong> SyFunc10 – Account for fracture debt (Invalid or Skipped)</p>
 <p><strong>Stage:</strong> Reorg Stage 6</p>
 <ol style="list-style-type: decimal">
-<li>Calculate SyRec10.</li>
+<li>Calculate SyRec10.
+<ul>
 <li>SyRec10 = SyRec5 * SyRec19</li>
-<li>Calculate SyRec12.</li>
+</ul></li>
+<li>Calculate SyRec12.
+<ul>
 <li>SyRec12 = SyRec6 * SyRec19</li>
+</ul></li>
 <li>Continue to SyFunc11.</li>
 </ol>
 <h4 id="syfunc11-detailed-description"><span class="header-section-number">10.6.1.11</span> SyFunc11 Detailed Description</h4>
 <p><strong>Function name:</strong> SyFunc11 – Advance period</p>
 <p><strong>Stage:</strong> Reorg Stage 7</p>
 <p><strong>Initial check:</strong> Is the current period 10?</p>
-<ul>
-<li>If the current period = 10, then terminate and continue to <strong>Path 2</strong>.</li>
-<li>If the current period ≠ 10, then continue.</li>
-</ul>
 <ol style="list-style-type: decimal">
-<li>Calculate Total.</li>
+<li>If the current period = 10, then:
+<ul>
+<li>Terminate</li>
+<li>continue to <strong>Path 2</strong>.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>continue.</li>
+</ul></li>
+<li>Calculate Total.
+<ul>
 <li>Total = SyRec3 + SyRec5 + SyRec7</li>
-<li>If Total &gt; 0, then continue to Path 1.</li>
-<li>If Total = 0, then terminate and continue to Path 2.</li>
+</ul></li>
+<li>If Total &gt; 0, then:
+<ul>
+<li>continue to Path 1.</li>
+</ul></li>
+<li>If Total = 0, then:
+<ul>
+<li>terminate</li>
+<li>continue to Path 2.</li>
+</ul></li>
 </ol>
 <p><em>Path 1</em></p>
 <p><strong>Variable introduced:</strong></p>
-<ul>
-<li>x = Current period</li>
-</ul>
 <ol style="list-style-type: decimal">
+<li><p>x = Current period</p></li>
 <li>Advance to the next row in system record of simulation pay stage for Period x +1.</li>
 <li>Copy all values from previous row.</li>
 <li>Assign SyRec11 the value of SyRec10.</li>
@@ -1233,16 +1646,19 @@
 <li>Assign SyRec18 the value of SyRec17.</li>
 <li>Assign SyRec10, SyRec12, and SyRec17 = 0.</li>
 <li>Assign SyRec3, SyRec5, and SyRec6 = 0.</li>
-<li>If UsRec8 = Defected, Skipped, or Quit, then:</li>
+<li>If UsRec8 is either Defected, Skipped, or Quit, then:
+<ul>
 <li>UsRec8 = NR</li>
 <li>UsRec3 = 0</li>
 <li>UsRec5 = NR</li>
 <li>UsRec12 = NR</li>
-<li>Go to UsFunc</li>
+</ul></li>
+<li><p>Go to UsFunc</p></li>
 </ol>
 <p><em>Path 2</em></p>
 <ol style="list-style-type: decimal">
-<li>Write the following to a log file:</li>
+<li>Write the following to a log file:
+<ul>
 <li>Log1 = EV1 = Z, where &lt;x&gt; is the number of members at the start of the simulation</li>
 <li>Log2 = SyRec1 (final period) = Y, where &lt;x&gt; is the number of valid members remaining at the end of the simulation</li>
 <li><img src="images/f24.png" height=30> = &lt;x&gt;% of policyholders that left the group by end of simulation</li>
@@ -1253,18 +1669,26 @@
 <li>Log8 = EV4 = &lt;x&gt;% of policyholders who were assigned to Defect</li>
 <li><img src="images/f26.png" height=30> = &lt;x&gt;% of policyholders who actually defected</li>
 <li>Log10 = PV5 = &lt;x&gt;% of the initial collapse threshold set for PV5</li>
-<li>For single runs, store the table of system record as a .csv file.</li>
+</ul></li>
+<li>For single runs do:
+<ul>
+<li>store the table of system record as a .csv file.</li>
+</ul></li>
 </ol>
 <p>See the additional specification for automating the simulation and performing cumulative runs testing the collapse threshold:</p>
 <p>[insert specification for multiple simulation runs here]</p>
 <h1 id="what-the-protocol-might-do-one-day"><span class="header-section-number">11</span> What the protocol might do one day</h1>
 <p>Questions the simulation might be able to answer are as follows:</p>
 <ol style="list-style-type: decimal">
-<li>Chart the cumulative number of defections over the course of the simulation. At termination, did the community collapse?</li>
+<li>Chart the cumulative number of defections over the course of the simulation. At termination, did the community collapse?
+<ul>
 <li>Iterative runs = the boundary condition for system input variables that produce community collapse.</li>
+</ul></li>
 <li>What percentage of honest participants are required to produce groups which collapse?</li>
-<li>How do the different variable inputs contribute to changing the collapse threshold?</li>
+<li>How do the different variable inputs contribute to changing the collapse threshold?
+<ul>
 <li>Collapse is x% likely to occur with x% of initial defectors = modifying all other variables</li>
+</ul></li>
 </ol>
 </body>
 </html>
