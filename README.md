@@ -487,7 +487,7 @@ _Path 4_
 2. Clear Path 3 Run Set.
 3. Continue to UsFunc2.
 
-#### UsFunc2 Detailed Description
+## UsFunc2 Detailed Description
 
 **Function name:** UsFunc2 – User skip function
 
@@ -565,7 +565,7 @@ _Path 3_
 
 **Note:** Once Path 1, Path 2, and Path 3 are completed for all records, continue to SyFunc3.
 
-#### SyFunc3 Detailed Description
+## SyFunc3 Detailed Description
 
 **Function name:** SyFunc3 – Validate premium function
 
@@ -617,7 +617,7 @@ _Path 2_
 1. Clear Path 1 Run Set.
 2. Continue to SyFunc4.
 
-#### SyFunc4 Detailed Description
+## SyFunc4 Detailed Description
 
 **Function name:** SyFunc4 – Invalidate subgroup function
 
@@ -645,7 +645,7 @@ _Path 1_
 	- period = x advance to SyFunc6
 	- Advance (copy) values in current System Record row to Reorg Stage Period x row.
 
-#### SyFunc5 Detailed Description
+## SyFunc5 Detailed Description
 
 **Function name:** SyFunc5 – Finalize premium function
 
@@ -672,7 +672,7 @@ _Path 1_
 2. Advance values in current System Record row to Reorg Stage Period 1 row.
 3. Advance to UsFunc6.
 
-#### UsFunc6 Detailed Description
+## UsFunc6 Detailed Description
 
 **Function name:** UsFunc6 – User quit function
 
@@ -842,7 +842,7 @@ _Path 4_
 5. Clear Path 3 Run Set.
 6. Continue to SyFunc7.
 
-#### SyFunc7 Detailed Description
+## SyFunc7 Detailed Description
 
 **Function name:** SyFunc7 – Reorg user function
 
@@ -1142,7 +1142,7 @@ _Path 1_
 	- Else: 
 		- return to Path 3 Assignment Second Attempt.
 
-#### SyFunc8 Detailed Description
+## SyFunc8 Detailed Description
 
 **Function name:** SyFunc8 – Claims/refunds function
 
@@ -1164,7 +1164,7 @@ Evaluate the period number as follows:
 		- do nothing.
 4. Continue to SyFunc9.
 
-#### SyFunc9 Detailed Description
+## SyFunc9 Detailed Description
 
 **Function name:** SyFunc9 – Pricing function
 
@@ -1190,7 +1190,7 @@ Evaluate the period number as follows:
 
 **Note:** Setting UsRec10 = 0 after UsRec10 is used to calculate UsRec11 prevents the same refund from being counted twice.
 
-#### SyFunc10 Detailed Description
+## SyFunc10 Detailed Description
 
 **Function name:** SyFunc10 – Account for fracture debt (Invalid or Skipped)
 
@@ -1202,7 +1202,7 @@ Evaluate the period number as follows:
 	- SyRec12 = SyRec6 * SyRec19
 3. Continue to SyFunc11.
 
-#### SyFunc11 Detailed Description
+## SyFunc11 Detailed Description
 
 **Function name:** SyFunc11 – Advance period
 
