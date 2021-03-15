@@ -1142,7 +1142,7 @@ _Path 1_
 	- Else: 
 		- return to Path 3 Assignment Second Attempt.
 
-## SyFunc8 Detailed Description
+## SyFunc8
 
 **Function name:** SyFunc8 – Claims/refunds function
 
@@ -1163,6 +1163,20 @@ Evaluate the period number as follows:
 	- If yes, then:
 		- do nothing.
 4. Continue to SyFunc9.
+
+## SyFunc 8.5
+
+**Function name:** SyFunc8.5 – account for fracture debt function
+
+**Stage:** Reorg Stage 4.5 - This function always runs in every period
+
+**SyFunc8 input:** SyRec 6, SyRec 5, SyRec 19 and the Period Number
+
+1. Calculate: SyRec 5 * SyRec 19 
+	- Output: Generate SyRec 11
+2. Calculate: SyRec 6 * SyRec 19 
+	- Output: Generate SyRec 13
+3. Continue to SyFunc 9
 
 ## SyFunc9 Detailed Description
 
