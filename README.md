@@ -1162,7 +1162,7 @@ Evaluate the period number as follows:
 		- write SyRec2 to SyRec17.
 	- If yes, then:
 		- do nothing.
-4. Continue to SyFunc9.
+4. Continue to SyFunc 8.5
 
 ## SyFunc 8.5
 
