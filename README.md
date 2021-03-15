@@ -23,7 +23,7 @@ When coverage requirements are mandated by the system, it causes premiums to inc
 
 If it can be shown that the required threshold of a dissenting minority capable of producing group collapse is between 20 to 30% of participants, then the implications related to game theory for determining the honesty of an insurance claim will likely be of profound consequence. The threat of collapse gives the minority an effective means of imposing self-censorship upon the majority. The smaller the minority of honest participants that are required who can effectively prevent a supermajority from colluding to approve an invalid claim, the more an approved claim provides a valuable signal to entities outside of the group. If group collapse (or lack thereof) can become a reliable heuristic (to outsiders) for determining the honesty of an insurance claim then the group has an effective means of generating a historical record that has statistical significance.
 
-# Goal of THE simulation
+# Goal of the simulation
 
 It is currently unknown if combining zero-reserve architecture and coverage requirements with a mechanism that permits defections can deterministically produce group collapse when a group&#39;s consensus is fractured. If it can be shown that a small dissenting minority can produce sharply rising premiums that effectively result in group collapse, then the implications related to game theory may be of profound consequence. Having an architecture where the threshold of honest participants required to produce collapse is known is likely to be valuable. If TandaPay is one day widely available, models capable of providing the probability that an insurance claim is valid based upon the group&#39;s historical record located on the blockchain are therefore also likely to be valuable.
 
@@ -396,9 +396,9 @@ The following sections explain the system and user functions module. The functio
 - When all stages are complete, advance to the next period in the system record.
 - The following includes a step-by-step breakdown of the system and user functions module.
 
-### System and user function breakdown
+# System and user function breakdown
 
-#### UsFunc1 Detailed Description
+## UsFunc1 Detailed Description
 
 **Function name:** UsFunc1 – User defection function
 
