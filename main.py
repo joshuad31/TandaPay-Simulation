@@ -42,9 +42,7 @@ class TandaPaySimulationApp(QMainWindow):
             getattr(self.ui, f"pv_{i}").textChanged.connect(partial(self._on_value_changed, 'pv', i))
             self._on_value_changed('pv', i, float(getattr(self.ui, f"pv_{i}").value()))
 
-        self.start_iter = 0
         self.counter = 0
-        self.current_period_list = []
 
         self.sy_rec_p = [None, ] * 21
         self.sy_rec_f = [None, ] * 21
@@ -147,11 +145,11 @@ class TandaPaySimulationApp(QMainWindow):
 
     def assign_variables(self):
         for i in range(3):
-            self.rows[i] = self.start_iter * 3 + i + 2
+            self.rows[i] = self.counter * 3 + i - 1
         for i in range(1, 20):
-            self.sy_rec_p[i] = self.sh['system'].cell(self.start_iter * 3 + 2, i + 2)
-            self.sy_rec_f[i] = self.sh['system'].cell(self.start_iter * 3 + 3, i + 2)
-            self.sy_rec_r[i] = self.sh['system'].cell(self.start_iter * 3 + 4, i + 2)
+            self.sy_rec_p[i] = self.sh['system'].cell(self.counter * 3 - 1, i + 2)
+            self.sy_rec_f[i] = self.sh['system'].cell(self.counter * 3, i + 2)
+            self.sy_rec_r[i] = self.sh['system'].cell(self.counter * 3 + 1, i + 2)
 
     def _draw_chart(self):
         self.canvas.axes.cla()  # Clear the canvas.
@@ -182,14 +180,9 @@ class TandaPaySimulationApp(QMainWindow):
         for k in {"system", "user"}:
             self._init_sheet(target_dir, k)
 
-        self.start_iter = 0
-        self.counter = 0
-        self.current_period_list = []
-        while self.start_iter < count:
-            self.counter = self.counter + 1
-            current_period = 'Period Data {}'.format(self.counter)
-            self.current_period_list.append(current_period)
-            logger.info('Current period is: {}'.format(self.current_period_list[self.start_iter]))
+        self.counter = 1
+        while self.counter <= count:
+            logger.info(f'Current period is: {self.counter}')
             if self.counter == 1:
                 logger.debug(f'EV1: {self.ev[0]}')
                 for i in range(self.ev[0]):
@@ -213,7 +206,7 @@ class TandaPaySimulationApp(QMainWindow):
                 self.save_to_excel('user')
                 logger.debug('Initial values for UsRec variables set!')
             # PAGE 8, 9
-            if self.current_period_list[self.start_iter] == 'Period Data 1':
+            if self.counter == 1:
                 for i in range(2):
                     val = self.sh['system'].cell(i + 2, 3)
                     val.value = self.ev[0]
@@ -431,7 +424,7 @@ class TandaPaySimulationApp(QMainWindow):
             USER DEFECTION FUNCTION
             """
 
-            if self.current_period_list[self.start_iter] == 'Period Data 1':
+            if self.counter == 1:
                 defector_count = 0
                 current_group_num = 1
 
@@ -579,7 +572,7 @@ class TandaPaySimulationApp(QMainWindow):
             USER DEFECTION FUNCTION
             """
 
-            if self.current_period_list[self.start_iter] != 'Period Data 1':
+            if self.counter != 1:
 
                 slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
 
@@ -736,7 +729,7 @@ class TandaPaySimulationApp(QMainWindow):
             self.save_to_excel('system')
 
             self.assign_variables()
-            if self.current_period_list[self.start_iter] == 'Period Data 1':
+            if self.counter == 1:
                 for k in range(1, 20):
                     self.sy_rec_f[k].value = self.sy_rec_p[k].value
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
@@ -751,7 +744,7 @@ class TandaPaySimulationApp(QMainWindow):
             self._checksum(4, int(self.counter), 715)
             self.assign_variables()
 
-            if self.current_period_list[self.start_iter] != 'Period Data 1':
+            if self.counter != 1:
                 for k in range(1, 20):
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
 
@@ -1180,7 +1173,7 @@ class TandaPaySimulationApp(QMainWindow):
             Reorg Stage 7
             """
             _path = 0
-            if self.current_period_list[self.start_iter] != 'Period Data 10':
+            if self.counter != 10:
                 total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
 
                 if total > 0:
@@ -1189,8 +1182,8 @@ class TandaPaySimulationApp(QMainWindow):
                     _path = 2
 
                 if _path == 1:
-                    reorg_row = self.start_iter * 3 + 4
-                    new_pay_row = self.start_iter * 3 + 5
+                    reorg_row = self.counter * 3 + 1
+                    new_pay_row = self.counter * 3 + 2
                     # copying values of previous to current
                     sy_rec_new_p = [None] * 21
                     sy_rec_r = [None] * 21
@@ -1210,7 +1203,7 @@ class TandaPaySimulationApp(QMainWindow):
                     self._checksum(11, int(self.counter), 1202)
 
             # logging to log file
-            if self.current_period_list[self.start_iter] == 'Period Data 10' or _path == 2:
+            if self.counter == 10 or _path == 2:
                 logger.info(f'Run complete, logging simulation results')
                 try:
                     percent = (self.sh['system'].cell(3, 5).value / self.ev[0]) * 100
@@ -1236,15 +1229,13 @@ class TandaPaySimulationApp(QMainWindow):
                     logger.info(''.join(lines))
                 except Exception as e:
                     logger.exception(e)
+            self.counter += 1
 
-            self.start_iter += 1
-            if self.start_iter == 11:
-                logger.info(f'Iteration {self.start_iter} times complete! Please run the entire application again.')
-                break
+        logger.info(f'Iteration {count} times complete! Please run the entire application again.')
         getattr(self, 'finished').emit()
 
     def _on_process_finished(self):
-        self.ui.statusbar.showMessage("Finished, please check result folder!", 5000)
+        self.ui.statusbar.showMessage(text="Finished, please check result folder!", timeout=5000)
         self.ui.centralwidget.setEnabled(True)
 
 
