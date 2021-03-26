@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1086, 935)
+        TandaPaySimulationWindow.resize(1121, 935)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -106,6 +106,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_0.setMinimum(1)
         self.ev_0.setMaximum(9999)
+        self.ev_0.setValue(60)
 
         self.horizontalLayout_5.addWidget(self.ev_0)
 
@@ -149,6 +150,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_2.setMinimum(0)
         self.ev_2.setMaximum(100)
+        self.ev_2.setValue(40)
 
         self.horizontalLayout_7.addWidget(self.ev_2)
 
@@ -170,7 +172,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_3.setMinimum(0)
         self.ev_3.setMaximum(100)
-        self.ev_3.setValue(35)
+        self.ev_3.setValue(27)
 
         self.horizontalLayout_8.addWidget(self.ev_3)
 
@@ -192,7 +194,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_4.setMinimum(0)
         self.ev_4.setMaximum(100)
-        self.ev_4.setValue(64)
+        self.ev_4.setValue(10)
 
         self.horizontalLayout_9.addWidget(self.ev_4)
 
@@ -236,7 +238,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_6.setMinimum(2)
         self.ev_6.setMaximum(4)
-        self.ev_6.setValue(4)
+        self.ev_6.setValue(2)
 
         self.horizontalLayout_11.addWidget(self.ev_6)
 
@@ -258,6 +260,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_7.setMinimum(0)
         self.ev_7.setMaximum(3)
+        self.ev_7.setValue(1)
 
         self.horizontalLayout_12.addWidget(self.ev_7)
 
@@ -274,10 +277,11 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.ev_8 = QDoubleSpinBox(self.groupBox)
         self.ev_8.setObjectName(u"ev_8")
-        self.ev_8.setMaximumSize(QSize(70, 16777215))
+        self.ev_8.setMaximumSize(QSize(100, 16777215))
         self.ev_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ev_8.setDecimals(5)
         self.ev_8.setMaximum(1.000000000000000)
-        self.ev_8.setValue(0.990000000000000)
+        self.ev_8.setValue(0.333330000000000)
 
         self.horizontalLayout_13.addWidget(self.ev_8)
 
@@ -308,7 +312,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_0.setMinimum(1)
         self.pv_0.setMaximum(100)
-        self.pv_0.setValue(40)
+        self.pv_0.setValue(10)
 
         self.horizontalLayout_18.addWidget(self.pv_0)
 
@@ -371,7 +375,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_3.setMinimum(0)
         self.pv_3.setMaximum(100)
-        self.pv_3.setValue(20)
+        self.pv_3.setValue(8)
 
         self.horizontalLayout_22.addWidget(self.pv_3)
 
@@ -392,7 +396,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.pv_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.pv_4.setMinimum(0)
         self.pv_4.setMaximum(100)
-        self.pv_4.setValue(80)
+        self.pv_4.setValue(77)
 
         self.horizontalLayout_23.addWidget(self.pv_4)
 
