@@ -29,29 +29,32 @@ class TandaPaySimulator(object):
     def _checksum(self, syfunc: int):
         c_count = 0
         c_value = 0
-        last_checked = 0
+        checked_vals = []
         for i in range(self.ev[0]):
-            c_us_rec3_val = self.sh['user'].cell(i + 2, 4)
-            c_us_rec8_val = self.sh['user'].cell(i + 2, 9)
-            if c_us_rec3_val.value == 0 or c_us_rec8_val.value == 'defected':
+            c_us_rec3_val = self.sh['user'].cell(i + 2, 4).value
+            c_us_rec8_val = self.sh['user'].cell(i + 2, 9).value
+            if c_us_rec3_val == 0 or c_us_rec8_val == 'defected':
                 continue
-            c_us_rec4_val = self.sh['user'].cell(i + 2, 5)
-            if c_us_rec3_val.value != last_checked:
-                for _i in range(self.ev[0]):
-                    c_ur3_sub = self.sh['user'].cell(_i + 2, 4)
-                    c_ur8_sub = self.sh['user'].cell(_i + 2, 9)
-                    if c_ur3_sub.value == 0 or c_ur8_sub.value == 'defected':
+            c_us_rec4_val = self.sh['user'].cell(i + 2, 5).value
+            if c_us_rec3_val not in checked_vals:
+                for j in range(self.ev[0]):
+                    c_ur3_sub_val = self.sh['user'].cell(j + 2, 4).value
+                    c_ur8_sub = self.sh['user'].cell(j + 2, 9)
+                    if c_ur3_sub_val == 0 or c_ur8_sub.value == 'defected':
                         continue
-                    c_ur4_sub = self.sh['user'].cell(_i + 2, 5)
-                    if c_ur3_sub.value == c_us_rec3_val.value:
+                    c_ur4_sub = self.sh['user'].cell(j + 2, 5)
+                    if c_ur3_sub_val == c_us_rec3_val:
                         c_count += 1
                         c_value += c_ur4_sub.value
-                if c_value % c_count != 0 or c_count != c_us_rec4_val.value:
-                    logger.debug(f'______________ Period {self.counter}')
-                    msg = f'SyFunc {syfunc} _checksum failed: c_value % c_count = {c_value % c_count} - ' \
-                          f'supposed to be 0.\nc_UsRec3_val:{c_us_rec3_val.value}'
+                if c_value % c_count != 0:
+                    msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
+                          f'c_value({c_value}) % c_count({c_count}) = {c_value % c_count}.. This should be 0!'
                     logger.error(msg)
-                last_checked = c_us_rec3_val.value
+                if c_count != c_us_rec4_val:
+                    msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
+                          f'UsRec4 value({c_us_rec4_val}) doesn\'t match with {c_count}'
+                    logger.error(msg)
+                checked_vals.append(c_us_rec3_val)
                 c_count = 0
                 c_value = 0
 
@@ -107,15 +110,14 @@ class TandaPaySimulator(object):
         for k in {"system", "user"}:
             self.init_sheet(target_dir, k)
 
+        logger.debug(f'EV1: {self.ev[0]}')
+
         self.counter = 1
         while self.counter <= count:
             logger.info(f'Current period is: {self.counter}')
             if self.counter == 1:
-                logger.debug(f'EV1: {self.ev[0]}')
                 init_user_rec(self)
-
                 init_sys_rec(self)
-
                 # Subgroup  # FUNCTION FOR SUBGROUP EXECUTION
                 step1_ev1 = self.ev[0]
                 step2 = self.ev[0] / 5
@@ -146,95 +148,71 @@ class TandaPaySimulator(object):
                 group_num = 1
                 group_mem_count = 0
                 temp_val_four = step14 * 4
-                four_grp = []
-                dep_num = 0
+                dep_num = temp_val_four
+                offset = 0
                 for i in range(temp_val_four):
-                    d = self.sh['user'].cell(i + 2, 3)
-                    d.value = 4
-                    a = self.sh['user'].cell(i + 2, 5)
-                    a.value = 4
-                    label = self.sh['user'].cell(i + 2, 2)
-                    # label.value = 'D'
-                    label.value = group_num
-                    four_grp.append(group_num)
-                    label_1 = self.sh['user'].cell(i + 2, 4)
-                    # label_1.value = 'D'
-                    label_1.value = group_num
+                    self.sh['user'].cell(i + offset + 2, 2).value = group_num  # 'D'
+                    self.sh['user'].cell(i + offset + 2, 3).value = 4
+                    self.sh['user'].cell(i + offset + 2, 4).value = group_num  # 'D'
+                    self.sh['user'].cell(i + offset + 2, 5).value = 4
+                    self.sh['user'].cell(i + offset + 2, 8).value = 'dependent'
                     group_mem_count += 1
-                    self.sh['user'].cell(i + 2, 8).value = 'dependent'
-                    dep_num += 1
                     if group_mem_count == 4:
                         group_num += 1
                         group_mem_count = 0
+                offset += temp_val_four
 
                 # condition checking for group == 5
                 temp_val_five = step3 * 5
                 for i in range(temp_val_five):
-                    d = self.sh['user'].cell(i + temp_val_four + 2, 3)
-                    d.value = 5
-                    a = self.sh['user'].cell(i + temp_val_four + 2, 5)
-                    a.value = 5
-                    label = self.sh['user'].cell(i + temp_val_four + 2, 2)
-                    # label.value = 'A'
-                    label.value = group_num
-                    label_1 = self.sh['user'].cell(i + temp_val_four + 2, 4)
-                    # label_1.value = 'A'
-                    label_1.value = group_num
+                    self.sh['user'].cell(i + offset + 2, 2).value = group_num  # 'A'
+                    self.sh['user'].cell(i + offset + 2, 3).value = 5
+                    self.sh['user'].cell(i + offset + 2, 4).value = group_num  # 'A'
+                    self.sh['user'].cell(i + offset + 2, 5).value = 5
                     group_mem_count += 1
                     if group_mem_count == 5:
                         group_num += 1
                         group_mem_count = 0
+                offset += temp_val_five
 
                 # condition checking for group == 6
                 temp_val_six = step7 * 6
                 for i in range(temp_val_six):
-                    d = self.sh['user'].cell(i + temp_val_four + temp_val_five + 2, 3)
-                    d.value = 6
-                    a = self.sh['user'].cell(i + temp_val_four + temp_val_five + 2, 5)
-                    a.value = 6
-                    label = self.sh['user'].cell(i + temp_val_four + temp_val_five + 2, 2)
-                    # label.value = 'B'
-                    label.value = group_num
-                    label_1 = self.sh['user'].cell(i + temp_val_four + temp_val_five + 2, 4)
-                    # label_1.value = 'B'
-                    label_1.value = group_num
+                    self.sh['user'].cell(i + offset + 2, 2).value = group_num  # 'B'
+                    self.sh['user'].cell(i + offset + 2, 3).value = 6
+                    self.sh['user'].cell(i + offset + 2, 4).value = group_num  # 'B'
+                    self.sh['user'].cell(i + offset + 2, 5).value = 6
                     group_mem_count += 1
                     if group_mem_count == 6:
                         group_num += 1
                         group_mem_count = 0
+                offset += temp_val_six
 
                 # condition checking for group == 7
                 temp_val_seven = step11 * 7
                 for i in range(temp_val_seven):
-                    d = self.sh['user'].cell(i + temp_val_four + temp_val_five + temp_val_six + 2, 3)
-                    d.value = 7
-                    a = self.sh['user'].cell(i + temp_val_four + temp_val_five + temp_val_six + 2, 5)
-                    a.value = 7
-                    label = self.sh['user'].cell(i + temp_val_four + temp_val_five + temp_val_six + 2, 2)
-                    # label.value = 'C'
-                    label.value = group_num
-                    label_1 = self.sh['user'].cell(i + temp_val_four + temp_val_five + temp_val_six + 2, 4)
-                    # label_1.value = 'C'
-                    label_1.value = group_num
+                    self.sh['user'].cell(i + offset + 2, 2).value = group_num
+                    self.sh['user'].cell(i + offset + 2, 3).value = 7
+                    self.sh['user'].cell(i + offset + 2, 4).value = group_num
+                    self.sh['user'].cell(i + offset + 2, 5).value = 7
                     group_mem_count += 1
                     if group_mem_count == 7:
                         group_num += 1
                         group_mem_count = 0
                 self.save_to_excel('user')
 
-                checksum = temp_val_four + temp_val_five + temp_val_six + temp_val_seven
+                checksum = offset + temp_val_seven
                 if checksum != self.ev[0]:
-                    raise ValueError(f"Initial group checksum failed: checksum:{checksum} != self.ev[0]:{self.ev[0]}")
+                    raise ValueError(f"Initial group checksum failed: checksum:{checksum} != EV1:{self.ev[0]}")
                 logger.debug({"D": temp_val_four, "A": temp_val_five, "B": temp_val_six, "C": temp_val_seven})
 
                 # setting valid to UsRec5
                 for i in range(self.ev[0]):
-                    valid_value = self.sh['user'].cell(i + 2, 6)
-                    valid_value.value = 'valid'
+                    self.sh['user'].cell(i + 2, 6).value = 'valid'
                 self.save_to_excel('user')
                 logger.debug(
-                    f'group of four members: {step14}, five members: {step3}, six members: {step7}, '
-                    f'seven members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
+                    f'Group of 4 members: {step14}, 5 members: {step3}, 6 members: {step7}, '
+                    f'7 members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
 
                 # Assign 'dependent' to equal EV6
                 dependent_pct = dep_num / self.ev[0]

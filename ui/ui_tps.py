@@ -267,27 +267,6 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_12)
 
-        self.horizontalLayout_13 = QHBoxLayout()
-        self.horizontalLayout_13.setSpacing(10)
-        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.label_12 = QLabel(self.groupBox)
-        self.label_12.setObjectName(u"label_12")
-
-        self.horizontalLayout_13.addWidget(self.label_12)
-
-        self.ev_8 = QDoubleSpinBox(self.groupBox)
-        self.ev_8.setObjectName(u"ev_8")
-        self.ev_8.setMaximumSize(QSize(100, 16777215))
-        self.ev_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev_8.setDecimals(5)
-        self.ev_8.setMaximum(1.000000000000000)
-        self.ev_8.setValue(0.333330000000000)
-
-        self.horizontalLayout_13.addWidget(self.ev_8)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_13)
-
 
         self.horizontalLayout_4.addWidget(self.groupBox)
 
@@ -524,7 +503,6 @@ class Ui_TandaPaySimulationWindow(object):
 #if QT_CONFIG(tooltip)
         self.ev_7.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Once the group stabilizes how many additional periods will there be?", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_12.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV 9", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"PRICING VARIABLES", None))
         self.label_13.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Lower threshold of premium price", None))
 #if QT_CONFIG(tooltip)

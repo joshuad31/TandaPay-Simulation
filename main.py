@@ -24,15 +24,18 @@ class TandaPaySimulationApp(QMainWindow):
         self.ui = Ui_TandaPaySimulationWindow()
         self.ui.setupUi(self)
         self.conf = get_config()
-        self.ev = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.]
+        self.ev = [0, 0, 0, 0, 0, 0, 0, 0, .3333, 0.]
         self.pv = [0, 0, 0, 0, 0, 0]
 
         for i in range(9):
-            getattr(self.ui, f"ev_{i}").textChanged.connect(partial(self._on_value_changed, 'ev', i))
-            self._on_value_changed('ev', i, float(getattr(self.ui, f"ev_{i}").value()))
+            name = f"ev_{i}"
+            if hasattr(self.ui, name):
+                getattr(self.ui, name).textChanged.connect(partial(self._on_value_changed, 'ev', i))
+                self._on_value_changed('ev', i, float(getattr(self.ui, name).value()))
         for i in range(6):
-            getattr(self.ui, f"pv_{i}").textChanged.connect(partial(self._on_value_changed, 'pv', i))
-            self._on_value_changed('pv', i, float(getattr(self.ui, f"pv_{i}").value()))
+            name = f"pv_{i}"
+            getattr(self.ui, name).textChanged.connect(partial(self._on_value_changed, 'pv', i))
+            self._on_value_changed('pv', i, float(getattr(self.ui, name).value()))
 
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
