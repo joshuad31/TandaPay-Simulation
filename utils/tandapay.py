@@ -222,23 +222,19 @@ class TandaPaySimulator(object):
                     rand_dep_user = []
 
                 # ROLE1
-                # Role1_list = ['low-morale', 'unity-role']
                 # EV 4 = Percentage of honest defectors
                 role_ev4 = int(self.ev[0] * self.ev[3])
                 rand_defectors = sorted(random.sample(range(1, self.ev[0]), role_ev4))
                 # EV 5 = Percentage of low-morale members
-                role_ev5 = round(self.ev[0] * self.ev[4])
+                role_ev5 = int(self.ev[0] * self.ev[4])
                 low_morale_list = []
 
-                if self.ev[4] > 0:
-                    while True:
-                        n = random.randint(1, self.ev[0])
-                        if n not in rand_defectors and n not in low_morale_list:
-                            low_morale_list.append(n)
-                            if len(low_morale_list) == role_ev5 or len(low_morale_list) + len(
-                                    rand_defectors) == self.ev[0]:
-                                # if len(low_morale_list) == role_ev5:
-                                break
+                while True:
+                    n = random.randint(1, self.ev[0])
+                    if n not in rand_defectors and n not in low_morale_list:
+                        if len(low_morale_list) == role_ev5 or len(low_morale_list) + len(rand_defectors) == self.ev[0]:
+                            break
+                        low_morale_list.append(n)
                 # Remaining members play a unity role
                 # unity_role = self.ev[0] - (role_ev4 - role_ev5)
                 # ROLE2
