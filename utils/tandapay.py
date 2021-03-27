@@ -199,7 +199,6 @@ class TandaPaySimulator(object):
                     if group_mem_count == 7:
                         group_num += 1
                         group_mem_count = 0
-                self.save_to_excel('user')
 
                 checksum = offset + temp_val_seven
                 if checksum != self.ev[0]:
@@ -209,7 +208,6 @@ class TandaPaySimulator(object):
                 # setting valid to UsRec5
                 for i in range(self.ev[0]):
                     self.sh['user'].cell(i + 2, 6).value = 'valid'
-                self.save_to_excel('user')
                 logger.debug(
                     f'Group of 4 members: {step14}, 5 members: {step3}, 6 members: {step7}, '
                     f'7 members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
@@ -219,10 +217,9 @@ class TandaPaySimulator(object):
                 remaining_pct = self.ev[5] - dependent_pct
                 if remaining_pct > 0:
                     unassigned_dep = int(remaining_pct * self.ev[0])
-                else:  # FIXME: Correct value?
-                    unassigned_dep = 1
-
-                rand_dep_user = sorted(random.sample(range(dep_num + 1, self.ev[0] + 1), unassigned_dep))
+                    rand_dep_user = sorted(random.sample(range(dep_num + 1, self.ev[0] + 1), unassigned_dep))
+                else:
+                    rand_dep_user = []
 
                 # ROLE1
                 # Role1_list = ['low-morale', 'unity-role']
@@ -259,14 +256,11 @@ class TandaPaySimulator(object):
 
                     us_rec2_init = self.sh['user'].cell(i + 2, 3)
                     if us_rec2_init.value != 4 and i + 1 in rand_dep_user:
-                        us_rec7_init = self.sh['user'].cell(i + 2, 8)
-                        us_rec7_init.value = 'dependent'
+                        self.sh['user'].cell(i + 2, 8).value = 'dependent'
                         assigned_dep += 1
                     elif us_rec2_init.value != 4 and i + 1 not in rand_dep_user:
-                        us_rec7_init = self.sh['user'].cell(i + 2, 8)
-                        us_rec7_init.value = 'independent'
+                        self.sh['user'].cell(i + 2, 8).value = 'independent'
                         assigned_indep += 1
-                self.save_to_excel('user')
                 for i in range(self.ev[0]):
                     us_rec6_init = self.sh['user'].cell(i + 2, 7)
                     if us_rec6_init.value != 'defector':
