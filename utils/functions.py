@@ -40,7 +40,10 @@ def init_sys_rec(self):
 
 
 def user_func_1(self):
-
+    """
+    User defection function
+    """
+    # Path 1
     for i in range(self.ev[0]):
         if get_primary_role(self, i) == 'defector' and get_secondary_role(self, i) == 'dependent':
             # Increase the defect counter of all subgroup members where the current user is involved.
@@ -52,8 +55,8 @@ def user_func_1(self):
                     set_defect_count(self, j, get_defect_count(self, j) + 1)
 
     for i in range(self.ev[0]):
-        if get_primary_role(self, i) == 'defector' and get_secondary_role(self, i) == 'dependent':
-            if get_defect_count(self, i) >= self.ev[6]:
+        if get_primary_role(self, i) == 'defector':
+            if get_defect_count(self, i) >= self.ev[6] or get_secondary_role(self, i) == 'independent':     # Path 2
                 self.sy_rec_p[1].value -= 1     # Decrease valid members remaining
                 self.sy_rec_p[3].value += 1     # Increase members defected
                 self.sy_rec_p[5].value += 1     # Increase members skipped
@@ -71,7 +74,7 @@ def user_func_1(self):
                 set_subgroup_status(self, i, 'NR')
                 set_cur_status(self, i, 'NR')
                 set_payable(self, i, 'NR')
-            else:
+            if get_defect_count(self, i) < self.ev[6] and get_secondary_role(self, i) == 'dependent':       # Path 3
                 set_primary_role(self, i, 'low-morale')
     self.save_to_excel('user')
     self.save_to_excel('system')
@@ -80,79 +83,78 @@ def user_func_1(self):
 
 def user_func_2(self):
     """"
-    Pay Stage 2, USER DEFECTION FUNCTION
+    Pay Stage 2,  User skip function
     """
-    if self.counter != 1:
-        row = self.counter * 3 - 1
-        slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
-        sy_rec19_prev = self.sh['system'].cell(row - 3, 21)
-        try:
-            a = float(self.sy_rec_p[19].value)
-            b = float(sy_rec19_prev.value)
-            inc_premium = (a / b) - 1
-        except Exception as e:
-            logger.exception(e)
-            logger.debug(
-                f'SyRec19.value: {self.sy_rec_p[19].value}, sy_rec19_prev.value: {sy_rec19_prev.value}, row1: {row}')
-            inc_premium = 0
+    row = self.counter * 3 - 1
+    slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
+    sy_rec19_prev = self.sh['system'].cell(row - 3, 21)
+    try:
+        a = float(self.sy_rec_p[19].value)
+        b = float(sy_rec19_prev.value)
+        inc_premium = (a / b) - 1
+    except Exception as e:
+        logger.exception(e)
+        logger.debug(
+            f'SyRec19.value: {self.sy_rec_p[19].value}, sy_rec19_prev.value: {sy_rec19_prev.value}, row1: {row}')
+        inc_premium = 0
 
-        valid_users = []
+    valid_users = []
+    for i in range(self.ev[0]):
+        us_rec5 = self.sh['user'].cell(i + 2, 6)
+        if us_rec5.value == 'valid':
+            valid_users.append(i + 2)
+
+    if inc_premium >= self.pv[0]:
+        # PATH1
+        skip_percent = (slope * inc_premium - slope * self.pv[0]) + self.pv[1]
+
+        skip_hash = round(self.sy_rec_p[1].value * skip_percent)
+        skip_users = random.sample(valid_users, skip_hash)
+
         for i in range(self.ev[0]):
-            us_rec5 = self.sh['user'].cell(i + 2, 6)
-            if us_rec5.value == 'valid':
-                valid_users.append(i + 2)
+            index = i + 2
+            us_rec12 = self.sh['user'].cell(index, 13)
+            if index in skip_users:
+                us_rec12.value = 'no'
 
-        if inc_premium >= self.pv[0]:
-            # PATH1
-            skip_percent = (slope * inc_premium - slope * self.pv[0]) + self.pv[1]
+    if inc_premium < self.pv[0]:
+        try:
+            num = (self.sy_rec_p[19].value / (float(self.ev[0] / self.ev[0])) - 1)
+            if num >= self.pv[4]:
+                skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
+                skip_users = random.sample(valid_users, skip_hash)
 
-            skip_hash = round(self.sy_rec_p[1].value * skip_percent)
-            skip_users = random.sample(valid_users, skip_hash)
-
-            for i in range(self.ev[0]):
-                index = i + 2
-                us_rec12 = self.sh['user'].cell(index, 13)
-                if index in skip_users:
+                # rand_skip_users = []
+                # for _ in range(skip_hash):
+                #     n = random.randint(2,self.ev[0])
+                #     while True:
+                #         if n in rand_skip_users:
+                #             n = random.randint(2,self.ev[0])
+                #         elif n not in rand_skip_users:
+                #             rand_skip_users.append(n)
+                #             break
+                for i in skip_users:
+                    us_rec12 = self.sh['user'].cell(i, 13)
                     us_rec12.value = 'no'
+                self.save_to_excel('user')
+            if num < self.pv[4]:
+                # PATH3
+                if self.ev[7] == 0:
+                    pass
+                if self.ev[7] == 1 or self.ev[7] == 2 or self.ev[7] == 3:
+                    self.ev[7] -= 1
+                    # valid_users = []
+                    # for i in range(self.ev[0]):
+                    #     val = self.sh['user'].cell(i+2,6)
+                    #     if val.value == 'valid':
+                    #         valid_users.append(i+2)
+                    rand_sel = random.choice(valid_users)
+                    rand_us_rec12 = self.sh['user'].cell(rand_sel, 13)
+                    rand_us_rec12.value = 'no'
+        except ZeroDivisionError:
+            pass
 
-        if inc_premium < self.pv[0]:
-            try:
-                num = (self.sy_rec_p[19].value / (float(self.ev[0] / self.ev[0])) - 1)
-                if num >= self.pv[4]:
-                    skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
-                    skip_users = random.sample(valid_users, skip_hash)
-
-                    # rand_skip_users = []
-                    # for _ in range(skip_hash):
-                    #     n = random.randint(2,self.ev[0])
-                    #     while True:
-                    #         if n in rand_skip_users:
-                    #             n = random.randint(2,self.ev[0])
-                    #         elif n not in rand_skip_users:
-                    #             rand_skip_users.append(n)
-                    #             break
-                    for i in skip_users:
-                        us_rec12 = self.sh['user'].cell(i, 13)
-                        us_rec12.value = 'no'
-                    self.save_to_excel('user')
-                if num < self.pv[4]:
-                    # PATH3
-                    if self.ev[7] == 0:
-                        pass
-                    if self.ev[7] == 1 or self.ev[7] == 2 or self.ev[7] == 3:
-                        self.ev[7] -= 1
-                        # valid_users = []
-                        # for i in range(self.ev[0]):
-                        #     val = self.sh['user'].cell(i+2,6)
-                        #     if val.value == 'valid':
-                        #         valid_users.append(i+2)
-                        rand_sel = random.choice(valid_users)
-                        rand_us_rec12 = self.sh['user'].cell(rand_sel, 13)
-                        rand_us_rec12.value = 'no'
-            except ZeroDivisionError:
-                pass
-
-            self.save_to_excel('user')
+        self.save_to_excel('user')
 
 
 def sys_func_3(self):

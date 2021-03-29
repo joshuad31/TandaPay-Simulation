@@ -241,7 +241,8 @@ class TandaPaySimulator(object):
                 user_func_1(self)
 
             self.assign_variables()
-            user_func_2(self)
+            if 1 < self.counter < 10:
+                user_func_2(self)
 
             self.assign_variables()
             sys_func_3(self)
