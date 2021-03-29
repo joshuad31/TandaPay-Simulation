@@ -217,24 +217,19 @@ class TandaPaySimulator(object):
                 remaining_pct = self.ev[5] - dependent_pct
                 if remaining_pct > 0:
                     unassigned_dep = int(remaining_pct * self.ev[0])
-                    rand_dep_user = sorted(random.sample(range(dep_num + 1, self.ev[0] + 1), unassigned_dep))
+                    rand_dep_user = sorted(random.sample(range(self.ev[0]), unassigned_dep))
                 else:
                     rand_dep_user = []
 
                 # ROLE1
                 # EV 4 = Percentage of honest defectors
                 role_ev4 = int(self.ev[0] * self.ev[3])
-                rand_defectors = sorted(random.sample(range(1, self.ev[0]), role_ev4))
+                defectors = sorted(random.sample(range(self.ev[0]), role_ev4))
+                non_defectors = [i for i in range(self.ev[0]) if i not in defectors]
                 # EV 5 = Percentage of low-morale members
                 role_ev5 = int(self.ev[0] * self.ev[4])
-                low_morale_list = []
+                low_morale_list = sorted(random.sample(non_defectors, role_ev5))
 
-                while True:
-                    n = random.randint(1, self.ev[0])
-                    if n not in rand_defectors and n not in low_morale_list:
-                        if len(low_morale_list) == role_ev5 or len(low_morale_list) + len(rand_defectors) == self.ev[0]:
-                            break
-                        low_morale_list.append(n)
                 # Remaining members play a unity role
                 # unity_role = self.ev[0] - (role_ev4 - role_ev5)
                 # ROLE2
@@ -245,16 +240,16 @@ class TandaPaySimulator(object):
                 assigned_indep = 0
                 for i in range(self.ev[0]):
                     us_rec6_init = self.sh['user'].cell(i + 2, 7)
-                    if i + 1 in rand_defectors:
+                    if i in defectors:
                         us_rec6_init.value = 'defector'
-                    elif i + 1 in low_morale_list:
+                    elif i in low_morale_list:
                         us_rec6_init.value = 'low-morale'
 
                     us_rec2_init = self.sh['user'].cell(i + 2, 3)
-                    if us_rec2_init.value != 4 and i + 1 in rand_dep_user:
+                    if us_rec2_init.value != 4 and i in rand_dep_user:
                         self.sh['user'].cell(i + 2, 8).value = 'dependent'
                         assigned_dep += 1
-                    elif us_rec2_init.value != 4 and i + 1 not in rand_dep_user:
+                    elif us_rec2_init.value != 4 and i in rand_dep_user:
                         self.sh['user'].cell(i + 2, 8).value = 'independent'
                         assigned_indep += 1
                 for i in range(self.ev[0]):
