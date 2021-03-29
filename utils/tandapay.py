@@ -19,7 +19,6 @@ class TandaPaySimulator(object):
         self.wb = {}
         self.sh = {}
         self.excel_files = {}
-        self.rows = [0, 0, 0]
         self.counter = 0
 
         self.sy_rec_p = [None, ] * 21
@@ -79,8 +78,6 @@ class TandaPaySimulator(object):
         return [i + 2 for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, u_rec + 1).value == _filter]
 
     def assign_variables(self):
-        for i in range(3):
-            self.rows[i] = self.counter * 3 + i - 1
         for i in range(1, 20):
             self.sy_rec_p[i] = self.sh['system'].cell(self.counter * 3 - 1, i + 2)
             self.sy_rec_f[i] = self.sh['system'].cell(self.counter * 3, i + 2)
@@ -189,9 +186,9 @@ class TandaPaySimulator(object):
                 # condition checking for group == 7
                 temp_val_seven = step11 * 7
                 for i in range(temp_val_seven):
-                    self.sh['user'].cell(i + offset + 2, 2).value = group_num
+                    self.sh['user'].cell(i + offset + 2, 2).value = group_num       # 'C'
                     self.sh['user'].cell(i + offset + 2, 3).value = 7
-                    self.sh['user'].cell(i + offset + 2, 4).value = group_num
+                    self.sh['user'].cell(i + offset + 2, 4).value = group_num       # 'C'
                     self.sh['user'].cell(i + offset + 2, 5).value = 7
                     group_mem_count += 1
                     if group_mem_count == 7:
