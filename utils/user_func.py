@@ -81,3 +81,8 @@ def set_payable(self, index, state):
 def get_defect_count(self, index):
     # UsRec13
     return self.sh['user'].cell(index + 2, 14).value
+
+
+def set_defect_count(self, index, num):
+    # UsRec13
+    self.sh['user'].cell(index + 2, 14).value = num

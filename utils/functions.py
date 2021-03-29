@@ -3,7 +3,7 @@ from utils.logger import logger
 from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgroup, get_defect_count, \
     set_primary_role, get_orig_subgroup, set_remaining_num_orig_subgroup, get_remaining_num_orig_subgroup, \
     set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
-    set_cur_status, set_payable
+    set_cur_status, set_payable, set_defect_count
 
 
 def init_user_rec(self):
@@ -48,7 +48,8 @@ def user_func_1(self):
             for j in range(self.ev[0]):
                 if get_primary_role(self, j) == 'defector' and get_secondary_role(self, j) == 'dependent' \
                         and get_cur_subgroup(self, j) == cur_subgroup:
-                    self.sh['user'].cell(i + 2, 14).value = get_defect_count(self, j) + 1
+                    # Increase the defect count
+                    set_defect_count(self, j, get_defect_count(self, j) + 1)
 
     for i in range(self.ev[0]):
         if get_primary_role(self, i) == 'defector' and get_secondary_role(self, i) == 'dependent':
