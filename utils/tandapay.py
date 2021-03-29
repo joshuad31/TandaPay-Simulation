@@ -148,14 +148,12 @@ class TandaPaySimulator(object):
                 group_num = 1
                 group_mem_count = 0
                 temp_val_four = step14 * 4
-                dep_num = temp_val_four
                 offset = 0
                 for i in range(temp_val_four):
                     self.sh['user'].cell(i + offset + 2, 2).value = group_num  # 'D'
                     self.sh['user'].cell(i + offset + 2, 3).value = 4
                     self.sh['user'].cell(i + offset + 2, 4).value = group_num  # 'D'
                     self.sh['user'].cell(i + offset + 2, 5).value = 4
-                    self.sh['user'].cell(i + offset + 2, 8).value = 'dependent'
                     group_mem_count += 1
                     if group_mem_count == 4:
                         group_num += 1
@@ -212,54 +210,31 @@ class TandaPaySimulator(object):
                     f'Group of 4 members: {step14}, 5 members: {step3}, 6 members: {step7}, '
                     f'7 members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
 
-                # Assign 'dependent' to equal EV6
-                dependent_pct = dep_num / self.ev[0]
-                remaining_pct = self.ev[5] - dependent_pct
-                if remaining_pct > 0:
-                    unassigned_dep = int(remaining_pct * self.ev[0])
-                    rand_dep_user = sorted(random.sample(range(self.ev[0]), unassigned_dep))
-                else:
-                    rand_dep_user = []
+                self.save_to_excel('user')
 
-                # ROLE1
+                # ROLE 1
                 # EV 4 = Percentage of honest defectors
                 role_ev4 = int(self.ev[0] * self.ev[3])
-                defectors = sorted(random.sample(range(self.ev[0]), role_ev4))
+                defectors = random.sample(range(self.ev[0]), role_ev4)
                 non_defectors = [i for i in range(self.ev[0]) if i not in defectors]
                 # EV 5 = Percentage of low-morale members
                 role_ev5 = int(self.ev[0] * self.ev[4])
-                low_morale_list = sorted(random.sample(non_defectors, role_ev5))
-
-                # Remaining members play a unity role
-                # unity_role = self.ev[0] - (role_ev4 - role_ev5)
-                # ROLE2
-                # percentage of members unwilling to act alone
-                # role_ev6 = round(self.ev[0] * self.ev[5])
-                # assigning UsRec6, ROLE1 values to excel
-                assigned_dep = dep_num
-                assigned_indep = 0
+                low_morale_list = random.sample(non_defectors, role_ev5)
                 for i in range(self.ev[0]):
-                    us_rec6_init = self.sh['user'].cell(i + 2, 7)
-                    if i in defectors:
-                        us_rec6_init.value = 'defector'
-                    elif i in low_morale_list:
-                        us_rec6_init.value = 'low-morale'
+                    self.sh['user'].cell(i + 2, 7).value = 'defector' if i in defectors else \
+                        'low-morale' if i in low_morale_list else 'unity-role'
 
-                    us_rec2_init = self.sh['user'].cell(i + 2, 3)
-                    if us_rec2_init.value != 4 and i in rand_dep_user:
-                        self.sh['user'].cell(i + 2, 8).value = 'dependent'
-                        assigned_dep += 1
-                    elif us_rec2_init.value != 4 and i in rand_dep_user:
-                        self.sh['user'].cell(i + 2, 8).value = 'independent'
-                        assigned_indep += 1
+                # ROLE 2
+                # temp_val_four users and pick remaining users randomly to be equal with EV6
+                remaining_pct = int(self.ev[5] * self.ev[0]) - temp_val_four
+                if remaining_pct > 0:
+                    rand_dep_user = random.sample(range(temp_val_four, self.ev[0]), remaining_pct)
+                else:
+                    rand_dep_user = []
+
                 for i in range(self.ev[0]):
-                    us_rec6_init = self.sh['user'].cell(i + 2, 7)
-                    if us_rec6_init.value != 'defector':
-                        if us_rec6_init.value != 'low-morale':
-                            us_rec6_init.value = 'unity-role'
-
-                if assigned_dep + assigned_indep != self.ev[0]:
-                    logger.error(f'Dependent/independent assignment error')
+                    self.sh['user'].cell(i + 2, 8).value = 'dependent' if (i < temp_val_four or i in rand_dep_user) \
+                        else 'independent'
 
                 self.save_to_excel('user')
                 logger.debug('Roles Assigned!')
