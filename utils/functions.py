@@ -122,55 +122,54 @@ def user_func_1(self):
             # PATH 2 (Part 2)
             us_rec13.value = defected_cache[us_rec1.value]
             # group_mems = us_rec4.value - us_rec13.value
-            if us_rec6.value == 'defector' and us_rec1.value not in lm_def:
-                # Defectors >= ev7
-                us_rec12.value = 'no'
-                us_rec8.value = 'defected'
-                self.sy_rec_p[1].value -= 1
-                self.sy_rec_p[3].value += 1
-                self.sy_rec_p[5].value += 1
+            if us_rec6.value == 'defector':
+                if us_rec1.value not in lm_def:
+                    # Defectors >= ev7
+                    us_rec12.value = 'no'
+                    us_rec8.value = 'defected'
+                    self.sy_rec_p[1].value -= 1
+                    self.sy_rec_p[3].value += 1
+                    self.sy_rec_p[5].value += 1
+                    for j in range(self.ev[0]):
+                        ur1 = self.sh['user'].cell(j + 2, 2)
+                        ur2 = self.sh['user'].cell(j + 2, 3)
+                        ur3 = self.sh['user'].cell(j + 2, 4)
+                        ur4 = self.sh['user'].cell(j + 2, 5)
+                        if ur4.value != 0 and us_rec3.value == ur3.value:
+                            ur4.value -= 1
+                            # ur4.value = group_mems
+                            if us_rec1.value == ur1.value:
+                                ur2.value -= 1
+                    us_rec3.value = 0
+                    us_rec4.value = 0
+                    us_rec5.value = 'NR'
+                    us_rec8.value = 'NR'
+                    us_rec12.value = 'NR'
+                    self.save_to_excel('user')
+                elif us_rec7.value == 'independent':
+                    # Defectors < ev7 and independent defectors exist
+                    us_rec12.value = 'no'
+                    us_rec8.value = 'defected'
+                    self.sy_rec_p[1].value -= 1
+                    self.sy_rec_p[3].value += 1
+                    self.sy_rec_p[5].value += 1
 
-                for j in range(self.ev[0]):
-                    ur1 = self.sh['user'].cell(j + 2, 2)
-                    ur2 = self.sh['user'].cell(j + 2, 3)
-                    ur3 = self.sh['user'].cell(j + 2, 4)
-                    ur4 = self.sh['user'].cell(j + 2, 5)
-                    if ur4.value != 0 and us_rec3.value == ur3.value:
-                        ur4.value -= 1
-                        # ur4.value = group_mems
-                        if us_rec1.value == ur1.value:
-                            ur2.value -= 1
-                us_rec3.value = 0
-                us_rec4.value = 0
-                us_rec5.value = 'NR'
-                us_rec8.value = 'NR'
-                us_rec12.value = 'NR'
-                self.save_to_excel('user')
-
-            if us_rec6.value == 'defector' and us_rec1.value in lm_def and us_rec7.value == 'independent':
-                # Defectors < ev7 and independent defectors exist
-                us_rec12.value = 'no'
-                us_rec8.value = 'defected'
-                self.sy_rec_p[1].value -= 1
-                self.sy_rec_p[3].value += 1
-                self.sy_rec_p[5].value += 1
-
-                for j in range(self.ev[0]):
-                    ur1 = self.sh['user'].cell(j + 2, 2)
-                    ur2 = self.sh['user'].cell(j + 2, 3)
-                    ur3 = self.sh['user'].cell(j + 2, 4)
-                    ur4 = self.sh['user'].cell(j + 2, 5)
-                    if ur4.value != 0 and us_rec3.value == ur3.value:
-                        ur4.value -= 1
-                        # ur4.value = group_mems
-                        if us_rec1.value == ur1.value:
-                            ur2.value -= 1
-                us_rec3.value = 0
-                us_rec4.value = 0
-                us_rec5.value = 'NR'
-                us_rec8.value = 'NR'
-                us_rec12.value = 'NR'
-                self.save_to_excel('user')
+                    for j in range(self.ev[0]):
+                        ur1 = self.sh['user'].cell(j + 2, 2)
+                        ur2 = self.sh['user'].cell(j + 2, 3)
+                        ur3 = self.sh['user'].cell(j + 2, 4)
+                        ur4 = self.sh['user'].cell(j + 2, 5)
+                        if ur4.value != 0 and us_rec3.value == ur3.value:
+                            ur4.value -= 1
+                            # ur4.value = group_mems
+                            if us_rec1.value == ur1.value:
+                                ur2.value -= 1
+                    us_rec3.value = 0
+                    us_rec4.value = 0
+                    us_rec5.value = 'NR'
+                    us_rec8.value = 'NR'
+                    us_rec12.value = 'NR'
+                    self.save_to_excel('user')
 
         if us_rec1.value in low_morale_cache and us_rec7.value == 'dependent':
             # PATH 3 (Part 2)
@@ -187,18 +186,17 @@ def user_func_2(self):
     Pay Stage 2, USER DEFECTION FUNCTION
     """
     if self.counter != 1:
+        row = self.counter * 3 - 1
         slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
-        sy_rec19_prev = self.sh['system'].cell(self.rows[0] - 3, 21)
+        sy_rec19_prev = self.sh['system'].cell(row - 3, 21)
         try:
             a = float(self.sy_rec_p[19].value)
             b = float(sy_rec19_prev.value)
             inc_premium = (a / b) - 1
         except Exception as e:
             logger.exception(e)
-            logger.debug(f'SyRec19.value: {self.sy_rec_p[19].value}')
-            logger.debug(f'sy_rec19_prev.value: {sy_rec19_prev.value}')
-            logger.debug(f'row1: {self.rows[0]}')
-            logger.debug(f'row1-3: {self.rows[0] - 3}')
+            logger.debug(
+                f'SyRec19.value: {self.sy_rec_p[19].value}, sy_rec19_prev.value: {sy_rec19_prev.value}, row1: {row}')
             inc_premium = 0
 
         valid_users = []
