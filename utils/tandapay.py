@@ -237,7 +237,8 @@ class TandaPaySimulator(object):
                 logger.debug('Roles Assigned!')
 
             self.assign_variables()
-            user_func_1(self)
+            if self.counter == 1:
+                user_func_1(self)
 
             self.assign_variables()
             user_func_2(self)

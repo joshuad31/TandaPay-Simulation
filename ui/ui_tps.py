@@ -216,7 +216,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_5.setMinimum(0)
         self.ev_5.setMaximum(100)
-        self.ev_5.setValue(100)
+        self.ev_5.setValue(70)
 
         self.horizontalLayout_10.addWidget(self.ev_5)
 
@@ -260,7 +260,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev_7.setMinimum(0)
         self.ev_7.setMaximum(3)
-        self.ev_7.setValue(1)
+        self.ev_7.setValue(3)
 
         self.horizontalLayout_12.addWidget(self.ev_7)
 

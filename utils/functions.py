@@ -50,144 +50,136 @@ def user_func_1(self):
     """"
     Pay Stage 1, USER DEFECTION FUNCTION
     """
-    if self.counter == 1:
-        defector_count = 0
-        current_group_num = 1
+    defector_count = 0
+    current_group_num = 1
 
-        # Setting defector values in each subgroup
-        defected_cache = {}
-        defected_subt = {}
-        low_morale_cache = []
-        lm_def = []
-        for i in range(self.ev[0]):
-            us_rec1 = self.sh['user'].cell(i + 2, 2)
-            us_rec13 = self.sh['user'].cell(i + 2, 14)
+    # Setting defector values in each subgroup
+    defected_cache = {}
+    defected_subt = {}
+    low_morale_cache = []
+    lm_def = []
+    for i in range(self.ev[0]):
+        us_rec1 = self.sh['user'].cell(i + 2, 2)
+        us_rec13 = self.sh['user'].cell(i + 2, 14)
 
-            us_rec6 = self.sh['user'].cell(i + 2, 7)
-            us_rec7 = self.sh['user'].cell(i + 2, 8)
+        us_rec6 = self.sh['user'].cell(i + 2, 7)
+        us_rec7 = self.sh['user'].cell(i + 2, 8)
 
-            if us_rec6.value == 'defector' or i == self.ev[0] - 1:
-                if current_group_num not in defected_subt:
-                    defected_subt[current_group_num] = 0
-                # PATH 1 for dependent
-                if us_rec1.value == current_group_num or i == self.ev[0] - 1:
-                    if us_rec6.value == 'defector':
-                        defector_count += 1
-                        us_rec13.value = defector_count
-                        if us_rec7.value == 'dependent':
-                            defected_subt[current_group_num] += 1
-                        if us_rec13.value >= self.ev[6] or us_rec7.value == 'independent':
-                            # PATH 2 (Part 1 - assigning to cache for UsRec 6 & 13 incrementation in next
-                            # for loop)
-                            defected_cache[current_group_num] = defector_count
-                if us_rec1.value != current_group_num or i == self.ev[0] - 1:
-                    if current_group_num in defected_cache:
-                        if defected_cache[current_group_num] < self.ev[6]:
-                            if defected_subt[current_group_num] != 0:
-                                defected_cache[current_group_num] = defector_count
-                                defected_cache[current_group_num] -= defected_subt[current_group_num]
-                                low_morale_cache.append(current_group_num)
-                                lm_def.append(current_group_num)
-
-                    if defector_count < self.ev[6] and current_group_num not in defected_cache and \
-                            defector_count != 0:
-                        # PATH 3 (Part 1 - assigning to cache for UsRec 6 & 7 values in next for loop)
-                        low_morale_cache.append(current_group_num)
-                    if i != self.ev[0] - 1:
-                        defector_count = 1
-                        current_group_num = us_rec1.value
-                        if current_group_num not in defected_subt:
-                            defected_subt[current_group_num] = 0
-                        us_rec13.value = defector_count
-                        if us_rec7.value == 'independent':
-                            # PATH 2 (Part 1 - assigning to cache for UsRec 6 & 13 incrementation in next
-                            # for loop)
-                            defected_cache[current_group_num] = defector_count
-                        elif us_rec7.value == 'dependent':
-                            defected_subt[current_group_num] += 1
-        self.save_to_excel('user')
-
-        # PATH 2 & 3 (Part 2)
-        for i in range(self.ev[0]):
-            us_rec1 = self.sh['user'].cell(i + 2, 2)
-            us_rec3 = self.sh['user'].cell(i + 2, 4)
-            us_rec4 = self.sh['user'].cell(i + 2, 5)
-            us_rec5 = self.sh['user'].cell(i + 2, 6)
-            us_rec6 = self.sh['user'].cell(i + 2, 7)
-            us_rec7 = self.sh['user'].cell(i + 2, 8)
-            us_rec8 = self.sh['user'].cell(i + 2, 9)
-            us_rec12 = self.sh['user'].cell(i + 2, 13)
-            us_rec13 = self.sh['user'].cell(i + 2, 14)
-
-            if us_rec1.value in defected_cache:
-                # PATH 2 (Part 2)
-                us_rec13.value = defected_cache[us_rec1.value]
-                # group_mems = us_rec4.value - us_rec13.value
-                if us_rec6.value == 'defector' and us_rec1.value not in lm_def:
-                    # Defectors >= ev7
-                    us_rec12.value = 'no'
-                    us_rec8.value = 'defected'
-                    self.sy_rec_p[1].value -= 1
-                    self.sy_rec_p[5].value += 1
-                    self.sy_rec_p[3].value += 1
-
-                    for _ in range(self.ev[0]):
-                        ur4 = self.sh['user'].cell(_ + 2, 5)
-                        ur1 = self.sh['user'].cell(_ + 2, 2)
-                        ur3 = self.sh['user'].cell(_ + 2, 4)
-                        ur2 = self.sh['user'].cell(_ + 2, 3)
-
-                        if ur4.value != 0:
-                            if us_rec3.value == ur3.value:
-                                ur4.value -= 1
-                                # ur4.value = group_mems
-                                if us_rec1.value == ur1.value:
-                                    ur2.value -= 1
-                    us_rec3.value = 0
-                    us_rec4.value = 0
-                    us_rec5.value = 'NR'
-                    us_rec8.value = 'NR'
-                    us_rec12.value = 'NR'
-                    self.save_to_excel('user')
-
-                if us_rec6.value == 'defector' and us_rec1.value in lm_def and us_rec7.value == 'independent':
-                    # Defectors < ev7 and independent defectors exist
-                    us_rec12.value = 'no'
-                    us_rec8.value = 'defected'
-                    self.sy_rec_p[1].value -= 1
-                    self.sy_rec_p[5].value += 1
-                    self.sy_rec_p[3].value += 1
-
-                    for _ in range(self.ev[0]):
-                        ur4 = self.sh['user'].cell(_ + 2, 5)
-                        ur1 = self.sh['user'].cell(_ + 2, 2)
-                        ur3 = self.sh['user'].cell(_ + 2, 4)
-                        ur2 = self.sh['user'].cell(_ + 2, 3)
-                        if ur4.value != 0:
-                            if us_rec3.value == ur3.value:
-                                ur4.value -= 1
-                                # ur4.value = group_mems
-                                if us_rec1.value == ur1.value:
-                                    ur2.value -= 1
-                    us_rec3.value = 0
-                    us_rec4.value = 0
-                    us_rec5.value = 'NR'
-                    us_rec8.value = 'NR'
-                    us_rec12.value = 'NR'
-                    self.save_to_excel('user')
-
-            if us_rec1.value in low_morale_cache and us_rec7.value == 'dependent':
-                # PATH 3 (Part 2)
-                if us_rec1.value in defected_cache:
-                    us_rec13.value = defected_cache[us_rec1.value]
-                else:
-                    us_rec13.value = 0
+        if us_rec6.value == 'defector' or i == self.ev[0] - 1:
+            if current_group_num not in defected_subt:
+                defected_subt[current_group_num] = 0
+            # PATH 1 for dependent
+            if us_rec1.value == current_group_num or i == self.ev[0] - 1:
                 if us_rec6.value == 'defector':
-                    us_rec6.value = 'low-morale'
-        self.save_to_excel('user')
-        self.save_to_excel('system')
+                    defector_count += 1
+                    us_rec13.value = defector_count
+                    if us_rec7.value == 'dependent':
+                        defected_subt[current_group_num] += 1
+                    if us_rec13.value >= self.ev[6] or us_rec7.value == 'independent':
+                        # PATH 2 (Part 1 - assigning to cache for UsRec 6 & 13 incrementation in next
+                        # for loop)
+                        defected_cache[current_group_num] = defector_count
+            if us_rec1.value != current_group_num or i == self.ev[0] - 1:
+                if current_group_num in defected_cache:
+                    if defected_cache[current_group_num] < self.ev[6]:
+                        if defected_subt[current_group_num] != 0:
+                            defected_cache[current_group_num] = defector_count
+                            defected_cache[current_group_num] -= defected_subt[current_group_num]
+                            low_morale_cache.append(current_group_num)
+                            lm_def.append(current_group_num)
 
-        self._checksum(1)
+                if defector_count < self.ev[6] and current_group_num not in defected_cache and \
+                        defector_count != 0:
+                    # PATH 3 (Part 1 - assigning to cache for UsRec 6 & 7 values in next for loop)
+                    low_morale_cache.append(current_group_num)
+                if i != self.ev[0] - 1:
+                    defector_count = 1
+                    current_group_num = us_rec1.value
+                    if current_group_num not in defected_subt:
+                        defected_subt[current_group_num] = 0
+                    us_rec13.value = defector_count
+                    if us_rec7.value == 'independent':
+                        # PATH 2 (Part 1 - assigning to cache for UsRec 6 & 13 incrementation in next
+                        # for loop)
+                        defected_cache[current_group_num] = defector_count
+                    elif us_rec7.value == 'dependent':
+                        defected_subt[current_group_num] += 1
+    self.save_to_excel('user')
+
+    # PATH 2 & 3 (Part 2)
+    for i in range(self.ev[0]):
+        us_rec1 = self.sh['user'].cell(i + 2, 2)
+        us_rec3 = self.sh['user'].cell(i + 2, 4)
+        us_rec4 = self.sh['user'].cell(i + 2, 5)
+        us_rec5 = self.sh['user'].cell(i + 2, 6)
+        us_rec6 = self.sh['user'].cell(i + 2, 7)
+        us_rec7 = self.sh['user'].cell(i + 2, 8)
+        us_rec8 = self.sh['user'].cell(i + 2, 9)
+        us_rec12 = self.sh['user'].cell(i + 2, 13)
+        us_rec13 = self.sh['user'].cell(i + 2, 14)
+
+        if us_rec1.value in defected_cache:
+            # PATH 2 (Part 2)
+            us_rec13.value = defected_cache[us_rec1.value]
+            # group_mems = us_rec4.value - us_rec13.value
+            if us_rec6.value == 'defector' and us_rec1.value not in lm_def:
+                # Defectors >= ev7
+                us_rec12.value = 'no'
+                us_rec8.value = 'defected'
+                self.sy_rec_p[1].value -= 1
+                self.sy_rec_p[3].value += 1
+                self.sy_rec_p[5].value += 1
+
+                for j in range(self.ev[0]):
+                    ur1 = self.sh['user'].cell(j + 2, 2)
+                    ur2 = self.sh['user'].cell(j + 2, 3)
+                    ur3 = self.sh['user'].cell(j + 2, 4)
+                    ur4 = self.sh['user'].cell(j + 2, 5)
+                    if ur4.value != 0 and us_rec3.value == ur3.value:
+                        ur4.value -= 1
+                        # ur4.value = group_mems
+                        if us_rec1.value == ur1.value:
+                            ur2.value -= 1
+                us_rec3.value = 0
+                us_rec4.value = 0
+                us_rec5.value = 'NR'
+                us_rec8.value = 'NR'
+                us_rec12.value = 'NR'
+                self.save_to_excel('user')
+
+            if us_rec6.value == 'defector' and us_rec1.value in lm_def and us_rec7.value == 'independent':
+                # Defectors < ev7 and independent defectors exist
+                us_rec12.value = 'no'
+                us_rec8.value = 'defected'
+                self.sy_rec_p[1].value -= 1
+                self.sy_rec_p[3].value += 1
+                self.sy_rec_p[5].value += 1
+
+                for j in range(self.ev[0]):
+                    ur1 = self.sh['user'].cell(j + 2, 2)
+                    ur2 = self.sh['user'].cell(j + 2, 3)
+                    ur3 = self.sh['user'].cell(j + 2, 4)
+                    ur4 = self.sh['user'].cell(j + 2, 5)
+                    if ur4.value != 0 and us_rec3.value == ur3.value:
+                        ur4.value -= 1
+                        # ur4.value = group_mems
+                        if us_rec1.value == ur1.value:
+                            ur2.value -= 1
+                us_rec3.value = 0
+                us_rec4.value = 0
+                us_rec5.value = 'NR'
+                us_rec8.value = 'NR'
+                us_rec12.value = 'NR'
+                self.save_to_excel('user')
+
+        if us_rec1.value in low_morale_cache and us_rec7.value == 'dependent':
+            # PATH 3 (Part 2)
+            us_rec13.value = defected_cache.get(us_rec1.value, 0)
+            if us_rec6.value == 'defector':
+                us_rec6.value = 'low-morale'
+    self.save_to_excel('user')
+    self.save_to_excel('system')
+    self._checksum(syfunc=1)
 
 
 def user_func_2(self):
