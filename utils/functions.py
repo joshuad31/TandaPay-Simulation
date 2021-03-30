@@ -3,7 +3,7 @@ from utils.logger import logger
 from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgroup, get_defect_count, \
     set_primary_role, get_orig_subgroup, set_remaining_num_orig_subgroup, get_remaining_num_orig_subgroup, \
     set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
-    set_cur_status, set_payable, set_defect_count
+    set_cur_status, set_payable, set_defect_count, get_subgroup_status
 
 
 def init_user_rec(self):
@@ -85,76 +85,31 @@ def user_func_2(self):
     """"
     Pay Stage 2,  User skip function
     """
-    row = self.counter * 3 - 1
     slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
-    sy_rec19_prev = self.sh['system'].cell(row - 3, 21)
-    try:
-        a = float(self.sy_rec_p[19].value)
-        b = float(sy_rec19_prev.value)
-        inc_premium = (a / b) - 1
-    except Exception as e:
-        logger.exception(e)
-        logger.debug(
-            f'SyRec19.value: {self.sy_rec_p[19].value}, sy_rec19_prev.value: {sy_rec19_prev.value}, row1: {row}')
+    cur_total_payment = float(self.sy_rec_p[19].value)
+    prev_total_payment = float(self.sh['system'].cell(self.counter * 3 - 1 - 3, 21).value)
+    if prev_total_payment > 0:
+        inc_premium = max((cur_total_payment / prev_total_payment) - 1, 0)
+    else:
         inc_premium = 0
 
-    valid_users = []
-    for i in range(self.ev[0]):
-        us_rec5 = self.sh['user'].cell(i + 2, 6)
-        if us_rec5.value == 'valid':
-            valid_users.append(i + 2)
-
-    if inc_premium >= self.pv[0]:
-        # PATH1
-        skip_percent = (slope * inc_premium - slope * self.pv[0]) + self.pv[1]
-
-        skip_hash = round(self.sy_rec_p[1].value * skip_percent)
-        skip_users = random.sample(valid_users, skip_hash)
-
-        for i in range(self.ev[0]):
-            index = i + 2
-            us_rec12 = self.sh['user'].cell(index, 13)
-            if index in skip_users:
-                us_rec12.value = 'no'
-
-    if inc_premium < self.pv[0]:
-        try:
-            num = (self.sy_rec_p[19].value / (float(self.ev[0] / self.ev[0])) - 1)
-            if num >= self.pv[4]:
-                skip_hash = round(self.sy_rec_p[1].value * self.pv[5])
-                skip_users = random.sample(valid_users, skip_hash)
-
-                # rand_skip_users = []
-                # for _ in range(skip_hash):
-                #     n = random.randint(2,self.ev[0])
-                #     while True:
-                #         if n in rand_skip_users:
-                #             n = random.randint(2,self.ev[0])
-                #         elif n not in rand_skip_users:
-                #             rand_skip_users.append(n)
-                #             break
-                for i in skip_users:
-                    us_rec12 = self.sh['user'].cell(i, 13)
-                    us_rec12.value = 'no'
-                self.save_to_excel('user')
-            if num < self.pv[4]:
-                # PATH3
-                if self.ev[7] == 0:
-                    pass
-                if self.ev[7] == 1 or self.ev[7] == 2 or self.ev[7] == 3:
-                    self.ev[7] -= 1
-                    # valid_users = []
-                    # for i in range(self.ev[0]):
-                    #     val = self.sh['user'].cell(i+2,6)
-                    #     if val.value == 'valid':
-                    #         valid_users.append(i+2)
-                    rand_sel = random.choice(valid_users)
-                    rand_us_rec12 = self.sh['user'].cell(rand_sel, 13)
-                    rand_us_rec12.value = 'no'
-        except ZeroDivisionError:
-            pass
-
-        self.save_to_excel('user')
+    valid_users = [i for i in range(self.ev[0]) if get_subgroup_status(self, i) == 'valid']
+    skip_count = 0
+    if inc_premium >= self.pv[0]:       # PATH1
+        skip_percent = slope * (inc_premium - self.pv[0]) + self.pv[1]
+        skip_count = round(self.sy_rec_p[1].value * skip_percent)
+    else:
+        num = cur_total_payment / (self.ev[9] / self.ev[0]) - 1
+        if num >= self.pv[4]:       # PATH2
+            skip_count = round(self.sy_rec_p[1].value * self.pv[5])
+        else:                       # PATH3
+            if self.ev[7] != 0:
+                self.ev[7] -= 1
+                skip_count = 1
+    skip_users = random.sample(valid_users, skip_count)
+    for i in skip_users:
+        set_payable(self, i, 'no')
+    self.save_to_excel('user')
 
 
 def sys_func_3(self):
