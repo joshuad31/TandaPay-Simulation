@@ -237,23 +237,20 @@ class TandaPaySimulator(object):
                 user_func_2(self)
             sys_func_3(self)
             sys_func_4(self)
+
+            # Sys Func 4 PATH 1
             if self.counter == 1:
                 for k in range(1, 20):
                     self.sy_rec_f[k].value = self.sy_rec_p[k].value
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
-
-                #################
                 # ___SyFunc5___
-                #################
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh['system'].cell(4, 11).value = self.sy_rec_f[9].value
-                self.save_to_excel('system')
-            self._checksum(4)
-            if self.counter != 1:
+            elif self.counter < 10:
                 for k in range(1, 20):
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
+                sys_func_6(self)
 
-            sys_func_6(self)
             sys_func_7(self)
             sys_func_8(self)
             sys_func_9(self)
