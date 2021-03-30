@@ -68,6 +68,26 @@ def set_cur_status(self, index, state):
     self.sh['user'].cell(index + 2, 9).value = state
 
 
+def get_invalid_refund_available(self, index):
+    # UsRec10
+    return self.sh['user'].cell(index + 2, 11).value
+
+
+def set_invalid_refund_available(self, index, val):
+    # UsRec10
+    self.sh['user'].cell(index + 2, 11).value = val
+
+
+def get_total_payment_specific_user(self, index):
+    # UsRec11
+    return self.sh['user'].cell(index + 2, 12).value
+
+
+def set_total_payment_specific_user(self, index, val):
+    # UsRec11
+    self.sh['user'].cell(index + 2, 12).value = val
+
+
 def get_payable(self, index):
     # UsRec12
     return self.sh['user'].cell(index + 2, 13).value

@@ -3,7 +3,8 @@ from utils.logger import logger
 from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgroup, get_defect_count, \
     set_primary_role, get_orig_subgroup, set_remaining_num_orig_subgroup, get_remaining_num_orig_subgroup, \
     set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
-    set_cur_status, set_payable, set_defect_count, get_subgroup_status, get_payable
+    set_cur_status, set_payable, set_defect_count, get_subgroup_status, get_payable, get_cur_status, \
+    set_invalid_refund_available, get_total_payment_specific_user
 
 
 def init_user_rec(self):
@@ -143,20 +144,11 @@ def sys_func_4(self):
     Pay Stage 4, Invalidate subgroup function
     """
     for i in range(self.ev[0]):
-        ur4 = self.sh['user'].cell(i + 2, 5)
-        ur8 = self.sh['user'].cell(i + 2, 9)
-        ur5 = self.sh['user'].cell(i + 2, 6)
-        ur10 = self.sh['user'].cell(i + 2, 11)
-        ur11 = self.sh['user'].cell(i + 2, 12)
-
-        if ur4.value == 1 or ur4.value == 2 or ur4.value == 3:
-            if ur8.value == 'paid':
-                # us_rec8 = 'paid-invalid'
-                ur8.value = 'paid-invalid'
-                # UsRec5 = 'invalid'
-                ur5.value = 'invalid'
-                ur10.value = ur11.value
-                self.sy_rec_p[6].value += 1
+        if get_remaining_num_cur_subgroup(self, i) in {1, 2, 3} and get_cur_status(self, i) == 'paid':
+            set_cur_status(self, i, 'paid-invalid')
+            set_subgroup_status(self, i, 'invalid')
+            set_invalid_refund_available(self, i, get_total_payment_specific_user(self, i))     # UsRec 10 = UsRec 11
+            self.sy_rec_p[6].value += 1             # Increase invalid members count
     self.save_to_excel('user')
     self.save_to_excel('system')
 

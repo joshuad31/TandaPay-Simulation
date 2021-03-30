@@ -233,21 +233,10 @@ class TandaPaySimulator(object):
             self.assign_variables()
             if self.counter == 1:
                 user_func_1(self)
-
-            self.assign_variables()
             if 1 < self.counter < 10:
                 user_func_2(self)
-
-            self.assign_variables()
             sys_func_3(self)
-
-            #################
-            # ___SyFunc4___
-            #################
-            self.assign_variables()
             sys_func_4(self)
-
-            self.assign_variables()
             if self.counter == 1:
                 for k in range(1, 20):
                     self.sy_rec_f[k].value = self.sy_rec_p[k].value
@@ -256,36 +245,20 @@ class TandaPaySimulator(object):
                 #################
                 # ___SyFunc5___
                 #################
-                self.assign_variables()
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh['system'].cell(4, 11).value = self.sy_rec_f[9].value
                 self.save_to_excel('system')
             self._checksum(4)
-            self.assign_variables()
-
             if self.counter != 1:
                 for k in range(1, 20):
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
 
-            self.assign_variables()
             sys_func_6(self)
-
-            self.assign_variables()
             sys_func_7(self)
-
-            self.assign_variables()
             sys_func_8(self)
-
-            self.assign_variables()
             sys_func_9(self)
 
-            #################
-            # ___SyFunc11___
-            #################
-            self.assign_variables()
-            """"
-            Reorg Stage 7
-            """
+            # ___SyFunc11___  (Reorg Stage 7)
             _path = 0
             if self.counter != 10:
                 total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
@@ -305,7 +278,6 @@ class TandaPaySimulator(object):
                         sy_rec_r[k] = self.sh['system'].cell(reorg_row, k + 2)
                         sy_rec_new_p[k] = self.sh['system'].cell(new_pay_row, k + 2)
                         sy_rec_new_p[k].value = sy_rec_r[k].value
-                    self.save_to_excel('system')
 
                     # Overwriting values in new row
                     sy_rec_new_p[18].value = sy_rec_new_p[17].value
