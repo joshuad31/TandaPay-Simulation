@@ -65,12 +65,6 @@ class TandaPaySimulator(object):
                   f'supposed to be {self.ev[0] - _sy_rec1_val}'
             logger.error(msg)
 
-    def get_valid_users(self) -> list:
-        """
-        Returns list of user indexes (for Excel) where User Record 5 is equal to 'valid'
-        """
-        return [i + 2 for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, 6).value == 'valid']
-
     def get_select_users(self, _filter: str, u_rec: int) -> list:
         """
         Returns list of user indexes (for Excel) where User Record 'u_rec' is equal to '_filter' argument

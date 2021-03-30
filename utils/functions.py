@@ -3,7 +3,7 @@ from utils.logger import logger
 from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgroup, get_defect_count, \
     set_primary_role, get_orig_subgroup, set_remaining_num_orig_subgroup, get_remaining_num_orig_subgroup, \
     set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
-    set_cur_status, set_payable, set_defect_count, get_subgroup_status
+    set_cur_status, set_payable, set_defect_count, get_subgroup_status, get_payable
 
 
 def init_user_rec(self):
@@ -60,20 +60,7 @@ def user_func_1(self):
                 self.sy_rec_p[1].value -= 1     # Decrease valid members remaining
                 self.sy_rec_p[3].value += 1     # Increase members defected
                 self.sy_rec_p[5].value += 1     # Increase members skipped
-                cur_subgroup = get_cur_subgroup(self, i)
-                orig_subgroup = get_orig_subgroup(self, i)
-                for j in range(self.ev[0]):
-                    if get_cur_subgroup(self, j) == cur_subgroup:
-                        # Decrease the number count of the current subgroup
-                        set_remaining_num_cur_subgroup(self, j, get_remaining_num_cur_subgroup(self, j) - 1)
-                        if get_orig_subgroup(self, j) == orig_subgroup:
-                            # Decrease the number count of original subgroup
-                            set_remaining_num_orig_subgroup(self, j, get_remaining_num_orig_subgroup(self, j) - 1)
-                set_cur_subgroup(self, i, 0)
-                set_remaining_num_cur_subgroup(self, i, 0)
-                set_subgroup_status(self, i, 'NR')
-                set_cur_status(self, i, 'NR')
-                set_payable(self, i, 'NR')
+                _poison_a_user(self, i)
             if get_defect_count(self, i) < self.ev[6] and get_secondary_role(self, i) == 'dependent':       # Path 3
                 set_primary_role(self, i, 'low-morale')
     self.save_to_excel('user')
@@ -100,9 +87,9 @@ def user_func_2(self):
         skip_count = round(self.sy_rec_p[1].value * skip_percent)
     else:
         num = cur_total_payment / (self.ev[9] / self.ev[0]) - 1
-        if num >= self.pv[4]:       # PATH2
+        if num >= self.pv[4]:           # PATH2
             skip_count = round(self.sy_rec_p[1].value * self.pv[5])
-        else:                       # PATH3
+        else:                           # PATH3
             if self.ev[7] != 0:
                 self.ev[7] -= 1
                 skip_count = 1
@@ -112,48 +99,37 @@ def user_func_2(self):
     self.save_to_excel('user')
 
 
+def _poison_a_user(self, index):
+    cur_subgroup = get_cur_subgroup(self, index)
+    orig_subgroup = get_orig_subgroup(self, index)
+    for j in range(self.ev[0]):
+        if get_cur_subgroup(self, j) == cur_subgroup:
+            # Decrease the number count of the current subgroup
+            set_remaining_num_cur_subgroup(self, j, get_remaining_num_cur_subgroup(self, j) - 1)
+            if get_orig_subgroup(self, j) == orig_subgroup:
+                # Decrease the number count of original subgroup
+                set_remaining_num_orig_subgroup(self, j, get_remaining_num_orig_subgroup(self, j) - 1)
+    set_cur_subgroup(self, index, 0)
+    set_remaining_num_cur_subgroup(self, index, 0)
+    set_subgroup_status(self, index, 'NR')
+    set_cur_status(self, index, 'NR')
+    set_payable(self, index, 'NR')
+
+
 def sys_func_3(self):
     """"
     Pay Stage 3, Validate premium function
     """
-    valid_users = self.get_valid_users()
+    valid_users = [i for i in range(self.ev[0]) if get_subgroup_status(self, i) == 'valid']
 
-    path_1 = []
     for i in valid_users:
-        us_rec1 = self.sh['user'].cell(i, 2)
-        us_rec3 = self.sh['user'].cell(i, 4)
-        us_rec4 = self.sh['user'].cell(i, 5)
-        us_rec5 = self.sh['user'].cell(i, 6)
-        us_rec8 = self.sh['user'].cell(i, 9)
-        us_rec12 = self.sh['user'].cell(i, 13)
-
-        if us_rec12.value == 'no':
-            us_rec8.value = 'skipped'
-            path_1.append(i)
-            self.sy_rec_p[1].value -= 1
-            self.sy_rec_p[5].value += 1  # potential incorrect copying or adding
-
-            for _ in range(self.ev[0]):
-                ur4 = self.sh['user'].cell(_ + 2, 5)
-                ur1 = self.sh['user'].cell(_ + 2, 2)
-                ur3 = self.sh['user'].cell(_ + 2, 4)
-                ur2 = self.sh['user'].cell(_ + 2, 3)
-
-                if ur4.value != 0:
-                    if us_rec3.value == ur3.value:
-                        ur4.value -= 1
-                        if us_rec1.value == ur1.value:
-                            ur2.value -= 1
-
-            us_rec8.value = "NR"
-            us_rec3.value = 0
-            us_rec4.value = 0
-            us_rec5.value = "NR"
-            us_rec12.value = "NR"
-            self.save_to_excel('user')
-
-        elif us_rec12.value == 'yes':
-            us_rec8.value = 'paid'
+        if get_payable(self, i) == 'no':
+            set_cur_status(self, i, 'skipped')
+            self.sy_rec_p[1].value -= 1         # Decrease valid members remaining
+            self.sy_rec_p[5].value += 1         # Increase members skipped
+            _poison_a_user(self, i)
+        elif get_payable(self, i) == 'yes':
+            set_cur_status(self, i, 'paid')
 
     self.save_to_excel('user')
     self.save_to_excel('system')
