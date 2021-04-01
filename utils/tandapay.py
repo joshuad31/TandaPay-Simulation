@@ -555,12 +555,11 @@ class TandaPaySimulator(object):
             if not invalid_list:
                 if not path_3_users:
                     return
-
-        if invalid_list:
-            # Path 3 Second Attempt
-            valid_list = list(set(
-                [get_cur_subgroup(self, i) for i in range(self.ev[0])
-                 if get_subgroup_status(self, i) == 'valid' and get_remaining_num_cur_subgroup(self, i) == 4]))
+        # Path 3 Second Attempt
+        valid_list = list(set(
+            [get_cur_subgroup(self, i) for i in range(self.ev[0])
+             if get_subgroup_status(self, i) == 'valid' and get_remaining_num_cur_subgroup(self, i) == 4]))
+        if invalid_list and valid_list:
             need_match = invalid_list[0]
             give_match = random.sample(valid_list, 1)[0]
             for i in path_3_users:
