@@ -10,7 +10,7 @@ from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgro
     set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
     set_cur_status, set_payable, set_defect_count, get_subgroup_status, get_payable, get_cur_status, \
     set_invalid_refund_available, get_total_payment_specific_user, set_reorg_time, get_reorg_time, \
-    set_total_payment_specific_user
+    set_total_payment_specific_user, get_invalid_refund_available
 from utils.logger import logger
 
 
@@ -591,9 +591,7 @@ class TandaPaySimulator(object):
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
         self.save_to_excel('system')
 
-        #################
         # ___SyFunc8.5___
-        #################
         self.assign_variables()
         """"
         Reorg Stage 4.5
@@ -607,20 +605,21 @@ class TandaPaySimulator(object):
         Reorg Stage 5
         """
         if self.sy_rec_r[1].value > 0:
-            self.sy_rec_r[2].value = float(self.ev[9]) / self.sy_rec_r[1].value
+            self.sy_rec_r[2].value = self.ev[9] / self.sy_rec_r[1].value
         self.sy_rec_r[14].value = self.sy_rec_r[9].value + self.sy_rec_r[11].value + self.sy_rec_r[13].value
         if self.sy_rec_r[1].value > 0:
             self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
 
         for i in range(self.ev[0]):
-            us10 = self.sh['user'].cell(i + 2, 11)
-            us11 = self.sh['user'].cell(i + 2, 12)
-            if us10.value != 0:
-                us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - us10.value
-                us10.value = 0
+            invalid_refund = get_invalid_refund_available(self, i)
+            if invalid_refund != 0:
+                set_total_payment_specific_user(
+                    self, i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - invalid_refund)
+                set_invalid_refund_available(self, i, 0)
             else:
                 sr18 = self.sy_rec_r[18].value
-                us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0
+                set_total_payment_specific_user(
+                    self, i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0)
         self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
         self.save_to_excel('user')
         self.save_to_excel('system')
