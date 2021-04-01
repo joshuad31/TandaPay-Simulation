@@ -3,12 +3,15 @@ import os
 from datetime import datetime
 import random
 from openpyxl import load_workbook
-
 from settings import RESULT_DIR
-from utils.functions import init_user_rec, init_sys_rec, user_func_1, user_func_2, sys_func_3, sys_func_4, sys_func_6, \
-    sys_func_7, sys_func_8, sys_func_9
+
+from utils.user_func import get_primary_role, get_secondary_role, get_cur_subgroup, get_defect_count, \
+    set_primary_role, get_orig_subgroup, set_remaining_num_orig_subgroup, get_remaining_num_orig_subgroup, \
+    set_remaining_num_cur_subgroup, get_remaining_num_cur_subgroup, set_cur_subgroup, set_subgroup_status, \
+    set_cur_status, set_payable, set_defect_count, get_subgroup_status, get_payable, get_cur_status, \
+    set_invalid_refund_available, get_total_payment_specific_user, set_reorg_time, get_reorg_time, \
+    set_total_payment_specific_user
 from utils.logger import logger
-from utils.user_func import get_cur_subgroup
 
 
 class TandaPaySimulator(object):
@@ -65,12 +68,6 @@ class TandaPaySimulator(object):
                   f'supposed to be {self.ev[0] - _sy_rec1_val}'
             logger.error(msg)
 
-    def get_select_users(self, _filter: str, u_rec: int) -> list:
-        """
-        Returns list of user indexes (for Excel) where User Record 'u_rec' is equal to '_filter' argument
-        """
-        return [i + 2 for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, u_rec + 1).value == _filter]
-
     def assign_variables(self):
         for i in range(1, 20):
             self.sy_rec_p[i] = self.sh['system'].cell(self.counter * 3 - 1, i + 2)
@@ -107,8 +104,8 @@ class TandaPaySimulator(object):
         while self.counter <= count:
             logger.info(f'Current period is: {self.counter}')
             if self.counter == 1:
-                init_user_rec(self)
-                init_sys_rec(self)
+                self.init_user_rec()
+                self.init_sys_rec()
                 # Subgroup  # FUNCTION FOR SUBGROUP EXECUTION
                 step1_ev1 = self.ev[0]
                 step2 = self.ev[0] / 5
@@ -196,7 +193,7 @@ class TandaPaySimulator(object):
 
                 # setting valid to UsRec5
                 for i in range(self.ev[0]):
-                    self.sh['user'].cell(i + 2, 6).value = 'valid'
+                    set_subgroup_status(self, i, 'valid')
                 logger.debug(
                     f'Group of 4 members: {step14}, 5 members: {step3}, 6 members: {step7}, '
                     f'7 members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
@@ -232,11 +229,11 @@ class TandaPaySimulator(object):
 
             self.assign_variables()
             if self.counter == 1:
-                user_func_1(self)
+                self.user_func_1()
             if 1 < self.counter < 10:
-                user_func_2(self)
-            sys_func_3(self)
-            sys_func_4(self)
+                self.user_func_2()
+            self.sys_func_3()
+            self.sys_func_4()
 
             # Sys Func 4 PATH 1
             if self.counter == 1:
@@ -249,11 +246,13 @@ class TandaPaySimulator(object):
             elif self.counter < 10:
                 for k in range(1, 20):
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
-                sys_func_6(self)
+            self.sys_func_6()
+            self.sys_func_7()
+            self.save_to_excel('user')
+            self._checksum(7)
 
-            sys_func_7(self)
-            sys_func_8(self)
-            sys_func_9(self)
+            self.sys_func_8()
+            self.sys_func_9()
 
             # ___SyFunc11___  (Reorg Stage 7)
             _path = 0
@@ -312,3 +311,316 @@ class TandaPaySimulator(object):
 
         logger.info(f'Iteration {count} times complete! Please run the entire application again.')
         return True
+
+    def init_user_rec(self):
+        for i in range(self.ev[0]):
+            self.sh['user'].cell(i + 2, 1).value = f'user{i + 1}'
+            set_reorg_time(self, i, 0)
+            set_invalid_refund_available(self, i, 0)
+            set_total_payment_specific_user(self, i, self.ev[0])
+            set_payable(self, i, 'yes')
+            set_defect_count(self, i, 0)
+        self.save_to_excel('user')
+        logger.debug('Initial values for UsRec variables set!')
+
+    def init_sys_rec(self):
+        # PAGE 8, 9
+        for i in range(2):
+            self.sh['system'].cell(i + 2, 3).value = self.ev[0]
+            self.sh['system'].cell(i + 2, 4).value = self.ev[9] / self.ev[0]
+            for k in range(5, 21):
+                self.sh['system'].cell(i + 2, k).value = 0 if k != 18 else 'no'
+            self.sh['system'].cell(i + 2, 21).value = self.ev[9] / self.ev[0]
+
+        for i in range(3, 30):
+            for k in range(3, 22):
+                self.sh['system'].cell(i + 2, k).value = 0
+        self.save_to_excel('system')
+        logger.debug('Initial values for SyRec variables set!')
+
+    def user_func_1(self):
+        """
+        User defection function
+        """
+        # Path 1
+        for i in range(self.ev[0]):
+            if get_primary_role(self, i) == 'defector' and get_secondary_role(self, i) == 'dependent':
+                # Increase the defect counter of all subgroup members where the current user is involved.
+                cur_subgroup = get_cur_subgroup(self, i)
+                for j in range(self.ev[0]):
+                    if get_primary_role(self, j) == 'defector' and get_secondary_role(self, j) == 'dependent' \
+                            and get_cur_subgroup(self, j) == cur_subgroup:
+                        # Increase the defect count
+                        set_defect_count(self, j, get_defect_count(self, j) + 1)
+
+        for i in range(self.ev[0]):
+            if get_primary_role(self, i) == 'defector':
+                if get_defect_count(self, i) >= self.ev[6] or get_secondary_role(self, i) == 'independent':  # Path 2
+                    self.sy_rec_p[1].value -= 1  # Decrease valid members remaining
+                    self.sy_rec_p[3].value += 1  # Increase members defected
+                    self.sy_rec_p[5].value += 1  # Increase members skipped
+                    self._poison_a_user(i)
+                if get_defect_count(self, i) < self.ev[6] and get_secondary_role(self, i) == 'dependent':  # Path 3
+                    set_primary_role(self, i, 'low-morale')
+        self.save_to_excel('user')
+        self.save_to_excel('system')
+        self._checksum(syfunc=1)
+
+    def user_func_2(self):
+        """"
+        Pay Stage 2,  User skip function
+        """
+        slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
+        cur_total_payment = float(self.sy_rec_p[19].value)
+        prev_total_payment = float(self.sh['system'].cell(self.counter * 3 - 1 - 3, 21).value)
+        if prev_total_payment > 0:
+            inc_premium = max((cur_total_payment / prev_total_payment) - 1, 0)
+        else:
+            inc_premium = 0
+
+        valid_users = [i for i in range(self.ev[0]) if get_subgroup_status(self, i) == 'valid']
+        skip_count = 0
+        if inc_premium >= self.pv[0]:  # PATH1
+            skip_percent = slope * (inc_premium - self.pv[0]) + self.pv[1]
+            skip_count = round(self.sy_rec_p[1].value * skip_percent)
+        else:
+            num = cur_total_payment / (self.ev[9] / self.ev[0]) - 1
+            if num >= self.pv[4]:  # PATH2
+                skip_count = round(self.sy_rec_p[1].value * self.pv[5])
+            else:  # PATH3
+                if self.ev[7] != 0:
+                    self.ev[7] -= 1
+                    skip_count = 1
+        skip_users = random.sample(valid_users, skip_count)
+        for i in skip_users:
+            set_payable(self, i, 'no')
+        self.save_to_excel('user')
+
+    def _poison_a_user(self, index):
+        cur_subgroup = get_cur_subgroup(self, index)
+        orig_subgroup = get_orig_subgroup(self, index)
+        for j in range(self.ev[0]):
+            if get_cur_subgroup(self, j) == cur_subgroup:
+                # Decrease the number count of the current subgroup
+                set_remaining_num_cur_subgroup(self, j, get_remaining_num_cur_subgroup(self, j) - 1)
+                if get_orig_subgroup(self, j) == orig_subgroup:
+                    # Decrease the number count of original subgroup
+                    set_remaining_num_orig_subgroup(self, j, get_remaining_num_orig_subgroup(self, j) - 1)
+        set_cur_subgroup(self, index, 0)
+        set_remaining_num_cur_subgroup(self, index, 0)
+        set_subgroup_status(self, index, 'NR')
+        set_cur_status(self, index, 'NR')
+        set_payable(self, index, 'NR')
+
+    def sys_func_3(self):
+        """"
+        Pay Stage 3, Validate premium function
+        """
+        valid_users = [i for i in range(self.ev[0]) if get_subgroup_status(self, i) == 'valid']
+
+        for i in valid_users:
+            if get_payable(self, i) == 'no':
+                set_cur_status(self, i, 'skipped')
+                self.sy_rec_p[1].value -= 1  # Decrease valid members remaining
+                self.sy_rec_p[5].value += 1  # Increase members skipped
+                self._poison_a_user(i)
+            elif get_payable(self, i) == 'yes':
+                set_cur_status(self, i, 'paid')
+
+        self.save_to_excel('user')
+        self.save_to_excel('system')
+
+        self._checksum(3)
+        self._checksum_sr1(self.sy_rec_p[1].value, 3)
+
+    def sys_func_4(self):
+        """"
+        Pay Stage 4, Invalidate subgroup function
+        """
+        for i in range(self.ev[0]):
+            if get_remaining_num_cur_subgroup(self, i) in {1, 2, 3} and get_cur_status(self, i) == 'paid':
+                set_cur_status(self, i, 'paid-invalid')
+                set_subgroup_status(self, i, 'invalid')
+                set_invalid_refund_available(self, i, get_total_payment_specific_user(self, i))  # UsRec 10 = UsRec 11
+                self.sy_rec_p[6].value += 1  # Increase invalid members count
+        self.save_to_excel('user')
+        self.save_to_excel('system')
+
+    def sys_func_6(self):
+        """"
+        Reorg Stage 1
+        """
+        invalid_users = [i for i in range(self.ev[0]) if get_cur_status(self, i) == 'paid-invalid']
+        for i in invalid_users:
+            if (get_primary_role(self, i) == 'low-morale' and random.uniform(0, 1) < self.ev[8]) or \
+                    (get_secondary_role(self, i) == 'dependent' and get_remaining_num_orig_subgroup(self, i) < 2):
+                set_cur_status(self, i, 'quit')
+                self.sy_rec_r[1].value -= 1
+                self.sy_rec_r[7].value += 1
+                self._poison_a_user(i)
+            else:
+                self.sy_rec_r[8].value += 1
+
+        self.save_to_excel('user')
+        self.save_to_excel('system')
+        self._checksum(6)
+        self._checksum_sr1(self.sy_rec_r[1].value, 6)
+
+    def sys_func_7(self):
+        """"
+        Reorg Stage 2
+        """
+        invalid_users = [i for i in range(self.ev[0]) if get_cur_status(self, i) == 'paid-invalid']
+        for path in {1, 2}:
+            path_users = [i for i in invalid_users if get_remaining_num_cur_subgroup(self, i) == path]
+            # First Attempt
+            invalid_list = list(set([get_cur_subgroup(self, i) for i in path_users]))
+            valid_list = list(set(
+                [get_cur_subgroup(self, i) for i in range(self.ev[0])
+                 if get_subgroup_status(self, i) == 'valid' and get_remaining_num_cur_subgroup(self, i) == (7 - path)]))
+            while True:
+                # Assignment First Attempt
+                if invalid_list and valid_list:
+                    need_match = invalid_list[0]
+                    give_match = random.sample(valid_list, 1)[0]
+                    for i in path_users:
+                        if get_cur_subgroup(self, i) == need_match:
+                            set_cur_subgroup(self, i, give_match)
+                            set_remaining_num_cur_subgroup(self, i, 7)
+                            set_subgroup_status(self, i, 'valid')
+                            set_cur_status(self, i, 'reorg')
+                            set_reorg_time(self, i, get_reorg_time(self, i) + 1)
+                    invalid_list.remove(need_match)
+                    path_users = [i for i in path_users if get_cur_subgroup(self, i) != need_match]
+                    for i in range(self.ev[0]):
+                        if get_cur_subgroup(self, i) == give_match:
+                            set_remaining_num_cur_subgroup(self, i, 7)
+                    valid_list.remove(give_match)
+                if not invalid_list:
+                    if path_users:
+                        logger.error(f"SysFunc7: Path{path} invalid is empty but run set is not in the 1st attempt!")
+                    break
+                elif not valid_list:      # Second attempt
+                    filtered_list = list(set(
+                        [get_cur_subgroup(self, i) for i in range(self.ev[0])
+                         if get_subgroup_status(self, i) == 'valid' and
+                            get_remaining_num_cur_subgroup(self, i) == (6 - path)]))
+                    while True:
+                        need_match = invalid_list[0]
+                        give_match = random.sample(filtered_list, 1)[0]
+                        for i in path_users:
+                            if get_cur_subgroup(self, i) == need_match:
+                                set_cur_subgroup(self, i, give_match)
+                                set_remaining_num_cur_subgroup(self, i, 6)
+                                set_subgroup_status(self, i, 'valid')
+                                set_cur_status(self, i, 'reorg')
+                                set_reorg_time(self, i, get_reorg_time(self, i) + 1)
+                        invalid_list.remove(need_match)
+                        path_users = [i for i in path_users if get_cur_subgroup(self, i) != need_match]
+                        for i in range(self.ev[0]):
+                            if get_cur_subgroup(self, i) == give_match:
+                                set_remaining_num_cur_subgroup(self, i, 6)
+                        filtered_list.remove(give_match)
+                        if not invalid_list:
+                            if path_users:
+                                logger.error(
+                                    f"SysFunc7: Path{path} invalid is empty but run set is not in the 2nd attempt!")
+                            break
+                        if not filtered_list:
+                            break
+                    break
+
+        # Path 3
+        path_3_users = [i for i in invalid_users if get_remaining_num_cur_subgroup(self, i) == 3]
+        invalid_list = list(set([get_cur_subgroup(self, i) for i in path_3_users]))
+        while len(invalid_list) >= 2:      # Path 3 Assignment first attempt
+            need_match = invalid_list[0]
+            give_match = invalid_list[1]
+            for i in path_3_users:
+                if get_cur_subgroup == need_match:
+                    set_cur_subgroup(self, i, give_match)
+                    set_remaining_num_cur_subgroup(self, i, 6)
+                    set_subgroup_status(self, i, 'valid')
+                    set_cur_status(self, i, 'reorg')
+                    set_reorg_time(self, i, get_reorg_time(self, i) + 1)
+            invalid_list.remove(need_match)
+            for i in range(self.ev[0]):
+                if get_cur_subgroup(self, i) == give_match and i not in path_3_users:
+                    set_remaining_num_cur_subgroup(self, i, 6)
+                    set_subgroup_status(self, i, 'valid')
+                    set_cur_status(self, i, 'reorg')
+                    set_reorg_time(self, i, get_reorg_time(self, i) + 1)
+            invalid_list.remove(give_match)
+            path_3_users = [i for i in path_3_users if get_cur_subgroup(self, i) not in {need_match, give_match}]
+            if not invalid_list:
+                if not path_3_users:
+                    return
+
+        if invalid_list:
+            # Path 3 Second Attempt
+            valid_list = list(set(
+                [get_cur_subgroup(self, i) for i in range(self.ev[0])
+                 if get_subgroup_status(self, i) == 'valid' and get_remaining_num_cur_subgroup(self, i) == 4]))
+            need_match = invalid_list[0]
+            give_match = random.sample(valid_list, 1)[0]
+            for i in path_3_users:
+                if get_cur_subgroup(self, i) == need_match:
+                    set_cur_subgroup(self, i, give_match)
+                    set_remaining_num_cur_subgroup(self, i, 7)
+                    set_subgroup_status(self, i, 'valid')
+                    set_cur_status(self, i, 'reorg')
+                    set_reorg_time(self, i, get_reorg_time(self, i) + 1)
+            path_3_users = [i for i in path_3_users if get_cur_subgroup(self, i) != need_match]
+            for i in range(self.ev[0]):
+                if get_cur_subgroup(self, i) == give_match:
+                    set_remaining_num_cur_subgroup(self, i, 7)
+            valid_list.remove(give_match)
+            if path_3_users:
+                logger.error("SysFunc7: Path3 invalid is empty but run set is not in the 2nd attempt!")
+
+    def sys_func_8(self):
+        """"
+        Reorg Stage 4
+        """
+
+        prob = round(random.uniform(0, 1), 2)
+        if self.ev[2] > prob:
+            self.sy_rec_r[16].value = 'yes'
+        elif self.ev[2] < prob:
+            self.sy_rec_r[16].value = "no"
+            self.sy_rec_r[17].value = self.sy_rec_r[2].value
+        self.save_to_excel('system')
+
+        #################
+        # ___SyFunc8.5___
+        #################
+        self.assign_variables()
+        """"
+        Reorg Stage 4.5
+        """
+        self.sy_rec_r[11].value = self.sy_rec_r[5].value * self.sy_rec_r[19].value
+        self.sy_rec_r[13].value = self.sy_rec_r[6].value * self.sy_rec_r[19].value
+        self.save_to_excel('system')
+
+    def sys_func_9(self):
+        """"
+        Reorg Stage 5
+        """
+        if self.sy_rec_r[1].value > 0:
+            self.sy_rec_r[2].value = float(self.ev[9]) / self.sy_rec_r[1].value
+        self.sy_rec_r[14].value = self.sy_rec_r[9].value + self.sy_rec_r[11].value + self.sy_rec_r[13].value
+        if self.sy_rec_r[1].value > 0:
+            self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
+
+        for i in range(self.ev[0]):
+            us10 = self.sh['user'].cell(i + 2, 11)
+            us11 = self.sh['user'].cell(i + 2, 12)
+            if us10.value != 0:
+                us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - us10.value
+                us10.value = 0
+            else:
+                sr18 = self.sy_rec_r[18].value
+                us11.value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0
+        self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
+        self.save_to_excel('user')
+        self.save_to_excel('system')

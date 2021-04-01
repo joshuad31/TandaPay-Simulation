@@ -68,6 +68,16 @@ def set_cur_status(self, index, state):
     self.sh['user'].cell(index + 2, 9).value = state
 
 
+def get_reorg_time(self, index):
+    # UsRec9
+    return self.sh['user'].cell(index + 2, 10).value
+
+
+def set_reorg_time(self, index, val):
+    # UsRec9
+    self.sh['user'].cell(index + 2, 10).value = val
+
+
 def get_invalid_refund_available(self, index):
     # UsRec10
     return self.sh['user'].cell(index + 2, 11).value
