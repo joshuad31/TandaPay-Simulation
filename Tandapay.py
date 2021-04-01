@@ -2173,7 +2173,7 @@ class Simulator:
                 try:
                     if not self._matrix:
                         x = datetime.now()
-                        file1_path = os.path.join(root_sys, 'LOGS', 'myfile.txt')
+                        file1_path = os.path.join(root_sys, 'result.txt')
                         
                         file1 = open(file1_path, 'w')
                         # file1 = open("C:\\Tandapay\\LOGS\\myfile.txt", 'w')

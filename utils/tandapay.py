@@ -8,6 +8,7 @@ from settings import RESULT_DIR
 from utils.functions import init_user_rec, init_sys_rec, user_func_1, user_func_2, sys_func_3, sys_func_4, sys_func_6, \
     sys_func_7, sys_func_8, sys_func_9
 from utils.logger import logger
+from utils.user_func import get_cur_subgroup
 
 
 class TandaPaySimulator(object):
@@ -58,10 +59,9 @@ class TandaPaySimulator(object):
                 c_value = 0
 
     def _checksum_sr1(self, _sy_rec1_val: int, syfunc: int):
-        counter = len([i for i in range(self.ev[0]) if self.sh['user'].cell(i + 2, 4).value == 0])
+        counter = len([i for i in range(self.ev[0]) if get_cur_subgroup(self, i) == 0])
         if self.ev[0] - _sy_rec1_val != counter:
-            logger.debug(f'______________ Period {self.counter}')
-            msg = f'SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
+            msg = f'______________ Period {self.counter} SyFunc {syfunc} _checksum_sr1 failed: counter = {counter} - ' \
                   f'supposed to be {self.ev[0] - _sy_rec1_val}'
             logger.error(msg)
 
@@ -266,15 +266,11 @@ class TandaPaySimulator(object):
                     _path = 2
 
                 if _path == 1:
-                    reorg_row = self.counter * 3 + 1
-                    new_pay_row = self.counter * 3 + 2
-                    # copying values of previous to current
+                    # copy values of previous to current
                     sy_rec_new_p = [None] * 21
-                    sy_rec_r = [None] * 21
                     for k in range(1, 20):
-                        sy_rec_r[k] = self.sh['system'].cell(reorg_row, k + 2)
-                        sy_rec_new_p[k] = self.sh['system'].cell(new_pay_row, k + 2)
-                        sy_rec_new_p[k].value = sy_rec_r[k].value
+                        sy_rec_new_p[k] = self.sh['system'].cell(self.counter * 3 + 2, k + 2)
+                        sy_rec_new_p[k].value = self.sh['system'].cell(self.counter * 3 + 1, k + 2).value
 
                     # Overwriting values in new row
                     sy_rec_new_p[18].value = sy_rec_new_p[17].value

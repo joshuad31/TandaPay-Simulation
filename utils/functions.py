@@ -157,103 +157,21 @@ def sys_func_6(self):
     """"
     Reorg Stage 1
     """
+    invalid_users = [i for i in range(self.ev[0]) if get_cur_status(self, i) == 'paid-invalid']
+    for i in invalid_users:
+        if (get_primary_role(self, i) == 'low-morale' and random.uniform(0, 1) < self.ev[8]) or \
+                (get_secondary_role(self, i) == 'dependent' and get_remaining_num_orig_subgroup(self, i) < 2):
+            set_cur_status(self, i, 'quit')
+            self.sy_rec_p[1].value -= 1
+            self.sy_rec_p[7].value += 1
+            _poison_a_user(self, i)
+        else:
+            self.sy_rec_p[8].value += 1
 
-    for i in range(self.ev[0]):
-        _path = 0
-        us_rec1 = self.sh['user'].cell(i + 2, 2)
-        us_rec2 = self.sh['user'].cell(i + 2, 3)
-        us_rec3 = self.sh['user'].cell(i + 2, 4)
-        us_rec4 = self.sh['user'].cell(i + 2, 5)
-        us_rec5 = self.sh['user'].cell(i + 2, 6)
-        us_rec6 = self.sh['user'].cell(i + 2, 7)
-        us_rec7 = self.sh['user'].cell(i + 2, 8)
-        us_rec8 = self.sh['user'].cell(i + 2, 9)
-        us_rec12 = self.sh['user'].cell(i + 2, 13)
-        # 1 2 3 2 4
-        if us_rec8.value == 'paid-invalid':
-            if us_rec6.value == 'low-morale':
-                # Path 1
-                prob = random.uniform(0, 1)
-                if prob >= self.ev[8]:
-                    _path = 3
-                elif prob < self.ev[8]:
-                    _path = 2
-
-                if _path == 3:
-                    if us_rec7.value == 'independent' or us_rec2.value >= 2:
-                        # path4
-                        self.sy_rec_r[8].value += 1
-                    else:
-                        _path = 2
-
-                if _path == 2:
-                    us_rec8.value = 'quit'
-                    self.sy_rec_r[1].value -= 1
-                    self.sy_rec_r[7].value += 1
-                    for _i in range(self.ev[0]):
-                        ur4 = self.sh['user'].cell(_i + 2, 5)
-                        ur3 = self.sh['user'].cell(_i + 2, 4)
-                        ur2 = self.sh['user'].cell(_i + 2, 3)
-                        ur1 = self.sh['user'].cell(_i + 2, 2)
-
-                        if ur4.value != 0:
-                            if ur3.value == us_rec3.value:
-                                ur4.value -= 1
-                                if ur1.value == us_rec1.value:
-                                    ur2.value -= 1
-                    us_rec8.value = "NR"
-                    us_rec3.value = 0
-                    us_rec4.value = 0
-                    us_rec5.value = "NR"
-                    us_rec12.value = "NR"
     self.save_to_excel('user')
     self.save_to_excel('system')
-
-    for i in range(self.ev[0]):
-        _path = 0
-        us_rec1 = self.sh['user'].cell(i + 2, 2)
-        us_rec2 = self.sh['user'].cell(i + 2, 3)
-        us_rec3 = self.sh['user'].cell(i + 2, 4)
-        us_rec4 = self.sh['user'].cell(i + 2, 5)
-        us_rec5 = self.sh['user'].cell(i + 2, 6)
-        us_rec6 = self.sh['user'].cell(i + 2, 7)
-        us_rec7 = self.sh['user'].cell(i + 2, 8)
-        us_rec8 = self.sh['user'].cell(i + 2, 9)
-        us_rec12 = self.sh['user'].cell(i + 2, 13)
-        # 1 2 3 2 4
-        if us_rec8.value == 'paid-invalid':
-            if us_rec6.value != 'low-morale':
-                if us_rec7.value == 'independent' or us_rec2.value >= 2:
-                    # path4
-                    self.sy_rec_r[8].value += 1
-                else:
-                    _path = 2
-
-                if _path == 2:
-                    us_rec8.value = 'quit'
-                    self.sy_rec_r[1].value -= 1
-                    self.sy_rec_r[7].value += 1
-                    for _i in range(self.ev[0]):
-                        ur4 = self.sh['user'].cell(_i + 2, 5)
-                        ur3 = self.sh['user'].cell(_i + 2, 4)
-                        ur2 = self.sh['user'].cell(_i + 2, 3)
-                        ur1 = self.sh['user'].cell(_i + 2, 2)
-
-                        if ur4.value != 0:
-                            if ur3.value == us_rec3.value:
-                                ur4.value -= 1
-                                if ur1.value == us_rec1.value:
-                                    ur2.value -= 1
-                    us_rec8.value = "NR"
-                    us_rec3.value = 0
-                    us_rec4.value = 0
-                    us_rec5.value = "NR"
-                    us_rec12.value = "NR"
-    self.save_to_excel('user')
-    self.save_to_excel('system')
-
     self._checksum(6)
-    self._checksum_sr1(self.sy_rec_r[1].value, 6)
+    self._checksum_sr1(self.sy_rec_p[1].value, 6)
 
 
 def sys_func_7(self):
