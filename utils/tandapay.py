@@ -227,16 +227,13 @@ class TandaPaySimulator(object):
             self.sys_func_4()
 
             # Sys Func 4 PATH 1
+            for k in range(1, 20):
+                self.sy_rec_f[k].value = self.sy_rec_p[k].value
+                self.sy_rec_r[k].value = self.sy_rec_p[k].value
             if self.counter == 1:
-                for k in range(1, 20):
-                    self.sy_rec_f[k].value = self.sy_rec_p[k].value
-                    self.sy_rec_r[k].value = self.sy_rec_p[k].value
                 # ___SyFunc5___
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh_system.cell(4, 11).value = self.sy_rec_f[9].value
-            else:
-                for k in range(1, 20):
-                    self.sy_rec_r[k].value = self.sy_rec_p[k].value
 
             self.sys_func_6()
 
@@ -281,7 +278,7 @@ class TandaPaySimulator(object):
                             f'policyholders left the group by end of simulation\n',
                             f'{round(self.sh_system.cell(2, 21).value)} was the initial premium members were '
                             f'asked to pay.\n',
-                            f'{inc_premium} is the final premium members were asked to pay.\n',
+                            f'{int(self.sy_rec_f[19].value)} is the final premium members were asked to pay.\n',
                             f'Premiums increased by {inc_premium}% by end of simulation\n',
                             f'self.SyRec 3 (period 0 finalize) = {self.sh_system.cell(3, 5).value}\n',
                             f'{self.ev[3] * 100}% of policyholders who were assigned to defect\n',
@@ -289,7 +286,7 @@ class TandaPaySimulator(object):
                             f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
                         ]
                         f.writelines(lines)
-                    logger.info(''.join(lines))
+                    logger.info('\n' + ''.join(lines))
                 except Exception as e:
                     logger.exception(e)
             self.counter += 1
