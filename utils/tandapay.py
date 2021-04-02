@@ -292,7 +292,6 @@ class TandaPaySimulator(object):
             self.counter += 1
 
         logger.info(f'Iteration {count} times complete! Please run the entire application again.')
-        return True
 
     def init_user_rec(self):
         for i in range(self.ev[0]):
@@ -486,7 +485,7 @@ class TandaPaySimulator(object):
                         [self.get_cur_subgroup(i) for i in range(self.ev[0])
                          if self.get_subgroup_status(i) == 'valid' and
                             self.get_remaining_num_cur_subgroup(i) == (6 - path)]))
-                    while True:
+                    while filtered_list:
                         need_match = invalid_list[0]
                         give_match = random.sample(filtered_list, 1)[0]
                         for i in path_users:
@@ -506,8 +505,6 @@ class TandaPaySimulator(object):
                             if path_users:
                                 logger.error(
                                     f"SysFunc7: Path{path} invalid is empty but run set is not in the 2nd attempt!")
-                            break
-                        if not filtered_list:
                             break
                     break
 
