@@ -4,9 +4,7 @@
 # In[ ]:
 import tkinter as tk
 from tkinter import messagebox
-import openpyxl
 from openpyxl import load_workbook
-from openpyxl.workbook import Workbook
 import random
 import sys
 import logging 
@@ -16,7 +14,7 @@ import shutil
 import os
 import time
 import json
-from ev_generator import generate_matrix
+from utils.ev_generator import generate_matrix
 
 
 logging.basicConfig(level=logging.ERROR, filemode='simulation.log', format='%(levelname)s:%(message)s')

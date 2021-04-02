@@ -1,5 +1,7 @@
 import ntpath
 import os
+import shutil
+import time
 from datetime import datetime
 import random
 from openpyxl import load_workbook
@@ -10,7 +12,7 @@ from utils.logger import logger
 
 class TandaPaySimulator(object):
 
-    def __init__(self, conf, ev, pv):
+    def __init__(self, conf, ev, pv, matrix=False):
         self.conf = conf
         self.ev = ev
         self.pv = pv
@@ -19,6 +21,7 @@ class TandaPaySimulator(object):
         self.sh_system = None
         self.excel_files = {}
         self.counter = 0
+        self.matrix = matrix
 
         self.sy_rec_p = [None, ] * 21
         self.sy_rec_f = [None, ] * 21
@@ -78,9 +81,11 @@ class TandaPaySimulator(object):
         self.save_to_excel('user')
 
     def save_to_excel(self, db_type):
-        self.wb[db_type].save(self.excel_files[db_type])
+        if not self.matrix:
+            self.wb[db_type].save(self.excel_files[db_type])
 
-    def start_simulate(self, count):
+    def start_simulate(self, count=10):
+        s_time = time.time()
         target_dir = os.path.join(RESULT_DIR, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
         os.makedirs(target_dir)
         self.init_user_sheet(target_dir)
@@ -88,8 +93,7 @@ class TandaPaySimulator(object):
 
         logger.debug(f'EV1: {self.ev[0]}')
 
-        self.counter = 1
-        while self.counter <= count:
+        for self.counter in range(1, count + 1):
             logger.info(f'Current period is: {self.counter}')
             if self.counter == 1:
                 self.init_user_rec()
@@ -247,7 +251,7 @@ class TandaPaySimulator(object):
 
             # ___SyFunc11___  (Reorg Stage 7)
             total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
-            if self.counter != 10 and total > 0:
+            if self.counter != count and total > 0:
                 # copy values of previous to current
                 sy_rec_new_p = [None] * 21
                 for k in range(1, 20):
@@ -263,35 +267,46 @@ class TandaPaySimulator(object):
                 self._checksum(11)
                 self._checksum_sr1(sy_rec_new_p[1].value, 11)
 
-            if self.counter == 10 or total == 0:
+            if self.counter == count or total == 0:
                 logger.info(f'Run complete, logging simulation results')
-                percent = (self.sh_system.cell(3, 5).value / self.ev[0]) * 100
+                percent = round(self.sh_system.cell(3, 5).value / self.ev[0] * 100, 2)
                 inc_premium = round((self.sy_rec_f[19].value / self.sh_system.cell(2, 21).value) * 100, 2)
                 result_file = os.path.join(target_dir, "result.txt")
-                with open(result_file, 'w') as f:
-                    lines = [
-                        f'{self.ev[0]} is the number of members at the start of the simulation\n',
-                        f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
-                        f'of the simulation\n',
-                        f'{round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2)}% of '
-                        f'policyholders left the group by end of simulation\n',
-                        f'{round(self.sh_system.cell(2, 21).value)} was the initial premium members were '
-                        f'asked to pay.\n',
-                        f'{int(self.sy_rec_f[19].value)} is the final premium members were asked to pay.\n',
-                        f'Premiums increased by {inc_premium}% by end of simulation\n',
-                        f'self.SyRec 3 (period 0 finalize) = {self.sh_system.cell(3, 5).value}\n',
-                        f'{self.ev[3] * 100}% of policyholders who were assigned to defect\n',
-                        f'{round(percent, 2)}% of policyholders who actually defected\n',
-                        f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
-                    ]
-                    f.writelines(lines)
+                results = [
+                    self.ev[0],
+                    self.sy_rec_r[1].value,
+                    round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2),
+                    round(self.sh_system.cell(2, 21).value),
+                    int(self.sy_rec_f[19].value),
+                    inc_premium,
+                    self.sh_system.cell(3, 5).value,
+                    self.ev[3] * 100,
+                    percent,
+                    self.pv[4] * 100
+                ]
+                lines = [
+                    f'{results[0]} is the number of members at the start of the simulation\n',
+                    f'{results[1]} is the number of valid members remaining at the end '
+                    f'of the simulation\n',
+                    f'{results[2]}% of '
+                    f'policyholders left the group by end of simulation\n',
+                    f'{results[3]} was the initial premium members were '
+                    f'asked to pay.\n',
+                    f'{results[4]} is the final premium members were asked to pay.\n',
+                    f'Premiums increased by {results[5]}% by end of simulation\n',
+                    f'self.SyRec 3 (period 0 finalize) = {results[6]}\n',
+                    f'{results[7]}% of policyholders who were assigned to defect\n',
+                    f'{results[8]}% of policyholders who actually defected\n',
+                    f'{results[9]}% was the initial collapse threshold set for PV 5\n'
+                ]
                 logger.info('\n' + ''.join(lines))
-
-            self.counter += 1
-            if total == 0:
-                break
-
-        logger.info(f'Iteration {self.counter - 1} times complete! Please run the entire application again.')
+                if not self.matrix:
+                    with open(result_file, 'w') as f:
+                        f.writelines(lines)
+                else:
+                    shutil.rmtree(target_dir, ignore_errors=True)
+                logger.info(f'Iteration {self.counter} times complete, elapsed: {time.time() - s_time}')
+                return results
 
     def init_user_rec(self):
         for i in range(self.ev[0]):
@@ -371,9 +386,10 @@ class TandaPaySimulator(object):
                 if self.ev[7] != 0:
                     self.ev[7] -= 1
                     skip_count = 1
-        skip_users = random.sample(valid_users, skip_count)
-        for i in skip_users:
-            self.set_payable(i, 'no')
+        if valid_users and skip_count > 0:
+            skip_users = random.sample(valid_users, min(skip_count, len(valid_users)))
+            for i in skip_users:
+                self.set_payable(i, 'no')
         self.save_to_excel('user')
 
     def _poison_a_user(self, index):
@@ -553,13 +569,12 @@ class TandaPaySimulator(object):
                     self.set_remaining_num_cur_subgroup(i, 7)
             valid_list.remove(give_match)
             if path_3_users:
-                logger.error("SysFunc7: Path3 invalid is empty but run set is not in the 2nd attempt!")
+                logger.warning("SysFunc7: Path3 invalid is empty but run set is not in the 2nd attempt!")
 
     def sys_func_8(self):
         """"
         Reorg Stage 4
         """
-
         prob = round(random.uniform(0, 1), 2)
         if self.ev[2] > prob:
             self.sy_rec_r[16].value = 'yes'
@@ -568,11 +583,8 @@ class TandaPaySimulator(object):
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
         self.save_to_excel('system')
 
-        # ___SyFunc8.5___
+        # ___SyFunc8.5___       Reorg Stage 4.5
         self.assign_variables()
-        """"
-        Reorg Stage 4.5
-        """
         self.sy_rec_r[11].value = self.sy_rec_r[5].value * self.sy_rec_r[19].value
         self.sy_rec_r[13].value = self.sy_rec_r[6].value * self.sy_rec_r[19].value
         self.save_to_excel('system')
