@@ -190,8 +190,6 @@ class TandaPaySimulator(object):
                     f'Group of 4 members: {step14}, 5 members: {step3}, 6 members: {step7}, '
                     f'7 members: {step11}, Total group: {step14 * 4 + step3 * 5 + step7 * 6 + step11 * 7})')
 
-                self.save_to_excel('user')
-
                 # ROLE 1
                 # EV 4 = Percentage of honest defectors
                 role_ev4 = int(self.ev[0] * self.ev[3])
@@ -216,7 +214,6 @@ class TandaPaySimulator(object):
                     self.set_secondary_role(
                         i, 'dependent' if (i < temp_val_four or i in rand_dep_user) else 'independent')
 
-                self.save_to_excel('user')
                 logger.debug('Roles Assigned!')
 
             self.assign_variables()
@@ -242,7 +239,6 @@ class TandaPaySimulator(object):
             self.sys_func_6()
 
             self.sys_func_7()
-            self.save_to_excel('user')
             self._checksum(7)
 
             self.sys_func_8()
@@ -262,13 +258,14 @@ class TandaPaySimulator(object):
                 sy_rec_new_p[18].value = sy_rec_new_p[17].value
                 for k in {3, 5, 6, 9, 10, 11, 13, 14, 15, 17}:
                     sy_rec_new_p[k].value = 0
-                self.save_to_excel('system')
 
                 self._checksum(11)
                 self._checksum_sr1(sy_rec_new_p[1].value, 11)
 
             if self.counter == count or total == 0:
                 logger.info(f'Run complete, logging simulation results')
+                self.save_to_excel('user')
+                self.save_to_excel('system')
                 percent = round(self.sh_system.cell(3, 5).value / self.ev[0] * 100, 2)
                 inc_premium = round((self.sy_rec_f[19].value / self.sh_system.cell(2, 21).value) * 100, 2)
                 result_file = os.path.join(target_dir, "result.txt")
@@ -316,7 +313,6 @@ class TandaPaySimulator(object):
             self.set_total_payment_specific_user(i, self.ev[0])
             self.set_payable(i, 'yes')
             self.set_defect_count(i, 0)
-        self.save_to_excel('user')
         logger.debug('Initial values for UsRec variables set!')
 
     def init_sys_rec(self):
@@ -330,7 +326,6 @@ class TandaPaySimulator(object):
         for i in range(3, 30):
             for k in range(3, 22):
                 self.sh_system.cell(i + 2, k).value = 0
-        self.save_to_excel('system')
         logger.debug('Initial values for SyRec variables set!')
 
     def user_func_1(self):
@@ -357,8 +352,6 @@ class TandaPaySimulator(object):
                     self._poison_a_user(i)
                 if self.get_defect_count(i) < self.ev[6] and self.get_secondary_role(i) == 'dependent':  # Path 3
                     self.set_primary_role(i, 'low-morale')
-        self.save_to_excel('user')
-        self.save_to_excel('system')
         self._checksum(syfunc=1)
 
     def user_func_2(self):
@@ -390,7 +383,6 @@ class TandaPaySimulator(object):
             skip_users = random.sample(valid_users, min(skip_count, len(valid_users)))
             for i in skip_users:
                 self.set_payable(i, 'no')
-        self.save_to_excel('user')
 
     def _poison_a_user(self, index):
         cur_subgroup = self.get_cur_subgroup(index)
@@ -423,9 +415,6 @@ class TandaPaySimulator(object):
             elif self.get_payable(i) == 'yes':
                 self.set_cur_status(i, 'paid')
 
-        self.save_to_excel('user')
-        self.save_to_excel('system')
-
         self._checksum(3)
         self._checksum_sr1(self.sy_rec_p[1].value, 3)
 
@@ -439,8 +428,6 @@ class TandaPaySimulator(object):
                 self.set_subgroup_status(i, 'invalid')
                 self.set_invalid_refund_available(i, self.get_total_payment_specific_user(i))  # UsRec 10 = UsRec 11
                 self.sy_rec_p[6].value += 1  # Increase invalid members count
-        self.save_to_excel('user')
-        self.save_to_excel('system')
 
     def sys_func_6(self):
         """"
@@ -457,8 +444,6 @@ class TandaPaySimulator(object):
             else:
                 self.sy_rec_r[8].value += 1
 
-        self.save_to_excel('user')
-        self.save_to_excel('system')
         self._checksum(6)
         self._checksum_sr1(self.sy_rec_r[1].value, 6)
 
@@ -581,13 +566,11 @@ class TandaPaySimulator(object):
         elif self.ev[2] < prob:
             self.sy_rec_r[16].value = "no"
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
-        self.save_to_excel('system')
 
         # ___SyFunc8.5___       Reorg Stage 4.5
         self.assign_variables()
         self.sy_rec_r[11].value = self.sy_rec_r[5].value * self.sy_rec_r[19].value
         self.sy_rec_r[13].value = self.sy_rec_r[6].value * self.sy_rec_r[19].value
-        self.save_to_excel('system')
 
     def sys_func_9(self):
         """"
@@ -609,8 +592,6 @@ class TandaPaySimulator(object):
                 self.set_total_payment_specific_user(
                     i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0)
         self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
-        self.save_to_excel('user')
-        self.save_to_excel('system')
 
     # ============   User Rec Functions   ===========================
 
