@@ -265,33 +265,33 @@ class TandaPaySimulator(object):
 
             if self.counter == 10 or total == 0:
                 logger.info(f'Run complete, logging simulation results')
-                try:
-                    percent = (self.sh_system.cell(3, 5).value / self.ev[0]) * 100
-                    inc_premium = round((self.sy_rec_f[19].value / self.sh_system.cell(2, 21).value) * 100, 2)
-                    result_file = os.path.join(target_dir, "result.txt")
-                    with open(result_file, 'w') as f:
-                        lines = [
-                            f'{self.ev[0]} is the number of members at the start of the simulation\n',
-                            f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
-                            f'of the simulation\n',
-                            f'{round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2)}% of '
-                            f'policyholders left the group by end of simulation\n',
-                            f'{round(self.sh_system.cell(2, 21).value)} was the initial premium members were '
-                            f'asked to pay.\n',
-                            f'{int(self.sy_rec_f[19].value)} is the final premium members were asked to pay.\n',
-                            f'Premiums increased by {inc_premium}% by end of simulation\n',
-                            f'self.SyRec 3 (period 0 finalize) = {self.sh_system.cell(3, 5).value}\n',
-                            f'{self.ev[3] * 100}% of policyholders who were assigned to defect\n',
-                            f'{round(percent, 2)}% of policyholders who actually defected\n',
-                            f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
-                        ]
-                        f.writelines(lines)
-                    logger.info('\n' + ''.join(lines))
-                except Exception as e:
-                    logger.exception(e)
-            self.counter += 1
+                percent = (self.sh_system.cell(3, 5).value / self.ev[0]) * 100
+                inc_premium = round((self.sy_rec_f[19].value / self.sh_system.cell(2, 21).value) * 100, 2)
+                result_file = os.path.join(target_dir, "result.txt")
+                with open(result_file, 'w') as f:
+                    lines = [
+                        f'{self.ev[0]} is the number of members at the start of the simulation\n',
+                        f'{self.sy_rec_r[1].value} is the number of valid members remaining at the end '
+                        f'of the simulation\n',
+                        f'{round(((self.ev[0] - self.sy_rec_r[1].value) / self.ev[0]) * 100, 2)}% of '
+                        f'policyholders left the group by end of simulation\n',
+                        f'{round(self.sh_system.cell(2, 21).value)} was the initial premium members were '
+                        f'asked to pay.\n',
+                        f'{int(self.sy_rec_f[19].value)} is the final premium members were asked to pay.\n',
+                        f'Premiums increased by {inc_premium}% by end of simulation\n',
+                        f'self.SyRec 3 (period 0 finalize) = {self.sh_system.cell(3, 5).value}\n',
+                        f'{self.ev[3] * 100}% of policyholders who were assigned to defect\n',
+                        f'{round(percent, 2)}% of policyholders who actually defected\n',
+                        f'{(self.pv[4]) * 100}% was the initial collapse threshold set for PV 5\n'
+                    ]
+                    f.writelines(lines)
+                logger.info('\n' + ''.join(lines))
 
-        logger.info(f'Iteration {count} times complete! Please run the entire application again.')
+            self.counter += 1
+            if total == 0:
+                break
+
+        logger.info(f'Iteration {self.counter - 1} times complete! Please run the entire application again.')
 
     def init_user_rec(self):
         for i in range(self.ev[0]):
@@ -503,7 +503,7 @@ class TandaPaySimulator(object):
                         filtered_list.remove(give_match)
                         if not invalid_list:
                             if path_users:
-                                logger.error(
+                                logger.warning(
                                     f"SysFunc7: Path{path} invalid is empty but run set is not in the 2nd attempt!")
                             break
                     break
