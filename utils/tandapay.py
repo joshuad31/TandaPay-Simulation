@@ -25,8 +25,6 @@ class TandaPaySimulator(object):
         self.sy_rec_r = [None, ] * 21
 
     def _checksum(self, syfunc: int):
-        c_count = 0
-        c_value = 0
         checked_vals = []
         for i in range(self.ev[0]):
             cur_subgroup = self.get_cur_subgroup(i)
@@ -34,25 +32,17 @@ class TandaPaySimulator(object):
                 continue
             cur_remaining = self.get_remaining_num_cur_subgroup(i)
             if cur_subgroup not in checked_vals:
-                for j in range(self.ev[0]):
-                    _subgroup = self.get_cur_subgroup(j)
-                    if _subgroup == 0 or self.get_cur_status(j) == 'defected':
-                        continue
-                    _remaining = self.get_remaining_num_cur_subgroup(j)
-                    if _subgroup == cur_subgroup:
-                        c_count += 1
-                        c_value += _remaining
-                if c_value % c_count != 0:
+                remainings = [self.get_remaining_num_cur_subgroup(j) for j in range(self.ev[0])
+                              if self.get_cur_subgroup(j) == cur_subgroup and self.get_cur_status(j) != 'defected']
+                if len(set(remainings)) > 1:
                     msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
-                          f'c_value({c_value}) % c_count({c_count}) = {c_value % c_count}.. This should be 0!'
+                          f'Remaining numbers in a same subgroup({cur_subgroup}) must be identical, but - {remainings}'
                     logger.error(msg)
-                if c_count != cur_remaining:
+                if len(remainings) != cur_remaining:
                     msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
-                          f'UsRec4 value({cur_remaining}) doesn\'t match with {c_count}'
+                          f'UsRec4 value({cur_remaining}) doesn\'t match with {len(remainings)}'
                     logger.error(msg)
                 checked_vals.append(cur_subgroup)
-                c_count = 0
-                c_value = 0
 
     def _checksum_sr1(self, _sy_rec1_val: int, syfunc: int):
         counter = len([i for i in range(self.ev[0]) if self.get_cur_subgroup(i) == 0])
@@ -492,7 +482,7 @@ class TandaPaySimulator(object):
                     valid_list.remove(give_match)
                 if not invalid_list:
                     if path_users:
-                        logger.error(f"SysFunc7: Path{path} invalid is empty but run set is not in the 1st attempt!")
+                        logger.warning(f"SysFunc7: Path{path} invalid is empty but run set is not in the 1st attempt!")
                     break
                 elif not valid_list:      # Second attempt
                     filtered_list = list(set(
