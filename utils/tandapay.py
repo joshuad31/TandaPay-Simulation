@@ -29,30 +29,28 @@ class TandaPaySimulator(object):
         c_value = 0
         checked_vals = []
         for i in range(self.ev[0]):
-            c_us_rec3_val = self.sh_user.cell(i + 2, 4).value
-            c_us_rec8_val = self.sh_user.cell(i + 2, 9).value
-            if c_us_rec3_val == 0 or c_us_rec8_val == 'defected':
+            cur_subgroup = self.get_cur_subgroup(i)
+            if cur_subgroup == 0 or self.get_cur_status(i) == 'defected':
                 continue
-            c_us_rec4_val = self.sh_user.cell(i + 2, 5).value
-            if c_us_rec3_val not in checked_vals:
+            cur_remaining = self.get_remaining_num_cur_subgroup(i)
+            if cur_subgroup not in checked_vals:
                 for j in range(self.ev[0]):
-                    c_ur3_sub_val = self.sh_user.cell(j + 2, 4).value
-                    c_ur8_sub = self.sh_user.cell(j + 2, 9)
-                    if c_ur3_sub_val == 0 or c_ur8_sub.value == 'defected':
+                    _subgroup = self.get_cur_subgroup(j)
+                    if _subgroup == 0 or self.get_cur_status(j) == 'defected':
                         continue
-                    c_ur4_sub = self.sh_user.cell(j + 2, 5)
-                    if c_ur3_sub_val == c_us_rec3_val:
+                    _remaining = self.get_remaining_num_cur_subgroup(j)
+                    if _subgroup == cur_subgroup:
                         c_count += 1
-                        c_value += c_ur4_sub.value
+                        c_value += _remaining
                 if c_value % c_count != 0:
                     msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
                           f'c_value({c_value}) % c_count({c_count}) = {c_value % c_count}.. This should be 0!'
                     logger.error(msg)
-                if c_count != c_us_rec4_val:
+                if c_count != cur_remaining:
                     msg = f'______________ Period {self.counter} :: SyFunc {syfunc} _checksum failed(i={i}): ' \
-                          f'UsRec4 value({c_us_rec4_val}) doesn\'t match with {c_count}'
+                          f'UsRec4 value({cur_remaining}) doesn\'t match with {c_count}'
                     logger.error(msg)
-                checked_vals.append(c_us_rec3_val)
+                checked_vals.append(cur_subgroup)
                 c_count = 0
                 c_value = 0
 
@@ -138,10 +136,10 @@ class TandaPaySimulator(object):
                 temp_val_four = step14 * 4
                 offset = 0
                 for i in range(temp_val_four):
-                    self.sh_user.cell(i + offset + 2, 2).value = group_num  # 'D'
-                    self.sh_user.cell(i + offset + 2, 3).value = 4
-                    self.sh_user.cell(i + offset + 2, 4).value = group_num  # 'D'
-                    self.sh_user.cell(i + offset + 2, 5).value = 4
+                    self.set_orig_subgroup(i + offset, group_num)
+                    self.set_remaining_num_orig_subgroup(i + offset, 4)
+                    self.set_cur_subgroup(i + offset, group_num)
+                    self.set_remaining_num_cur_subgroup(i + offset, 4)
                     group_mem_count += 1
                     if group_mem_count == 4:
                         group_num += 1
@@ -151,10 +149,10 @@ class TandaPaySimulator(object):
                 # condition checking for group == 5
                 temp_val_five = step3 * 5
                 for i in range(temp_val_five):
-                    self.sh_user.cell(i + offset + 2, 2).value = group_num  # 'A'
-                    self.sh_user.cell(i + offset + 2, 3).value = 5
-                    self.sh_user.cell(i + offset + 2, 4).value = group_num  # 'A'
-                    self.sh_user.cell(i + offset + 2, 5).value = 5
+                    self.set_orig_subgroup(i + offset, group_num)
+                    self.set_remaining_num_orig_subgroup(i + offset, 5)
+                    self.set_cur_subgroup(i + offset, group_num)
+                    self.set_remaining_num_cur_subgroup(i + offset, 5)
                     group_mem_count += 1
                     if group_mem_count == 5:
                         group_num += 1
@@ -164,10 +162,10 @@ class TandaPaySimulator(object):
                 # condition checking for group == 6
                 temp_val_six = step7 * 6
                 for i in range(temp_val_six):
-                    self.sh_user.cell(i + offset + 2, 2).value = group_num  # 'B'
-                    self.sh_user.cell(i + offset + 2, 3).value = 6
-                    self.sh_user.cell(i + offset + 2, 4).value = group_num  # 'B'
-                    self.sh_user.cell(i + offset + 2, 5).value = 6
+                    self.set_orig_subgroup(i + offset, group_num)
+                    self.set_remaining_num_orig_subgroup(i + offset, 6)
+                    self.set_cur_subgroup(i + offset, group_num)
+                    self.set_remaining_num_cur_subgroup(i + offset, 6)
                     group_mem_count += 1
                     if group_mem_count == 6:
                         group_num += 1
@@ -177,10 +175,10 @@ class TandaPaySimulator(object):
                 # condition checking for group == 7
                 temp_val_seven = step11 * 7
                 for i in range(temp_val_seven):
-                    self.sh_user.cell(i + offset + 2, 2).value = group_num       # 'C'
-                    self.sh_user.cell(i + offset + 2, 3).value = 7
-                    self.sh_user.cell(i + offset + 2, 4).value = group_num       # 'C'
-                    self.sh_user.cell(i + offset + 2, 5).value = 7
+                    self.set_orig_subgroup(i + offset, group_num)
+                    self.set_remaining_num_orig_subgroup(i + offset, 7)
+                    self.set_cur_subgroup(i + offset, group_num)
+                    self.set_remaining_num_cur_subgroup(i + offset, 7)
                     group_mem_count += 1
                     if group_mem_count == 7:
                         group_num += 1
@@ -209,8 +207,8 @@ class TandaPaySimulator(object):
                 role_ev5 = int(self.ev[0] * self.ev[4])
                 low_morale_list = random.sample(non_defectors, role_ev5)
                 for i in range(self.ev[0]):
-                    self.sh_user.cell(i + 2, 7).value = 'defector' if i in defectors else \
-                        'low-morale' if i in low_morale_list else 'unity-role'
+                    self.set_primary_role(
+                        i, 'defector' if i in defectors else 'low-morale' if i in low_morale_list else 'unity-role')
 
                 # ROLE 2
                 # temp_val_four users and pick remaining users randomly to be equal with EV6
@@ -221,8 +219,8 @@ class TandaPaySimulator(object):
                     rand_dep_user = []
 
                 for i in range(self.ev[0]):
-                    self.sh_user.cell(i + 2, 8).value = 'dependent' if (i < temp_val_four or i in rand_dep_user) \
-                        else 'independent'
+                    self.set_secondary_role(
+                        i, 'dependent' if (i < temp_val_four or i in rand_dep_user) else 'independent')
 
                 self.save_to_excel('user')
                 logger.debug('Roles Assigned!')
@@ -230,9 +228,12 @@ class TandaPaySimulator(object):
             self.assign_variables()
             if self.counter == 1:
                 self.user_func_1()
-            if 1 < self.counter < 10:
+
+            if self.counter > 1:
                 self.user_func_2()
+
             self.sys_func_3()
+
             self.sys_func_4()
 
             # Sys Func 4 PATH 1
@@ -243,45 +244,39 @@ class TandaPaySimulator(object):
                 # ___SyFunc5___
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh_system.cell(4, 11).value = self.sy_rec_f[9].value
-            elif self.counter < 10:
+            else:
                 for k in range(1, 20):
                     self.sy_rec_r[k].value = self.sy_rec_p[k].value
+
             self.sys_func_6()
+
             self.sys_func_7()
             self.save_to_excel('user')
             self._checksum(7)
 
             self.sys_func_8()
+
             self.sys_func_9()
 
             # ___SyFunc11___  (Reorg Stage 7)
-            _path = 0
-            if self.counter != 10:
-                total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
+            total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
+            if self.counter != 10 and total > 0:
+                # copy values of previous to current
+                sy_rec_new_p = [None] * 21
+                for k in range(1, 20):
+                    sy_rec_new_p[k] = self.sh_system.cell(self.counter * 3 + 2, k + 2)
+                    sy_rec_new_p[k].value = self.sh_system.cell(self.counter * 3 + 1, k + 2).value
 
-                if total > 0:
-                    _path = 1
-                elif total == 0:
-                    _path = 2
+                # Overwriting values in new row
+                sy_rec_new_p[18].value = sy_rec_new_p[17].value
+                for k in {3, 5, 6, 9, 10, 11, 13, 14, 15, 17}:
+                    sy_rec_new_p[k].value = 0
+                self.save_to_excel('system')
 
-                if _path == 1:
-                    # copy values of previous to current
-                    sy_rec_new_p = [None] * 21
-                    for k in range(1, 20):
-                        sy_rec_new_p[k] = self.sh_system.cell(self.counter * 3 + 2, k + 2)
-                        sy_rec_new_p[k].value = self.sh_system.cell(self.counter * 3 + 1, k + 2).value
+                self._checksum(11)
+                self._checksum_sr1(sy_rec_new_p[1].value, 11)
 
-                    # Overwriting values in new row
-                    sy_rec_new_p[18].value = sy_rec_new_p[17].value
-                    for k in {3, 5, 6, 9, 10, 11, 13, 14, 15, 17}:
-                        sy_rec_new_p[k].value = 0
-                    self.save_to_excel('system')
-
-                    self._checksum(11)
-                    self._checksum_sr1(sy_rec_new_p[1].value, 11)
-
-            # logging to log file
-            if self.counter == 10 or _path == 2:
+            if self.counter == 10 or total == 0:
                 logger.info(f'Run complete, logging simulation results')
                 try:
                     percent = (self.sh_system.cell(3, 5).value / self.ev[0]) * 100
@@ -324,7 +319,6 @@ class TandaPaySimulator(object):
         logger.debug('Initial values for UsRec variables set!')
 
     def init_sys_rec(self):
-        # PAGE 8, 9
         for i in range(2):
             self.sh_system.cell(i + 2, 3).value = self.ev[0]
             self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
@@ -628,6 +622,10 @@ class TandaPaySimulator(object):
         # UsRec1
         return self.sh_user.cell(index + 2, 2).value
 
+    def set_orig_subgroup(self, index, val):
+        # UsRec1
+        self.sh_user.cell(index + 2, 2).value = val
+
     def get_remaining_num_orig_subgroup(self, index):
         # UsRec2
         return self.sh_user.cell(index + 2, 3).value
@@ -671,6 +669,10 @@ class TandaPaySimulator(object):
     def get_secondary_role(self, index):
         # UsRec7
         return self.sh_user.cell(index + 2, 8).value
+
+    def set_secondary_role(self, index, val):
+        # UsRec7
+        self.sh_user.cell(index + 2, 8).value = val
 
     def get_cur_status(self, index):
         # UsRec8
