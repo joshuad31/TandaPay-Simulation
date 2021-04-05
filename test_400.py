@@ -1,6 +1,5 @@
 import time
 
-from utils.common import get_config
 from utils.tandapay import TandaPaySimulator
 
 
@@ -18,14 +17,13 @@ pv_list = [
     [.05, .01, .7, .2, .8, .05],
 ]
 
-conf = get_config()
 failure_count = [0, 0, 0, 0]
 result_list = [[], [], [], []]
 
 for i, ev in enumerate(ev_list):
     ev.append(ev[1] * 0.025 * ev[0])
     for _ in range(100):
-        sim = TandaPaySimulator(conf=conf, ev=ev, pv=pv_list[i], matrix=True)
+        sim = TandaPaySimulator(ev=ev, pv=pv_list[i], matrix=True)
         result = sim.start_simulate()
         remaining = result[1] / result[0]
         result_list[i].append(round(remaining, 2) * 100)

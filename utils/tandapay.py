@@ -6,14 +6,14 @@ from datetime import datetime
 import random
 from openpyxl import load_workbook
 from settings import RESULT_DIR
-
+from utils.common import get_config
 from utils.logger import logger
 
 
 class TandaPaySimulator(object):
 
-    def __init__(self, conf, ev, pv, matrix=False):
-        self.conf = conf
+    def __init__(self, ev=None, pv=None, matrix=False):
+        self.conf = get_config()
         self.ev = ev
         self.pv = pv
         self.wb = {}

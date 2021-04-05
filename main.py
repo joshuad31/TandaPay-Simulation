@@ -89,7 +89,7 @@ class TandaPaySimulationApp(QMainWindow):
         threading.Thread(target=self._start_process, args=(count, )).start()
 
     def _start_process(self, count=10):
-        tp = TandaPaySimulator(conf=self.conf, ev=self.ev, pv=self.pv)
+        tp = TandaPaySimulator(ev=self.ev, pv=self.pv)
         tp.start_simulate(count=count)
         getattr(self, 'finished').emit()
 
