@@ -20,14 +20,20 @@ pv_list = [
 
 conf = get_config()
 failure_count = [0, 0, 0, 0]
+result_list = [[], [], [], []]
 
 for i, ev in enumerate(ev_list):
     ev.append(ev[1] * 0.025 * ev[0])
     for _ in range(100):
         sim = TandaPaySimulator(conf=conf, ev=ev, pv=pv_list[i], matrix=True)
         result = sim.start_simulate()
-        if result[1] / result[0] < .5:
+        remaining = result[1] / result[0]
+        result_list[i].append(round(remaining, 2) * 100)
+        if remaining < .5:
             failure_count[i] += 1
 
+avg_percentage = [round(sum(m) / len(m), 2) for m in result_list]
+
 time.sleep(.1)
-print(f"Failure count: {failure_count}")
+print(f"Failure counts: {failure_count}")
+print(f"Average remaining percentages: {avg_percentage}")
