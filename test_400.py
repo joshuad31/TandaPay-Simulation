@@ -1,12 +1,14 @@
+import time
+
 from utils.common import get_config
 from utils.tandapay import TandaPaySimulator
 
 
 ev_list = [
-    [81, 1000, 1, .25, .10, 0, 2, 0, .99],
-    [75, 1000, 1, .20, .15, 0, 2, 0, .99],
-    [71, 1000, 1, .15, .20, 0, 2, 0, .99],
-    [65, 1000, 1, .10, .25, 0, 2, 0, .99],
+    [81, 1000, .70, .25, .08, 1., 2, 1, .5],
+    [75, 1000, .55, .20, .10, 1., 2, 1, .5],
+    [71, 1000, .70, .15, .12, 1., 2, 1, .5],
+    [65, 1000, .55, .10, .14, 1., 2, 1, .5],
 ]
 
 pv_list = [
@@ -19,12 +21,13 @@ pv_list = [
 conf = get_config()
 failure_count = [0, 0, 0, 0]
 
-for i in range(4):
-    ev_list[i].append(ev_list[i][1] * 0.025 * ev_list[i][0])
+for i, ev in enumerate(ev_list):
+    ev.append(ev[1] * 0.025 * ev[0])
     for _ in range(100):
-        sim = TandaPaySimulator(conf=conf, ev=ev_list[i], pv=pv_list[i], matrix=True)
+        sim = TandaPaySimulator(conf=conf, ev=ev, pv=pv_list[i], matrix=True)
         result = sim.start_simulate()
         if result[1] / result[0] < .5:
             failure_count[i] += 1
 
+time.sleep(.1)
 print(f"Failure count: {failure_count}")

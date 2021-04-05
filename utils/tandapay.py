@@ -94,7 +94,7 @@ class TandaPaySimulator(object):
         logger.debug(f'EV1: {self.ev[0]}')
 
         for self.counter in range(1, count + 1):
-            logger.info(f'Current period is: {self.counter}')
+            # logger.info(f'Current period is: {self.counter}')
             if self.counter == 1:
                 self.init_user_rec()
                 self.init_sys_rec()
@@ -263,9 +263,9 @@ class TandaPaySimulator(object):
                 self._checksum_sr1(sy_rec_new_p[1].value, 11)
 
             if self.counter == count or total == 0:
-                logger.info(f'Run complete, logging simulation results')
                 self.save_to_excel('user')
                 self.save_to_excel('system')
+                logger.info(f'Complete at period {self.counter}({time.time() - s_time}), logging simulation results')
                 percent = round(self.sh_system.cell(3, 5).value / self.ev[0] * 100, 2)
                 inc_premium = round((self.sy_rec_f[19].value / self.sh_system.cell(2, 21).value) * 100, 2)
                 result_file = os.path.join(target_dir, "result.txt")
@@ -302,7 +302,6 @@ class TandaPaySimulator(object):
                         f.writelines(lines)
                 else:
                     shutil.rmtree(target_dir, ignore_errors=True)
-                logger.info(f'Iteration {self.counter} times complete, elapsed: {time.time() - s_time}')
                 return results
 
     def init_user_rec(self):
@@ -479,7 +478,8 @@ class TandaPaySimulator(object):
                     valid_list.remove(give_match)
                 if not invalid_list:
                     if path_users:
-                        logger.warning(f"SysFunc7: Path{path} invalid is empty but run set is not in the 1st attempt!")
+                        logger.warning(f"Period {self.counter}, SysFunc7: Path{path} invalid is empty "
+                                       f"but run set is not in the 1st attempt!")
                     break
                 elif not valid_list:      # Second attempt
                     filtered_list = list(set(
@@ -504,8 +504,8 @@ class TandaPaySimulator(object):
                         filtered_list.remove(give_match)
                         if not invalid_list:
                             if path_users:
-                                logger.warning(
-                                    f"SysFunc7: Path{path} invalid is empty but run set is not in the 2nd attempt!")
+                                logger.warning(f"Period {self.counter}, SysFunc7: Path{path} invalid is empty "
+                                               f"but run set is not in the 2nd attempt!")
                             break
                     break
 
@@ -554,7 +554,8 @@ class TandaPaySimulator(object):
                     self.set_remaining_num_cur_subgroup(i, 7)
             valid_list.remove(give_match)
             if path_3_users:
-                logger.warning("SysFunc7: Path3 invalid is empty but run set is not in the 2nd attempt!")
+                logger.warning(f"Period {self.counter}, SysFunc7: Path3 invalid is empty but "
+                               f"run set is not in the 2nd attempt!")
 
     def sys_func_8(self):
         """"
