@@ -251,7 +251,7 @@ class TandaPaySimulator(object):
                 sy_rec_new_p = [None] * 21
                 for k in range(1, 20):
                     sy_rec_new_p[k] = self.sh_system.cell(self.counter * 3 + 2, k + 2)
-                    sy_rec_new_p[k].value = self.sy_rec_r[k]
+                    sy_rec_new_p[k].value = self.sy_rec_r[k].value
 
                 # Overwriting values in new row
                 sy_rec_new_p[18].value = sy_rec_new_p[17].value
