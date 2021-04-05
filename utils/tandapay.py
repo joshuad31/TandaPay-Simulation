@@ -64,9 +64,15 @@ class TandaPaySimulator(object):
         db_file = self.conf['database']['system']
         self.wb['system'] = load_workbook(db_file)
         self.sh_system = self.wb['system'].active
-        for row in self.sh_system['C2:U37']:
-            for cell in row:
-                cell.value = None
+        for i in range(2):
+            self.sh_system.cell(i + 2, 3).value = self.ev[0]
+            self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
+            for k in range(5, 21):
+                self.sh_system.cell(i + 2, k).value = 0 if k != 18 else 'no'
+            self.sh_system.cell(i + 2, 21).value = self.ev[9] / self.ev[0]
+        for i in range(3, 30):
+            for k in range(3, 22):
+                self.sh_system.cell(i + 2, k).value = 0
         self.excel_files['system'] = os.path.join(target_dir, ntpath.basename(self.conf['database']['system']))
         self.save_to_excel('system')
 
@@ -74,9 +80,13 @@ class TandaPaySimulator(object):
         db_file = self.conf['database']['user']
         self.wb['user'] = load_workbook(db_file)
         self.sh_user = self.wb['user'].active
-        for row in self.sh_user['A2:N200']:
-            for cell in row:
-                cell.value = None
+        for i in range(self.ev[0]):
+            self.sh_user.cell(i + 2, 1).value = f'user{i + 1}'
+            self.set_reorg_time(i, 0)
+            self.set_invalid_refund_available(i, 0)
+            self.set_total_payment_specific_user(i, self.ev[0])
+            self.set_payable(i, 'yes')
+            self.set_defect_count(i, 0)
         self.excel_files['user'] = os.path.join(target_dir, ntpath.basename(self.conf['database']['user']))
         self.save_to_excel('user')
 
@@ -92,9 +102,6 @@ class TandaPaySimulator(object):
         self.init_system_sheet(target_dir)
 
         logger.debug(f'EV1: {self.ev[0]}')
-
-        self.init_user_rec()
-        self.init_sys_rec()
 
         # Subgroup  # FUNCTION FOR SUBGROUP EXECUTION
         step1_ev1 = self.ev[0]
@@ -358,10 +365,9 @@ class TandaPaySimulator(object):
         skip_count = 0
         if inc_premium >= self.pv[0]:  # PATH1
             skip_percent = slope * (inc_premium - self.pv[0]) + self.pv[1]
-            skip_count = round(self.sy_rec_p[1].value * skip_percent)
+            skip_count = round(cur_total_payment * skip_percent)
         else:
-            num = cur_total_payment / (self.ev[9] / self.ev[0]) - 1
-            if num >= self.pv[4]:  # PATH2
+            if cur_total_payment / (self.ev[9] / self.ev[0]) - 1 >= self.pv[4]:  # PATH2
                 skip_count = round(self.sy_rec_p[1].value * self.pv[5])
             else:  # PATH3
                 if self.ev[7] != 0:
