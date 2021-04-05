@@ -230,8 +230,8 @@ class TandaPaySimulator(object):
 
             self.sys_func_4()
 
+            # ___SyFunc5___
             if self.counter == 1:
-                # ___SyFunc5___
                 self.sy_rec_f[9].value = self.sy_rec_f[3].value * self.sy_rec_f[19].value
                 self.sh_system.cell(4, 11).value = self.sy_rec_f[9].value
 
@@ -251,7 +251,7 @@ class TandaPaySimulator(object):
                 sy_rec_new_p = [None] * 21
                 for k in range(1, 20):
                     sy_rec_new_p[k] = self.sh_system.cell(self.counter * 3 + 2, k + 2)
-                    sy_rec_new_p[k].value = self.sh_system.cell(self.counter * 3 + 1, k + 2).value
+                    sy_rec_new_p[k].value = self.sy_rec_r[k]
 
                 # Overwriting values in new row
                 sy_rec_new_p[18].value = sy_rec_new_p[17].value
@@ -301,27 +301,6 @@ class TandaPaySimulator(object):
                 else:
                     shutil.rmtree(target_dir, ignore_errors=True)
                 return results
-
-    def init_user_rec(self):
-        for i in range(self.ev[0]):
-            self.sh_user.cell(i + 2, 1).value = f'user{i + 1}'
-            self.set_reorg_time(i, 0)
-            self.set_invalid_refund_available(i, 0)
-            self.set_total_payment_specific_user(i, self.ev[0])
-            self.set_payable(i, 'yes')
-            self.set_defect_count(i, 0)
-
-    def init_sys_rec(self):
-        for i in range(2):
-            self.sh_system.cell(i + 2, 3).value = self.ev[0]
-            self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
-            for k in range(5, 21):
-                self.sh_system.cell(i + 2, k).value = 0 if k != 18 else 'no'
-            self.sh_system.cell(i + 2, 21).value = self.ev[9] / self.ev[0]
-
-        for i in range(3, 30):
-            for k in range(3, 22):
-                self.sh_system.cell(i + 2, k).value = 0
 
     def user_func_1(self):
         """
