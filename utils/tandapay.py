@@ -545,7 +545,7 @@ class TandaPaySimulator(object):
         prob = round(random.uniform(0, 1), 2)
         if self.ev[2] > prob:
             self.sy_rec_r[16].value = 'yes'
-        elif self.ev[2] < prob:
+        else:
             self.sy_rec_r[16].value = "no"
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
 
