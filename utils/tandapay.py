@@ -14,6 +14,8 @@ class TandaPaySimulator(object):
 
     def __init__(self, ev=None, pv=None, matrix=False):
         self.conf = get_config()
+        if len(ev) != 10:
+            ev.append(ev[1] * 0.025 * ev[0])
         self.ev = ev
         self.pv = pv
         self.wb = {}
@@ -556,9 +558,11 @@ class TandaPaySimulator(object):
         """"
         Reorg Stage 5
         """
-        self.sy_rec_r[2].value = self.ev[9] / self.sy_rec_r[1].value
+        if self.sy_rec_r[1].value > 0:
+            self.sy_rec_r[2].value = self.ev[9] / self.sy_rec_r[1].value
         self.sy_rec_r[14].value = self.sy_rec_r[9].value + self.sy_rec_r[11].value + self.sy_rec_r[13].value
-        self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
+        if self.sy_rec_r[1].value > 0:
+            self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
 
         for i in range(self.ev[0]):
             invalid_refund = self.get_invalid_refund_available(i)
