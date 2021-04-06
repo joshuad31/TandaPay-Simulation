@@ -35,10 +35,9 @@ for i, d in enumerate(test_data):
         if remaining < .5:
             failure_count[i] += 1
 
-avg_percentage = [round(sum(m) / len(m) * 100, 2) for m in result_list]
-
 for i, r in enumerate(result_list):
-    plt.hist(r, density=True, bins=round(max(r) * 100), label=f"Value {i + 1}, AVG: {avg_percentage[i]}%)")
+    plt.figure(i + 1)
+    plt.hist(r, density=True, bins=round(max(r) * 100), label=f"Value {i + 1}")
     mn, mx = plt.xlim()
     plt.xlim(mn, mx)
     kde_xs = np.linspace(mn, mx, 300)
@@ -48,8 +47,8 @@ for i, r in enumerate(result_list):
     plt.ylabel('Count & Probability')
     plt.xlabel(f'EV: {test_data[i]["ev"]}, PV: {test_data[i]["pv"]}')
     plt.title(f"Failure Rate: {failure_count[i]}%")
-    plt.show()
+
+plt.show()
 
 time.sleep(.1)
 print(f"Failure Rate: {failure_count}")
-print(f"Average remaining percentages: {avg_percentage}")
