@@ -96,7 +96,7 @@ class TandaPaySimulator(object):
         if not self.matrix:
             self.wb[db_type].save(self.excel_files[db_type])
 
-    def start_simulate(self, count=10):
+    def start_simulation(self, count=10):
         s_time = time.time()
         target_dir = os.path.join(RESULT_DIR, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
         os.makedirs(target_dir)

@@ -90,7 +90,7 @@ class TandaPaySimulationApp(QMainWindow):
 
     def _start_process(self, count=10):
         tp = TandaPaySimulator(ev=self.ev, pv=self.pv)
-        tp.start_simulate(count=count)
+        tp.start_simulation(count=count)
         getattr(self, 'finished').emit()
 
     def _on_process_finished(self):

@@ -29,7 +29,7 @@ result_list = [[], [], [], []]
 for i, d in enumerate(test_data):
     for _ in range(100):
         sim = TandaPaySimulator(ev=d['ev'], pv=d['pv'], matrix=True)
-        result = sim.start_simulate()
+        result = sim.start_simulation()
         remaining = result[1] / result[0]
         result_list[i].append(remaining)
         if remaining < .5:
