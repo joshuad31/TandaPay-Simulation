@@ -255,7 +255,7 @@ class TandaPaySimulator(object):
 
                 # Overwriting values in new row
                 sy_rec_new_p[18].value = sy_rec_new_p[17].value
-                for k in {3, 5, 6, 9, 10, 11, 13, 14, 15, 17}:
+                for k in {3, 5, 6, 9, 11, 13, 14, 15, 17}:
                     sy_rec_new_p[k].value = 0
 
                 self._checksum(11)
@@ -441,15 +441,15 @@ class TandaPaySimulator(object):
                 if invalid_list and valid_list:
                     need_match = invalid_list[0]
                     give_match = random.sample(valid_list, 1)[0]
-                    for i in path_users:
+                    for i in path_users[:]:
                         if self.get_cur_subgroup(i) == need_match:
                             self.set_cur_subgroup(i, give_match)
                             self.set_remaining_num_cur_subgroup(i, 7)
                             self.set_subgroup_status(i, 'valid')
                             self.set_cur_status(i, 'reorg')
                             self.set_reorg_time(i, self.get_reorg_time(i) + 1)
+                            path_users.remove(i)
                     invalid_list.remove(need_match)
-                    path_users = [i for i in path_users if self.get_cur_subgroup(i) != need_match]
                     for i in range(self.ev[0]):
                         if self.get_cur_subgroup(i) == give_match:
                             self.set_remaining_num_cur_subgroup(i, 7)
@@ -457,7 +457,7 @@ class TandaPaySimulator(object):
                 if not invalid_list:
                     if path_users:
                         logger.warning(f"Period {self.counter}, SysFunc7: Path{path} invalid is empty "
-                                       f"but run set is not in the 1st attempt!")
+                                       f"but run set is not empty in the 1st attempt!")
                     break
                 elif not valid_list:      # Second attempt
                     filtered_list = list(set(
@@ -467,15 +467,15 @@ class TandaPaySimulator(object):
                     while filtered_list:
                         need_match = invalid_list[0]
                         give_match = random.sample(filtered_list, 1)[0]
-                        for i in path_users:
+                        for i in path_users[:]:
                             if self.get_cur_subgroup(i) == need_match:
                                 self.set_cur_subgroup(i, give_match)
                                 self.set_remaining_num_cur_subgroup(i, 6)
                                 self.set_subgroup_status(i, 'valid')
                                 self.set_cur_status(i, 'reorg')
                                 self.set_reorg_time(i, self.get_reorg_time(i) + 1)
+                                path_users.remove(i)
                         invalid_list.remove(need_match)
-                        path_users = [i for i in path_users if self.get_cur_subgroup(i) != need_match]
                         for i in range(self.ev[0]):
                             if self.get_cur_subgroup(i) == give_match:
                                 self.set_remaining_num_cur_subgroup(i, 6)
@@ -483,7 +483,7 @@ class TandaPaySimulator(object):
                         if not invalid_list:
                             if path_users:
                                 logger.warning(f"Period {self.counter}, SysFunc7: Path{path} invalid is empty "
-                                               f"but run set is not in the 2nd attempt!")
+                                               f"but run set is not empty in the 2nd attempt!")
                             break
                     break
 
@@ -516,24 +516,25 @@ class TandaPaySimulator(object):
         valid_list = list(set(
             [self.get_cur_subgroup(i) for i in range(self.ev[0])
              if self.get_subgroup_status(i) == 'valid' and self.get_remaining_num_cur_subgroup(i) == 4]))
+        # TODO: If invalid_list is empty and valid_list is not empty?
         if invalid_list and valid_list:
             need_match = invalid_list[0]
             give_match = random.sample(valid_list, 1)[0]
-            for i in path_3_users:
+            for i in path_3_users[:]:
                 if self.get_cur_subgroup(i) == need_match:
                     self.set_cur_subgroup(i, give_match)
                     self.set_remaining_num_cur_subgroup(i, 7)
                     self.set_subgroup_status(i, 'valid')
                     self.set_cur_status(i, 'reorg')
                     self.set_reorg_time(i, self.get_reorg_time(i) + 1)
-            path_3_users = [i for i in path_3_users if self.get_cur_subgroup(i) != need_match]
+                    path_3_users.remove(i)
             for i in range(self.ev[0]):
                 if self.get_cur_subgroup(i) == give_match:
                     self.set_remaining_num_cur_subgroup(i, 7)
             valid_list.remove(give_match)
             if path_3_users:
                 logger.warning(f"Period {self.counter}, SysFunc7: Path3 invalid is empty but "
-                               f"run set is not in the 2nd attempt!")
+                               f"run set is not empty in the 2nd attempt!")
 
     def sys_func_8(self):
         """"
@@ -555,21 +556,20 @@ class TandaPaySimulator(object):
         """"
         Reorg Stage 5
         """
-        if self.sy_rec_r[1].value > 0:
-            self.sy_rec_r[2].value = self.ev[9] / self.sy_rec_r[1].value
+        self.sy_rec_r[2].value = self.ev[9] / self.sy_rec_r[1].value
         self.sy_rec_r[14].value = self.sy_rec_r[9].value + self.sy_rec_r[11].value + self.sy_rec_r[13].value
-        if self.sy_rec_r[1].value > 0:
-            self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
+        self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
 
         for i in range(self.ev[0]):
             invalid_refund = self.get_invalid_refund_available(i)
             if invalid_refund != 0:
-                self.set_total_payment_specific_user(i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - invalid_refund)
+                self.set_total_payment_specific_user(
+                    i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - invalid_refund)
                 self.set_invalid_refund_available(i, 0)
             else:
                 sr18 = self.sy_rec_r[18].value
                 self.set_total_payment_specific_user(
-                    i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - sr18 if sr18 is not None else 0)
+                    i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - (sr18 if sr18 is not None else 0))
         self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
 
     # ============   User Rec Functions   ===========================
