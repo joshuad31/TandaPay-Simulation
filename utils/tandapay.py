@@ -549,7 +549,6 @@ class TandaPaySimulator(object):
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
 
         # ___SyFunc8.5___       Reorg Stage 4.5
-        self.assign_variables()
         self.sy_rec_r[11].value = self.sy_rec_r[5].value * self.sy_rec_r[19].value
         self.sy_rec_r[13].value = self.sy_rec_r[6].value * self.sy_rec_r[19].value
 
