@@ -542,8 +542,7 @@ class TandaPaySimulator(object):
         """"
         Reorg Stage 4
         """
-        prob = round(random.uniform(0, 1), 2)
-        if self.ev[2] > prob:
+        if self.ev[2] > random.uniform(0, 1):
             self.sy_rec_r[16].value = 'yes'
         else:
             self.sy_rec_r[16].value = "no"
