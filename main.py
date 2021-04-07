@@ -1,4 +1,3 @@
-import os
 import threading
 import sys
 from functools import partial
@@ -7,8 +6,8 @@ import qdarkstyle
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMainWindow, QApplication, QFileDialog
 
+from settings import RESULT_DIR
 from ui.ui_tps import Ui_TandaPaySimulationWindow
-from utils.common import get_config, update_config_file
 from utils.graph import MplCanvas
 from utils.logger import logger
 from utils.message import show_message
@@ -23,9 +22,9 @@ class TandaPaySimulationApp(QMainWindow):
         super().__init__()
         self.ui = Ui_TandaPaySimulationWindow()
         self.ui.setupUi(self)
-        self.conf = get_config()
         self.ev = [0, 0, 0, 0, 0, 0, 0, 0, .3333, 0.]
         self.pv = [0, 0, 0, 0, 0, 0]
+        self.result_path = RESULT_DIR
 
         for i in range(9):
             name = f"ev_{i}"
@@ -39,22 +38,17 @@ class TandaPaySimulationApp(QMainWindow):
 
         self.ui.btn_exit.released.connect(self.close)
         self.ui.btn_start.released.connect(self.btn_start)
-        for k in {"system", "user"}:
-            getattr(self.ui, f"{k}_database").setText(self.conf['database'][k])
-            getattr(self.ui, f"btn_{k}_database").released.connect(partial(self._on_btn_database, k))
-
+        self.ui.result_path.setText(self.result_path)
+        self.ui.btn_result_path.released.connect(self._on_btn_result_path)
         self.canvas = MplCanvas(width=5, height=4, dpi=100)
         self.ui.layout_graph.addWidget(self.canvas)
         getattr(self, 'finished').connect(self._on_process_finished)
 
-    def _on_btn_database(self, db_type: str):
-        db_file, _ = QFileDialog.getOpenFileName(
-            self, f"Select {db_type.capitalize()} Database File",
-            os.path.dirname(self.conf['database'][db_type]), "Excel files (*.xlsx)")
-        if db_file:
-            self.conf['database'][db_type] = db_file
-            update_config_file(self.conf)
-            getattr(self.ui, f"{db_type}_database").setText(db_file)
+    def _on_btn_result_path(self):
+        result_path = QFileDialog.getExistingDirectory(self, "Select a Folder to Save Result", self.result_path)
+        if result_path:
+            self.result_path = result_path
+            self.ui.result_path.setText(self.result_path)
 
     def _on_value_changed(self, v_type, index, value):
         # All PV values and EV3 ~ EV6 are percentage values.
@@ -86,11 +80,11 @@ class TandaPaySimulationApp(QMainWindow):
         self._draw_chart()
         self.ui.centralwidget.setEnabled(False)
         self.ui.statusbar.showMessage("Processing...")
-        threading.Thread(target=self._start_process, args=(count, )).start()
+        threading.Thread(target=self._start_process, args=(self.result_path, count, )).start()
 
-    def _start_process(self, count=10):
+    def _start_process(self, target_dir=RESULT_DIR, count=10):
         tp = TandaPaySimulator(ev=self.ev, pv=self.pv)
-        tp.start_simulation(count=count)
+        tp.start_simulation(target_dir=target_dir, count=count)
         getattr(self, 'finished').emit()
 
     def _on_process_finished(self):

@@ -5,15 +5,13 @@ import time
 from datetime import datetime
 import random
 from openpyxl import load_workbook
-from settings import RESULT_DIR
-from utils.common import get_config
+from settings import RESULT_DIR, DB_DIR
 from utils.logger import logger
 
 
 class TandaPaySimulator(object):
 
     def __init__(self, ev=None, pv=None, matrix=False):
-        self.conf = get_config()
         if len(ev) != 10:
             ev.append(ev[1] * 0.025 * ev[0])
         self.ev = ev
@@ -63,7 +61,7 @@ class TandaPaySimulator(object):
             self.sy_rec_r[i] = self.sh_system.cell(self.counter * 3 + 1, i + 2)
 
     def init_system_sheet(self, target_dir):
-        db_file = self.conf['database']['system']
+        db_file = os.path.join(DB_DIR, '1 System Database.xlsx')
         self.wb['system'] = load_workbook(db_file)
         self.sh_system = self.wb['system'].active
         for i in range(2):
@@ -75,11 +73,11 @@ class TandaPaySimulator(object):
         for i in range(3, 30):
             for k in range(3, 22):
                 self.sh_system.cell(i + 2, k).value = 0
-        self.excel_files['system'] = os.path.join(target_dir, ntpath.basename(self.conf['database']['system']))
+        self.excel_files['system'] = os.path.join(target_dir, ntpath.basename(db_file))
         self.save_to_excel('system')
 
     def init_user_sheet(self, target_dir):
-        db_file = self.conf['database']['user']
+        db_file = os.path.join(DB_DIR, '2 User Database.xlsx')
         self.wb['user'] = load_workbook(db_file)
         self.sh_user = self.wb['user'].active
         for i in range(self.ev[0]):
@@ -89,16 +87,16 @@ class TandaPaySimulator(object):
             self.set_total_payment_specific_user(i, self.ev[0])
             self.set_payable(i, 'yes')
             self.set_defect_count(i, 0)
-        self.excel_files['user'] = os.path.join(target_dir, ntpath.basename(self.conf['database']['user']))
+        self.excel_files['user'] = os.path.join(target_dir, ntpath.basename(db_file))
         self.save_to_excel('user')
 
     def save_to_excel(self, db_type):
         if not self.matrix:
             self.wb[db_type].save(self.excel_files[db_type])
 
-    def start_simulation(self, count=10):
+    def start_simulation(self, target_dir=RESULT_DIR, count=10):
         s_time = time.time()
-        target_dir = os.path.join(RESULT_DIR, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
+        target_dir = os.path.join(target_dir, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
         os.makedirs(target_dir)
         self.init_user_sheet(target_dir)
         self.init_system_sheet(target_dir)

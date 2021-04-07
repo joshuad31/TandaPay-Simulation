@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1121, 935)
+        TandaPaySimulationWindow.resize(1124, 855)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -36,47 +36,23 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.horizontalLayout.addWidget(self.label)
 
-        self.system_database = QLineEdit(self.centralwidget)
-        self.system_database.setObjectName(u"system_database")
-        self.system_database.setReadOnly(True)
+        self.result_path = QLineEdit(self.centralwidget)
+        self.result_path.setObjectName(u"result_path")
+        self.result_path.setReadOnly(True)
 
-        self.horizontalLayout.addWidget(self.system_database)
+        self.horizontalLayout.addWidget(self.result_path)
 
-        self.btn_system_database = QToolButton(self.centralwidget)
-        self.btn_system_database.setObjectName(u"btn_system_database")
+        self.btn_result_path = QToolButton(self.centralwidget)
+        self.btn_result_path.setObjectName(u"btn_result_path")
         icon = QIcon()
         icon.addFile(u":/img/img/Open.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_system_database.setIcon(icon)
-        self.btn_system_database.setIconSize(QSize(30, 30))
+        self.btn_result_path.setIcon(icon)
+        self.btn_result_path.setIconSize(QSize(30, 30))
 
-        self.horizontalLayout.addWidget(self.btn_system_database)
+        self.horizontalLayout.addWidget(self.btn_result_path)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_2 = QLabel(self.centralwidget)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(200, 0))
-
-        self.horizontalLayout_2.addWidget(self.label_2)
-
-        self.user_database = QLineEdit(self.centralwidget)
-        self.user_database.setObjectName(u"user_database")
-        self.user_database.setReadOnly(True)
-
-        self.horizontalLayout_2.addWidget(self.user_database)
-
-        self.btn_user_database = QToolButton(self.centralwidget)
-        self.btn_user_database.setObjectName(u"btn_user_database")
-        self.btn_user_database.setIcon(icon)
-        self.btn_user_database.setIconSize(QSize(30, 30))
-
-        self.horizontalLayout_2.addWidget(self.btn_user_database)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setSpacing(50)
@@ -463,10 +439,8 @@ class Ui_TandaPaySimulationWindow(object):
 
     def retranslateUi(self, TandaPaySimulationWindow):
         TandaPaySimulationWindow.setWindowTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"TandaPay Simulation", None))
-        self.label.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"System Database File:", None))
-        self.btn_system_database.setText("")
-        self.label_2.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"User Database File:", None))
-        self.btn_user_database.setText("")
+        self.label.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Result Path:", None))
+        self.btn_result_path.setText("")
         self.groupBox.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"ENVIRONMENTAL VARIABLES", None))
         self.label_4.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"Members in group", None))
 #if QT_CONFIG(tooltip)

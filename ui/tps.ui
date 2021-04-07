@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
-    <height>935</height>
+    <width>1124</width>
+    <height>855</height>
    </rect>
   </property>
   <property name="font">
@@ -46,60 +46,19 @@
          </size>
         </property>
         <property name="text">
-         <string>System Database File:</string>
+         <string>Result Path:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="system_database">
+       <widget class="QLineEdit" name="result_path">
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="btn_system_database">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="tps.qrc">
-          <normaloff>:/img/img/Open.png</normaloff>:/img/img/Open.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>User Database File:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="user_database">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="btn_user_database">
+       <widget class="QToolButton" name="btn_result_path">
         <property name="text">
          <string/>
         </property>
