@@ -1239,13 +1239,12 @@ _Path 1_
 1. x = Current period
 
 2. Advance to the next row in system record of simulation pay stage for Period x +1.
-	- SyRec 1, SyRec 2, SyRec 18, SyRec 19 and SyRec 20
 3. Copy all values from previous row.
 4. Assign SyRec11 the value of SyRec10.
 5. Assign SyRec13 the value of SyRec12.
 6. Assign SyRec18 the value of SyRec17.
-7. Assign SyRec 20 the value of SyRec 8
-8. Assign SyRec 9, SyRec 11, SyRec 13, SyRec 17 = 0.
+7. Assign SyRec20 the value of SyRec8
+8. Assign SyRec9, SyRec11, SyRec13, SyRec17 = 0.
 9. Assign SyRec3, SyRec5, SyRec6, SyRec8 = 0.
 10. Go to UsFunc 2
 
