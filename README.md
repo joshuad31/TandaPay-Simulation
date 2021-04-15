@@ -248,7 +248,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | SyRec5 | Number of members skipped | 0 |
 | SyRec6 | Number of invalid members | 0 |
 | SyRec7 | Number of members that quit | 0 |
-| SyRec8 | Number of reorged members | 0 |
+| SyRec8 | Members reorged current | 0 |
 | SyRec9 | Fracture debt from defections | 0 |
 | SyRec10 | Fracture debt from skips new | 0 |
 | SyRec11 | Fracture debt from skips prior | 0 |
@@ -260,6 +260,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | SyRec17 | Refund value available for new members | 0 |
 | SyRec18 | Refund value available for prior members | 0 |
 | SyRec19 | Generic total payment | <img src="images/f10.png" height=30> |
+| SyRec20 | Members reorged prior | 0 |
 
 ## User database
 
@@ -536,20 +537,20 @@ _Path 1_
 
 **Path 1**  **Output:** Skip#
 
-1. Identify group where UsRec5 = Valid.
-2. Randomly select (Skip#) number of users where UsRec5 = Valid.
+1. Identify group where UsRec5 = Valid and Usrec10 = 0
+2. Randomly select (skip#) number of users in group
 3. Group of skip users = Set of users.
 4. Set of users UsRec12 = No.
 
 _Path 2_
 
-1. If <img src="images/f21.png" height=30"> &lt; PV5, then: 
+1. If (SyRec 19 / (EV 10 / EV 1)) - 1 < PV 5, then: 
 	- continue to Path 3.
-2. If <img src="images/f22.png" height=30"> ≥ PV5, then: 
+2. If If (SyRec 19 / (EV 10 / EV 1)) - 1 ≥ PV5, then: 
 	- determine Skip# to the nearest whole number.
 	- Skip# = SyRec1 * PV6
-3. Identify group where UsRec5 = Valid.
-4. Randomly select (Skip#) number of users where UsRec5 = Valid.
+3. Identify group where UsRec5 = Valid and Usrec10 = 0
+4. Randomly select (skip#) number of users in group
 5. Group of skip users = Set of users.
 6. Set of users UsRec12 = No
 
