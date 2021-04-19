@@ -248,7 +248,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | SyRec5 | Number of members skipped | 0 |
 | SyRec6 | Number of invalid members | 0 |
 | SyRec7 | Number of members that quit | 0 |
-| SyRec8 | Number of reorged members | 0 |
+| SyRec8 | Members reorged current | 0 |
 | SyRec9 | Fracture debt from defections | 0 |
 | SyRec10 | Fracture debt from skips new | 0 |
 | SyRec11 | Fracture debt from skips prior | 0 |
@@ -260,6 +260,7 @@ _**Table 2. System Record (SyRec) Variables**_
 | SyRec17 | Refund value available for new members | 0 |
 | SyRec18 | Refund value available for prior members | 0 |
 | SyRec19 | Generic total payment | <img src="images/f10.png" height=30> |
+| SyRec20 | Members reorged prior | 0 |
 
 ## User database
 
@@ -536,20 +537,21 @@ _Path 1_
 
 **Path 1**  **Output:** Skip#
 
-1. Identify group where UsRec5 = Valid.
-2. Randomly select (Skip#) number of users where UsRec5 = Valid.
-3. Group of skip users = Set of users.
-4. Set of users UsRec12 = No.
+1. Round (SyRec1 - SyRec20) * Skip% = Skip#
+2. Identify group where UsRec5 = Valid and Usrec10 = 0
+3. Randomly select (skip#) number of users in group
+4. Group of skip users = Set of users.
+5. Set of users UsRec12 = No.
 
 _Path 2_
 
-1. If <img src="images/f21.png" height=30"> &lt; PV5, then: 
+1. If (SyRec 19 / (EV 10 / EV 1)) - 1 < PV 5, then: 
 	- continue to Path 3.
-2. If <img src="images/f22.png" height=30"> ≥ PV5, then: 
+2. If If (SyRec 19 / (EV 10 / EV 1)) - 1 ≥ PV5, then: 
 	- determine Skip# to the nearest whole number.
-	- Skip# = SyRec1 * PV6
-3. Identify group where UsRec5 = Valid.
-4. Randomly select (Skip#) number of users where UsRec5 = Valid.
+	- (SyRec1 - SyRec20) * PV6 = Skip#
+3. Identify group where UsRec5 = Valid and Usrec10 = 0
+4. Randomly select (skip#) number of users in group
 5. Group of skip users = Set of users.
 6. Set of users UsRec12 = No
 
@@ -563,7 +565,9 @@ _Path 3_
 	- Update user.
 	- UsRec12 = No
 
-**Note:** Once Path 1, Path 2, and Path 3 are completed for all records, continue to SyFunc3.
+Once Path 1, Path 2, and Path 3 are completed for all records, set UsRec 10 = 0 for all user records
+
+continue to SyFunc3.
 
 ## SyFunc3 Detailed Description
 
@@ -628,7 +632,6 @@ _Path 2_
 1. If UsRec4 = 1, 2, or 3 and UsRec8 = Paid, then: 
 	- Assign UsRec8 = Paid-Invalid
 	- Assign UsRec5 = Invalid
-	- Assign UsRec10 = UsRec11
 	- Increase SyRec6 by 1
 	- Continue to Path 1.
 2. If UsRec4 = 4, 5, 6, or 7, then: 
@@ -831,7 +834,8 @@ _Path 4_
 1. Load Path 4 Set List.
 2. Count users in set = **&lt;path 4 set list&gt;**.
 3. For all users in Path 4 Set List do:
-	- Increment SyRec8 by 1.
+	- Increment SyRec8 by 1 for every user in list
+	- Set UsRec 10 = 1
 	- If UsRec8 is not Paid-Invalid, then: 
 		- throw error
 		- terminate.
@@ -1150,19 +1154,13 @@ _Path 1_
 
 **SyFunc8 input:** EV3 and the Period Number
 
-Evaluate the period number as follows:
-
-1. If the Period Number = 0, then: 
-	- end the function.
-2. Else: 
-	- continue SyFunc8.
-
-3. Calculate the probability of SyRec16 (Boolean), given EV3 as follows:
+1. Generate random number between 0 and 1 = x
+2. 5. If EV 3 < x then
 	- If no, then: 
 		- write SyRec2 to SyRec17.
 	- If yes, then:
 		- do nothing.
-4. Continue to SyFunc 8.5
+3. Continue to SyFunc 8.5
 
 ## SyFunc 8.5
 
@@ -1190,12 +1188,8 @@ Evaluate the period number as follows:
 	- SyRec14 = SyRec9 + SyRec11 + SyRec13
 3. Calculate SyRec15.
 	- <img src="images/f23.png" height="30">
-4. Calculate UsRec11.
-	- UsRec 11 = SyRec2 + SyRec15 - SyRec18 or UsRec 11 = SyRec2 + SyRec15 - UsRec10
-	- If UsRec10 is used to calculate UsRec11, then: 
-		- assign UsRec10 = 0 after calculating UsRec11.
-5. Calculate SyRec19.
-	- SyRec19 = SyRec2 + SyRec15
+4. Calculate SyRec19.
+	- SyRec19 = SyRec2 + SyRec15 - SyRec18
 6. Continue to SyFunc10.
 
 **Note:** SyFunc9 provides output for individual user.
@@ -1249,14 +1243,10 @@ _Path 1_
 4. Assign SyRec11 the value of SyRec10.
 5. Assign SyRec13 the value of SyRec12.
 6. Assign SyRec18 the value of SyRec17.
-7. Assign SyRec10, SyRec12, and SyRec17 = 0.
-8. Assign SyRec3, SyRec5, and SyRec6 = 0.
-9. If UsRec8 is either Defected, Skipped, or Quit, then:
-	- UsRec8 = NR
-	- UsRec3 = 0
-	- UsRec5 = NR
-	- UsRec12 = NR
-10. Go to UsFunc
+7. Assign SyRec20 the value of SyRec8
+8. Assign SyRec9, SyRec11, SyRec13, SyRec17 = 0.
+9. Assign SyRec3, SyRec5, SyRec6, SyRec8 = 0.
+10. Go to UsFunc 2
 
 _Path 2_
 
@@ -1277,14 +1267,3 @@ _Path 2_
 See the additional specification for automating the simulation and performing cumulative runs testing the collapse threshold:
 
 [insert specification for multiple simulation runs here]
-
-# What the protocol might do one day
-
-Questions the simulation might be able to answer are as follows:
-
-1. Chart the cumulative number of defections over the course of the simulation. At termination, did the community collapse?
-	- Iterative runs = the boundary condition for system input variables that produce community collapse.
-2. What percentage of honest participants are required to produce groups which collapse?
-3. How do the different variable inputs contribute to changing the collapse threshold?
-	- Collapse is x% likely to occur with x% of initial defectors = modifying all other variables
-
