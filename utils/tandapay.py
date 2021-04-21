@@ -406,7 +406,7 @@ class TandaPaySimulator(object):
                 self.set_subgroup_status(i, 'invalid')
                 self.sy_rec_p[6].value += 1  # Increase invalid members count
         # PATH 1
-        for k in range(1, 20):
+        for k in range(1, 21):
             self.sy_rec_f[k].value = self.sy_rec_p[k].value
             self.sy_rec_r[k].value = self.sy_rec_p[k].value
 
