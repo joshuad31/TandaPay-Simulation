@@ -1,3 +1,4 @@
+import copy
 import ntpath
 import os
 import shutil
@@ -14,7 +15,7 @@ class TandaPaySimulator(object):
     def __init__(self, ev=None, pv=None, matrix=False):
         if len(ev) != 10:
             ev.append(ev[1] * 0.025 * ev[0])
-        self.ev = ev
+        self.ev = copy.deepcopy(ev)
         self.pv = pv
         self.wb = {}
         self.sh_user = None
