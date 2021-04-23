@@ -42,6 +42,9 @@ class TandaPaySimulationApp(QMainWindow):
             getattr(self.ui, name).textChanged.connect(partial(self._on_value_changed, 'pv', i))
             self._on_value_changed('pv', i, float(getattr(self.ui, name).value()))
 
+        self.ev_list = []
+        self.pv_list = []
+
         # Bind events for the matrix group selectors
         for combo, v_type, index in self._get_comboboxes():
             combo.currentTextChanged.connect(partial(self._on_group_changed, combo, v_type, index))
@@ -56,6 +59,8 @@ class TandaPaySimulationApp(QMainWindow):
 
         self.canvas = MplCanvas(width=5, height=4, dpi=100)
         self.ui.layout_graph.addWidget(self.canvas)
+        self.canvas_matrix = MplCanvas(width=5, height=4, dpi=100)
+        self.ui.layout_graph_matrix.addWidget(self.canvas_matrix)
         getattr(self, 'finished').connect(self._on_process_finished)
 
     def _on_btn_result_path(self):
@@ -103,6 +108,7 @@ class TandaPaySimulationApp(QMainWindow):
 
     def _on_process_finished(self):
         self.ui.statusbar.showMessage("Finished, please check result folder!", 5000)
+        self.ui.progressBar.setValue(0)
         self.ui.centralwidget.setEnabled(True)
 
     def _get_comboboxes(self):
@@ -142,10 +148,10 @@ class TandaPaySimulationApp(QMainWindow):
                         c.model().item(num).setEnabled(False)
 
     def btn_start_matrix(self):
-        ev_list = []
+        self.ev_list = []
         for i in range(9):
             if i == 1:      # EV2
-                ev_list.append([1000])
+                self.ev_list.append([1000])
             else:
                 layout = getattr(self.ui, f"layout_ev{i}")
                 ratio = .01 if 2 <= i <= 5 else 1
@@ -153,41 +159,52 @@ class TandaPaySimulationApp(QMainWindow):
                 for k in range(layout.count()):
                     if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
                         values.append(layout.itemAt(k).widget().value() * ratio)
-                ev_list.append(values)
-        pv_list = []
+                self.ev_list.append(values)
+        self.pv_list = []
         for i in range(6):
             layout = getattr(self.ui, f"layout_pv{i}")
             values = []
             for k in range(layout.count()):
                 if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
                     values.append(layout.itemAt(k).widget().value() * .01)
-            pv_list.append(values)
-        if any([not ev for ev in ev_list]):
+            self.pv_list.append(values)
+        if any([not ev for ev in self.ev_list]):
             show_message(msg="Please select ALL Environment Variables!", msg_type='Warning')
             return
-        if any([not pv for pv in pv_list]):
+        if any([not pv for pv in self.pv_list]):
             show_message(msg="Please select ALL Pricing Variables!", msg_type='Warning')
             return
-        if min(pv_list[2]) <= max(pv_list[0]):     # PV 3 lowest > PV 1 all
+        if min(self.pv_list[2]) <= max(self.pv_list[0]):     # PV 3 lowest > PV 1 all
             show_message(
                 msg="No values for variables in the set 'Start floor price increase %' are permitted to exceed any "
                     "values for variables in the set 'End limit price increase %`!", msg_type='Warning')
             return
-        if min(pv_list[3]) <= max(pv_list[1]):     # PV 4 lowest > PV 2 all
+        if min(self.pv_list[3]) <= max(self.pv_list[1]):     # PV 4 lowest > PV 2 all
             show_message(
                 msg="no values for variables in the set 'start floor skip result %' are permitted to exceed any values "
                     "for variables in the set 'end limit skip result %' ", msg_type='Warning')
             return
-        if min(pv_list[4]) <= max(pv_list[2]):     # PV 5 lowest > PV 3 all
+        if min(self.pv_list[4]) <= max(self.pv_list[2]):     # PV 5 lowest > PV 3 all
             show_message(
                 msg="no values for variables in the set 'end limit price increase %' are permitted to exceed any "
                     "values for variables in the set 'runaway collapse price increase %’ ", msg_type='Warning')
             return
+        self._draw_matrix_chart()
         self.ui.centralwidget.setEnabled(False)
         self.ui.statusbar.showMessage("Processing...")
         threading.Thread(
             target=create_matrix_result,
-            args=(ev_list, pv_list, self.result_path, self.matrix_status, self.finished)).start()
+            args=(self.ev_list, self.pv_list, self.result_path, self.matrix_status, self.finished)).start()
+
+    def _draw_matrix_chart(self):
+        self.canvas.axes.cla()  # Clear the canvas.
+        self.canvas.axes.set_xlim([0, 100])
+        self.canvas.axes.set_ylim([0, 25])
+        self.canvas.axes.plot([min(self.pv_list[0]) * 100, min(self.pv_list[1]) * 100],
+                              [min(self.pv_list[2]) * 100, min(self.pv_list[3]) * 100], 'b')
+        self.canvas.axes.plot([min(self.pv_list[0]) * 100, min(self.pv_list[1]) * 100],
+                              [max(self.pv_list[2]) * 100, max(self.pv_list[3]) * 100], 'b')
+        self.canvas.draw()
 
     def btn_default(self):
         for i, evs in enumerate(EV_LIST):
