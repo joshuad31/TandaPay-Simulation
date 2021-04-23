@@ -18,7 +18,7 @@ class Ui_TandaPaySimulationWindow(object):
     def setupUi(self, TandaPaySimulationWindow):
         if not TandaPaySimulationWindow.objectName():
             TandaPaySimulationWindow.setObjectName(u"TandaPaySimulationWindow")
-        TandaPaySimulationWindow.resize(1170, 830)
+        TandaPaySimulationWindow.resize(1170, 835)
         font = QFont()
         font.setPointSize(12)
         TandaPaySimulationWindow.setFont(font)
@@ -753,16 +753,29 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.horizontalLayout_27.addWidget(self.label_39)
 
+        self.widget_16 = QWidget(self.groupBox_4)
+        self.widget_16.setObjectName(u"widget_16")
+        self.layout_ev8 = QHBoxLayout(self.widget_16)
+        self.layout_ev8.setSpacing(0)
+        self.layout_ev8.setObjectName(u"layout_ev8")
+        self.layout_ev8.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.horizontalLayout_27.addItem(self.horizontalSpacer_5)
+        self.layout_ev8.addItem(self.horizontalSpacer_5)
 
-        self.ev8 = QDoubleSpinBox(self.groupBox_4)
+        self.ev8 = QDoubleSpinBox(self.widget_16)
         self.ev8.setObjectName(u"ev8")
+        self.ev8.setMinimumSize(QSize(90, 0))
+        self.ev8.setMaximumSize(QSize(90, 16777215))
         self.ev8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev8.setDecimals(4)
+        self.ev8.setMaximum(1.000000000000000)
+        self.ev8.setSingleStep(0.010000000000000)
 
-        self.horizontalLayout_27.addWidget(self.ev8)
+        self.layout_ev8.addWidget(self.ev8)
+
+
+        self.horizontalLayout_27.addWidget(self.widget_16)
 
 
         self.verticalLayout_5.addLayout(self.horizontalLayout_27)
@@ -1097,7 +1110,7 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.retranslateUi(TandaPaySimulationWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(TandaPaySimulationWindow)

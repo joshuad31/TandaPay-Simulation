@@ -5,9 +5,10 @@ from functools import partial
 import qdarkstyle
 from PySide2.QtCore import Signal, QSize
 from PySide2.QtGui import Qt
-from PySide2.QtWidgets import QMainWindow, QApplication, QFileDialog, QDoubleSpinBox, QWidget
+from PySide2.QtWidgets import QMainWindow, QApplication, QFileDialog, QWidget, QSpinBox, QAbstractSpinBox
 
-from settings import RESULT_DIR
+from matrix import EV_LIST, PV_LIST, create_matrix_result
+from settings import RESULT_DIR, MIN_VARIABLES, MAX_VARIABLES
 from ui.ui_tps import Ui_TandaPaySimulationWindow
 from utils.graph import MplCanvas
 from utils.logger import logger
@@ -49,11 +50,13 @@ class TandaPaySimulationApp(QMainWindow):
         self.ui.btn_exit_matrix.released.connect(self.close)
         self.ui.btn_start_single.released.connect(self.btn_start_single)
         self.ui.btn_start_matrix.released.connect(self.btn_start_matrix)
+        self.ui.btn_default.released.connect(self.btn_default)
         self.ui.btn_result_path.released.connect(self._on_btn_result_path)
+        getattr(self, 'matrix_status').connect(self._on_matrix_percent)
 
         self.canvas = MplCanvas(width=5, height=4, dpi=100)
         self.ui.layout_graph.addWidget(self.canvas)
-        getattr(self, 'finished').connect(self._on_single_process_finished)
+        getattr(self, 'finished').connect(self._on_process_finished)
 
     def _on_btn_result_path(self):
         result_path = QFileDialog.getExistingDirectory(self, "Select a Folder to Save Result", self.result_path)
@@ -98,7 +101,7 @@ class TandaPaySimulationApp(QMainWindow):
         tp.start_simulation(target_dir=target_dir, count=count)
         getattr(self, 'finished').emit()
 
-    def _on_single_process_finished(self):
+    def _on_process_finished(self):
         self.ui.statusbar.showMessage("Finished, please check result folder!", 5000)
         self.ui.centralwidget.setEnabled(True)
 
@@ -119,9 +122,11 @@ class TandaPaySimulationApp(QMainWindow):
         for _ in range(5 - combo.currentIndex()):
             layout.addWidget(QWidget())
         for _ in range(combo.currentIndex()):
-            spin = QDoubleSpinBox(parent=self)
+            spin = QSpinBox(parent=self)
             spin.setMaximumSize(QSize(70, 100))
             spin.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            spin.setMinimum(MIN_VARIABLES[v_type][index])
+            spin.setMaximum(MAX_VARIABLES[v_type][index])
             layout.addWidget(spin)
 
     def _rearrange_groups(self):
@@ -137,7 +142,77 @@ class TandaPaySimulationApp(QMainWindow):
                         c.model().item(num).setEnabled(False)
 
     def btn_start_matrix(self):
-        pass
+        ev_list = []
+        for i in range(9):
+            if i == 1:      # EV2
+                ev_list.append([1000])
+            else:
+                layout = getattr(self.ui, f"layout_ev{i}")
+                ratio = .01 if 2 <= i <= 5 else 1
+                values = []
+                for k in range(layout.count()):
+                    if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
+                        values.append(layout.itemAt(k).widget().value() * ratio)
+                ev_list.append(values)
+        pv_list = []
+        for i in range(6):
+            layout = getattr(self.ui, f"layout_pv{i}")
+            values = []
+            for k in range(layout.count()):
+                if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
+                    values.append(layout.itemAt(k).widget().value() * .01)
+            pv_list.append(values)
+        if any([not ev for ev in ev_list]):
+            show_message(msg="Please select ALL Environment Variables!", msg_type='Warning')
+            return
+        if any([not pv for pv in pv_list]):
+            show_message(msg="Please select ALL Pricing Variables!", msg_type='Warning')
+            return
+        if min(pv_list[2]) <= max(pv_list[0]):     # PV 3 lowest > PV 1 all
+            show_message(
+                msg="No values for variables in the set 'Start floor price increase %' are permitted to exceed any "
+                    "values for variables in the set 'End limit price increase %`!", msg_type='Warning')
+            return
+        if min(pv_list[3]) <= max(pv_list[1]):     # PV 4 lowest > PV 2 all
+            show_message(
+                msg="no values for variables in the set 'start floor skip result %' are permitted to exceed any values "
+                    "for variables in the set 'end limit skip result %' ", msg_type='Warning')
+            return
+        if min(pv_list[4]) <= max(pv_list[2]):     # PV 5 lowest > PV 3 all
+            show_message(
+                msg="no values for variables in the set 'end limit price increase %' are permitted to exceed any "
+                    "values for variables in the set 'runaway collapse price increase %’ ", msg_type='Warning')
+            return
+        self.ui.centralwidget.setEnabled(False)
+        self.ui.statusbar.showMessage("Processing...")
+        threading.Thread(
+            target=create_matrix_result,
+            args=(ev_list, pv_list, self.result_path, self.matrix_status, self.finished)).start()
+
+    def btn_default(self):
+        for i, evs in enumerate(EV_LIST):
+            if hasattr(self.ui, f"g_ev{i}"):
+                getattr(self.ui, f"g_ev{i}").setCurrentIndex(len(evs))
+            if i != 1:
+                layout = getattr(self.ui, f"layout_ev{i}")
+                ratio = 100 if 2 <= i <= 5 else 1
+                offset = 0
+                for k in range(layout.count()):
+                    if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
+                        layout.itemAt(k).widget().setValue(evs[offset] * ratio)
+                        offset += 1
+        for i, pvs in enumerate(PV_LIST):
+            if hasattr(self.ui, f"g_pv{i}"):
+                getattr(self.ui, f"g_pv{i}").setCurrentIndex(len(pvs))
+            layout = getattr(self.ui, f"layout_pv{i}")
+            offset = 0
+            for k in range(layout.count()):
+                if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
+                    layout.itemAt(k).widget().setValue(pvs[offset] * 100)
+                    offset += 1
+
+    def _on_matrix_percent(self, val):
+        self.ui.progressBar.setValue(val)
 
 
 if __name__ == '__main__':

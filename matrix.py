@@ -8,18 +8,18 @@ from utils.logger import logger
 from utils.tandapay import TandaPaySimulator
 
 # =============================  Test Data  =========================================
-_ev_list = [
+EV_LIST = [
     [60, 68, 70, 85],               # EV1
     [1000],                         # EV2
     [.40, .55, .70],                # EV3
-    [.24, .26, .27, .28, .29],      # EV4
+    [.24, .26, .27, .28, .30],      # EV4
     [.10, .20],                     # EV5
     [.70, 1.00],                    # EV6
     [2, 3],                         # EV7
     [1],                            # EV8
     [.3333]                         # EV9
 ]
-_pv_list = [
+PV_LIST = [
     [.10],                          # PV1
     [.02],                          # PV2
     [.7],                           # PV3
@@ -34,7 +34,7 @@ _cur_dir = os.path.dirname(os.path.realpath(__file__))
 os.makedirs(os.path.join(_cur_dir, 'result'), exist_ok=True)
 
 
-def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None):
+def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None, finished_signal=None):
 
     dataset = [{'ev': list(d[:9]), 'pv': list(d[9:])} for d in list(itertools.product(*(ev_list + pv_list)))]
 
@@ -47,7 +47,7 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None):
     for i, d in enumerate(dataset):
         logger.debug(f"========== Processing {i}")
         if status_signal is not None and i % 10 == 0:
-            status_signal.emit(i)
+            status_signal.emit(i / len(dataset) * 100)
         ev = d['ev']
         pv = d['pv']
         sim = TandaPaySimulator(ev=ev, pv=pv, matrix=True)
@@ -82,7 +82,7 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None):
         if len(evs) == 1:
             continue
         for j, ev in enumerate(evs):
-            sh_map.cell(1, offset + j).value = f"EV{i + 1} = {ev}"
+            sh_map.cell(1, offset + j).value = f"EV{i + 1} = {ev * (100 if 1 < i < 6 else 1)}"
             sh_map.cell(2, offset + j).value = len([r for r in results if r['ev'][i] == ev])
             sh_map.cell(3, offset + j).value = len([r for r in results if r['ev'][i] == ev and r['c']])
             sh_map.cell(4, offset + j).value = \
@@ -92,7 +92,7 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None):
         if len(pvs) == 1:
             continue
         for j, pv in enumerate(pvs):
-            sh_map.cell(1, offset + j).value = f"PV{i + 1} = {pv}"
+            sh_map.cell(1, offset + j).value = f"PV{i + 1} = {pv * 100}"
             sh_map.cell(2, offset + j).value = len([r for r in results if r['pv'][i] == pv])
             sh_map.cell(3, offset + j).value = len([r for r in results if r['pv'][i] == pv and r['c']])
             sh_map.cell(4, offset + j).value = \
@@ -106,9 +106,11 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None):
     workbook.close()
 
     logger.debug(f"Saved to {result_file}, elapsed: {time.time() - s_time}")
+    if finished_signal is not None:
+        finished_signal.emit()
     return result_file
 
 
 if __name__ == '__main__':
 
-    create_matrix_result(ev_list=_ev_list, pv_list=_pv_list)
+    create_matrix_result(ev_list=EV_LIST, pv_list=PV_LIST)
