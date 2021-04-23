@@ -766,7 +766,7 @@ class Ui_TandaPaySimulationWindow(object):
         self.ev8 = QDoubleSpinBox(self.widget_16)
         self.ev8.setObjectName(u"ev8")
         self.ev8.setMinimumSize(QSize(90, 0))
-        self.ev8.setMaximumSize(QSize(90, 16777215))
+        self.ev8.setMaximumSize(QSize(120, 16777215))
         self.ev8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.ev8.setDecimals(4)
         self.ev8.setMaximum(1.000000000000000)
@@ -1110,7 +1110,7 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.retranslateUi(TandaPaySimulationWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(TandaPaySimulationWindow)
