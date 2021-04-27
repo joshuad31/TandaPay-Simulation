@@ -763,14 +763,10 @@ class Ui_TandaPaySimulationWindow(object):
 
         self.layout_ev8.addItem(self.horizontalSpacer_5)
 
-        self.ev8 = QDoubleSpinBox(self.widget_16)
+        self.ev8 = QSpinBox(self.widget_16)
         self.ev8.setObjectName(u"ev8")
-        self.ev8.setMinimumSize(QSize(90, 0))
-        self.ev8.setMaximumSize(QSize(120, 16777215))
         self.ev8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.ev8.setDecimals(4)
-        self.ev8.setMaximum(1.000000000000000)
-        self.ev8.setSingleStep(0.010000000000000)
+        self.ev8.setMaximum(100)
 
         self.layout_ev8.addWidget(self.ev8)
 
@@ -1310,9 +1306,6 @@ class Ui_TandaPaySimulationWindow(object):
         self.label_39.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Low-morale quit %", None))
 #endif // QT_CONFIG(tooltip)
         self.label_39.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV9", None))
-#if QT_CONFIG(tooltip)
-        self.ev8.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Low-morale quit %", None))
-#endif // QT_CONFIG(tooltip)
         self.groupBox_5.setTitle(QCoreApplication.translate("TandaPaySimulationWindow", u"PRICING VARIABLES", None))
 #if QT_CONFIG(tooltip)
         self.label_41.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Start floor price increase %", None))

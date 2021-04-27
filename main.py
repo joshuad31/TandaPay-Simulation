@@ -70,8 +70,8 @@ class TandaPaySimulationApp(QMainWindow):
             self.ui.result_path.setText(self.result_path)
 
     def _on_value_changed(self, v_type, index, value):
-        # All PV values and EV3 ~ EV6 are percentage values.
-        ratio = .01 if (v_type == 'pv' or 2 <= index <= 5) else 1
+        # All PV values and EV3 ~ EV6, EV9 are percentage values.
+        ratio = .01 if (v_type == 'pv' or 2 <= index <= 5 or index == 8) else 1
         getattr(self, v_type)[index] = float(value) * ratio
         if v_type == 'ev' and index in {0, 1}:
             self.ev[9] = self.ev[1] * 0.025 * self.ev[0]
@@ -154,7 +154,7 @@ class TandaPaySimulationApp(QMainWindow):
                 self.ev_list.append([1000])
             else:
                 layout = getattr(self.ui, f"layout_ev{i}")
-                ratio = .01 if 2 <= i <= 5 else 1
+                ratio = .01 if (2 <= i <= 5 or i == 8) else 1
                 values = []
                 for k in range(layout.count()):
                     if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):
@@ -212,7 +212,7 @@ class TandaPaySimulationApp(QMainWindow):
                 getattr(self.ui, f"g_ev{i}").setCurrentIndex(len(evs))
             if i != 1:
                 layout = getattr(self.ui, f"layout_ev{i}")
-                ratio = 100 if 2 <= i <= 5 else 1
+                ratio = 100 if (2 <= i <= 5 or i == 8) else 1
                 offset = 0
                 for k in range(layout.count()):
                     if isinstance(layout.itemAt(k).widget(), QAbstractSpinBox):

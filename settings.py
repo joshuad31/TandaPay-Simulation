@@ -11,12 +11,12 @@ RESULT_DIR = os.path.join(_cur_dir, 'result')
 os.makedirs(RESULT_DIR, exist_ok=True)
 
 MIN_VARIABLES = {
-    'ev': [0, 1000, 25, 10, 10, 20, 2, 0, 0],
-    'pv': [20, 1, 30, 5, 0, 0]
+    'ev': [30, 1000, 0, 0, 0, 0, 2, 0, 0],
+    'pv': [1, 1, 1, 1, 1, 1]
 }
 MAX_VARIABLES = {
-    'ev': [100, 1000, 75, 45, 30, 80, 4, 3],
-    'pv': [40, 15, 70, 25, 100, 100]
+    'ev': [130, 1000, 100, 50, 50, 100, 4, 5, 100],
+    'pv': [50, 25, 100, 25, 100, 25]
 }
 try:
     from local_settings import *

@@ -70,7 +70,7 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None, 
 
         sh_log.cell(i + 2, 1).value = i + 1
         for j in range(9):
-            ratio = 100 if 1 < j < 6 else 1     # EV3 ~ EV6 are percentage values
+            ratio = 100 if (1 < j < 6 or j == 8) else 1     # EV3 ~ EV6, EV9 are percentage values
             sh_log.cell(i + 2, 2 + j).value = ev[j] * ratio
         for j in range(6):          # All PV values are percentages
             sh_log.cell(i + 2, 11 + j).value = pv[j] * 100
@@ -82,7 +82,7 @@ def create_matrix_result(ev_list, pv_list, target_dir=None, status_signal=None, 
         if len(evs) == 1:
             continue
         for j, ev in enumerate(evs):
-            sh_map.cell(1, offset + j).value = f"EV{i + 1} = {ev * (100 if 1 < i < 6 else 1)}"
+            sh_map.cell(1, offset + j).value = f"EV{i + 1} = {ev * (100 if (1 < i < 6 or i == 8) else 1)}"
             sh_map.cell(2, offset + j).value = len([r for r in results if r['ev'][i] == ev])
             sh_map.cell(3, offset + j).value = len([r for r in results if r['ev'][i] == ev and r['c']])
             sh_map.cell(4, offset + j).value = \
