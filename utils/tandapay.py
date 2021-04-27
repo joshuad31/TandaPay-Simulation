@@ -98,7 +98,7 @@ class TandaPaySimulator(object):
     def start_simulation(self, target_dir=RESULT_DIR, count=10):
         s_time = time.time()
         target_dir = os.path.join(target_dir, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
-        os.makedirs(target_dir)
+        os.makedirs(target_dir, exist_ok=True)
         self.init_user_sheet(target_dir)
         self.init_system_sheet(target_dir)
 

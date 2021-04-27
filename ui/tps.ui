@@ -111,6 +111,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>ENVIRONMENTAL VARIABLES</string>
             </property>
@@ -126,7 +132,7 @@
                <item>
                 <widget class="QLabel" name="label_4">
                  <property name="text">
-                  <string>EV1 - Members in group</string>
+                  <string>EV1 - Group member number</string>
                  </property>
                 </widget>
                </item>
@@ -170,6 +176,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>EV2 - Average take-home pay for group members</string>
                  </property>
@@ -354,7 +366,7 @@
                   <string>What is the percentage of members who are unwilling to act alone? </string>
                  </property>
                  <property name="text">
-                  <string>EV6 - Members who are unwilling to act alone(%)</string>
+                  <string>EV6 - Dependent members(%)</string>
                  </property>
                 </widget>
                </item>
@@ -399,7 +411,7 @@
                <item>
                 <widget class="QLabel" name="label_10">
                  <property name="text">
-                  <string>EV7 - Member threshold for dependent members to defect</string>
+                  <string>EV7 - Dependent member threshold</string>
                  </property>
                 </widget>
                </item>
@@ -444,7 +456,7 @@
                <item>
                 <widget class="QLabel" name="label_11">
                  <property name="text">
-                  <string>EV8 - Additional periods once the group stabilizes</string>
+                  <string>EV8 - Any additional periods?</string>
                  </property>
                 </widget>
                </item>
@@ -481,6 +493,51 @@
                </item>
               </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_28">
+               <property name="spacing">
+                <number>10</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_12">
+                 <property name="text">
+                  <string>EV9 - Low-morale quit (%)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ev_8">
+                 <property name="minimumSize">
+                  <size>
+                   <width>70</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>70</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Once the group stabilizes how many additional periods will there be?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>33</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
           </item>
@@ -504,7 +561,7 @@
                <item>
                 <widget class="QLabel" name="label_13">
                  <property name="text">
-                  <string>PV1 - Lower threshold of premium price</string>
+                  <string>PV1 - Start floor price increase %</string>
                  </property>
                 </widget>
                </item>
@@ -545,8 +602,14 @@
               <layout class="QHBoxLayout" name="horizontalLayout_19">
                <item>
                 <widget class="QLabel" name="label_14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>PV2 - Policyholders decide to leave before:</string>
+                  <string>PV2 - Start floor skip result %</string>
                  </property>
                 </widget>
                </item>
@@ -591,7 +654,7 @@
                   <string>The maximum premium price increase threshold</string>
                  </property>
                  <property name="text">
-                  <string>PV3 - Upper threshold of premium price</string>
+                  <string>PV3 - End limit price increase %</string>
                  </property>
                 </widget>
                </item>
@@ -630,7 +693,7 @@
                <item>
                 <widget class="QLabel" name="label_16">
                  <property name="text">
-                  <string>PV4- Policyholders deciding to leave result in(%)</string>
+                  <string>PV4 - End limit skip result %</string>
                  </property>
                 </widget>
                </item>
@@ -672,7 +735,7 @@
                <item>
                 <widget class="QLabel" name="label_17">
                  <property name="text">
-                  <string>PV5 - Lower threshold of premium price sensitivity(%)</string>
+                  <string>PV5 - Runaway collapse price increase %</string>
                  </property>
                 </widget>
                </item>
@@ -714,7 +777,7 @@
                <item>
                 <widget class="QLabel" name="label_18">
                  <property name="text">
-                  <string>PV6 - Policyholders leaving every period(%)</string>
+                  <string>PV6 - Runaway collapse skip result %</string>
                  </property>
                 </widget>
                </item>
