@@ -1152,7 +1152,7 @@ class Ui_TandaPaySimulationWindow(object):
 #if QT_CONFIG(tooltip)
         self.ev_1.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"Average take-home pay for group members?", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV3 - Chance of a claim each month(%)", None))
+        self.label_6.setText(QCoreApplication.translate("TandaPaySimulationWindow", u"EV3 - Chance of a claim(%)", None))
 #if QT_CONFIG(tooltip)
         self.ev_2.setToolTip(QCoreApplication.translate("TandaPaySimulationWindow", u"What is the chance of a claim each month?", None))
 #endif // QT_CONFIG(tooltip)

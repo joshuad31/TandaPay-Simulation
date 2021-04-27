@@ -228,7 +228,7 @@
                <item>
                 <widget class="QLabel" name="label_6">
                  <property name="text">
-                  <string>EV3 - Chance of a claim each month(%)</string>
+                  <string>EV3 - Chance of a claim(%)</string>
                  </property>
                 </widget>
                </item>
