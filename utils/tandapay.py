@@ -256,8 +256,7 @@ class TandaPaySimulator(object):
 
                 # Overwriting values in new row
                 sy_rec_new_p[18].value = sy_rec_new_p[17].value
-                sy_rec_new_p[20].value = sy_rec_new_p[8].value
-                for k in {3, 5, 6, 8, 9, 11, 13, 14, 15, 17}:
+                for k in {3, 5, 6, 9, 11, 13, 14, 15, 17}:
                     sy_rec_new_p[k].value = 0
 
                 self._checksum(11)
@@ -342,15 +341,14 @@ class TandaPaySimulator(object):
         else:
             inc_premium = 0
 
-        valid_users = [i for i in range(self.ev[0])
-                       if self.get_subgroup_status(i) == 'valid' and self.get_invalid_refund_available(i) == 0]
+        valid_users = [i for i in range(self.ev[0]) if self.get_subgroup_status(i) == 'valid']
         skip_count = 0
         if inc_premium >= self.pv[0]:  # PATH1
             skip_percent = slope * (inc_premium - self.pv[0]) + self.pv[1]
-            skip_count = round((self.sy_rec_p[1].value - self.sy_rec_p[20].value) * skip_percent)
+            skip_count = round(self.sy_rec_p[1].value * skip_percent)
         else:
             if cur_total_payment / (self.ev[9] / self.ev[0]) - 1 >= self.pv[4]:  # PATH2
-                skip_count = round((self.sy_rec_p[1].value - self.sy_rec_p[20].value) * self.pv[5])
+                skip_count = round(self.sy_rec_p[1].value * self.pv[5])
             else:  # PATH3
                 if self.ev[7] != 0:
                     self.ev[7] -= 1
@@ -359,9 +357,6 @@ class TandaPaySimulator(object):
             skip_users = random.sample(valid_users, min(skip_count, len(valid_users)))
             for i in skip_users:
                 self.set_payable(i, 'no')
-
-        for i in range(self.ev[0]):
-            self.set_invalid_refund_available(i, 0)
 
     def _poison_a_user(self, index):
         cur_subgroup = self.get_cur_subgroup(index)
@@ -405,6 +400,7 @@ class TandaPaySimulator(object):
             if self.get_remaining_num_cur_subgroup(i) in {1, 2, 3} and self.get_cur_status(i) == 'paid':
                 self.set_cur_status(i, 'paid-invalid')
                 self.set_subgroup_status(i, 'invalid')
+                self.set_invalid_refund_available(i, self.get_total_payment_specific_user(i))  # UsRec 10 = UsRec 11
                 self.sy_rec_p[6].value += 1  # Increase invalid members count
         # PATH 1
         for k in range(1, 21):
@@ -425,7 +421,6 @@ class TandaPaySimulator(object):
                 self._poison_a_user(i)
             else:  # PATH 4
                 self.sy_rec_r[8].value += 1
-                self.set_invalid_refund_available(i, 1)
 
         self._checksum(6)
         self._checksum_sr1(self.sy_rec_r[1].value, 6)
@@ -549,6 +544,7 @@ class TandaPaySimulator(object):
         if self.ev[2] > random.uniform(0, 1):
             self.sy_rec_r[16].value = 'yes'
         else:
+            self.sy_rec_r[16].value = "no"
             self.sy_rec_r[17].value = self.sy_rec_r[2].value
 
         # ___SyFunc8.5___       Reorg Stage 4.5
@@ -564,7 +560,17 @@ class TandaPaySimulator(object):
         self.sy_rec_r[14].value = self.sy_rec_r[9].value + self.sy_rec_r[11].value + self.sy_rec_r[13].value
         if self.sy_rec_r[1].value > 0:
             self.sy_rec_r[15].value = self.sy_rec_r[14].value / self.sy_rec_r[1].value
-        self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value - self.sy_rec_r[18].value
+        for i in range(self.ev[0]):
+            invalid_refund = self.get_invalid_refund_available(i)
+            if invalid_refund != 0:
+                self.set_total_payment_specific_user(
+                    i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - invalid_refund)
+                self.set_invalid_refund_available(i, 0)
+            else:
+                sr18 = self.sy_rec_r[18].value
+                self.set_total_payment_specific_user(
+                    i, self.sy_rec_r[2].value + self.sy_rec_r[15].value - (sr18 if sr18 is not None else 0))
+        self.sy_rec_r[19].value = self.sy_rec_r[2].value + self.sy_rec_r[15].value
 
     # ============   User Rec Functions   ===========================
 
