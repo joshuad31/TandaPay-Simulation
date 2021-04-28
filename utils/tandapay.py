@@ -338,8 +338,8 @@ class TandaPaySimulator(object):
         cur_total_payment = float(self.sy_rec_p[19].value)
         premium_value = float(self.sh_system.cell(self.counter * 3 - 1 - 3, 21).value)
         if premium_value < float(self.ev[9] / self.ev[0]):
-            premium_value = mean(
-                [float(self.sh_system.cell(i * 3 - 1 - 3, 21).value) for i in range(2, self.counter+1)])
+            prev_payments = [float(self.sh_system.cell(i * 3 - 1 - 3, 21).value) for i in range(2, self.counter+1)]
+            premium_value = mean(sorted(prev_payments)[-2:])
 
         if premium_value > 0:
             inc_premium = max((cur_total_payment / premium_value) - 1, 0)
