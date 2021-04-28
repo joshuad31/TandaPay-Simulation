@@ -335,7 +335,10 @@ class TandaPaySimulator(object):
         """
         slope = (self.pv[3] - self.pv[1]) / (self.pv[2] - self.pv[0])
         cur_total_payment = float(self.sy_rec_p[19].value)
-        prev_total_payment = float(self.ev[9] / self.ev[0])
+        prev_total_payment = float(self.sh_system.cell(self.counter * 3 - 1 - 3, 21).value)
+        if prev_total_payment < float(self.ev[9] / self.ev[0]):
+            prev_total_payment = float(self.ev[9] / self.ev[0])
+
         if prev_total_payment > 0:
             inc_premium = max((cur_total_payment / prev_total_payment) - 1, 0)
         else:
