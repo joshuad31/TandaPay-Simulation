@@ -3,3 +3,4 @@ note.txt
 local_settings.py
 local_config.json
 result/
+__pycache__
