@@ -1,12 +1,11 @@
 import copy
-import ntpath
 import os
 import shutil
 import time
 from datetime import datetime
 import random
 from openpyxl import load_workbook
-from settings import RESULT_DIR, DB_DIR
+from settings import RESULT_DIR, DB_DIR, FILE_SYSTEM, FILE_USER
 from utils.logger import logger
 
 
@@ -17,16 +16,20 @@ class TandaPaySimulator(object):
             ev.append(ev[1] * 0.025 * ev[0])
         self.ev = copy.deepcopy(ev)
         self.pv = pv
-        self.wb = {}
-        self.sh_user = None
-        self.sh_system = None
+        self.wb = {
+            'user': load_workbook(os.path.join(DB_DIR, FILE_USER)),
+            'system': load_workbook(os.path.join(DB_DIR, FILE_SYSTEM)),
+        }
+        self.sh_user = self.wb['user'].active
+        self.sh_system = self.wb['system'].active
+
         self.excel_files = {}
         self.counter = 0
         self.matrix = matrix
 
-        self.sy_rec_p = [None, ] * 21
-        self.sy_rec_f = [None, ] * 21
-        self.sy_rec_r = [None, ] * 21
+        self.sy_rec_p = [self.sh_system.cell(2, i + 2) for i in range(22)]
+        self.sy_rec_f = [self.sh_system.cell(3, i + 2) for i in range(22)]
+        self.sy_rec_r = [self.sh_system.cell(4, i + 2) for i in range(22)]
 
     def _checksum(self, syfunc: int):
         checked_vals = []
@@ -62,9 +65,6 @@ class TandaPaySimulator(object):
             self.sy_rec_r[i] = self.sh_system.cell(self.counter * 3 + 1, i + 2)
 
     def init_system_sheet(self, target_dir):
-        db_file = os.path.join(DB_DIR, '1 System Database.xlsx')
-        self.wb['system'] = load_workbook(db_file)
-        self.sh_system = self.wb['system'].active
         for i in range(2):
             self.sh_system.cell(i + 2, 3).value = self.ev[0]
             self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
@@ -74,13 +74,10 @@ class TandaPaySimulator(object):
         for i in range(3, 30):
             for k in range(3, 23):
                 self.sh_system.cell(i + 2, k).value = 0
-        self.excel_files['system'] = os.path.join(target_dir, ntpath.basename(db_file))
+        self.excel_files['system'] = os.path.join(target_dir, FILE_SYSTEM)
         self.save_to_excel('system')
 
     def init_user_sheet(self, target_dir):
-        db_file = os.path.join(DB_DIR, '2 User Database.xlsx')
-        self.wb['user'] = load_workbook(db_file)
-        self.sh_user = self.wb['user'].active
         for i in range(self.ev[0]):
             self.sh_user.cell(i + 2, 1).value = f'user{i + 1}'
             self.set_reorg_time(i, 0)
@@ -88,7 +85,7 @@ class TandaPaySimulator(object):
             self.set_total_payment_specific_user(i, self.ev[0])
             self.set_payable(i, 'yes')
             self.set_defect_count(i, 0)
-        self.excel_files['user'] = os.path.join(target_dir, ntpath.basename(db_file))
+        self.excel_files['user'] = os.path.join(target_dir, FILE_USER)
         self.save_to_excel('user')
 
     def save_to_excel(self, db_type):
@@ -249,7 +246,7 @@ class TandaPaySimulator(object):
             total = self.sy_rec_r[3].value + self.sy_rec_r[5].value + self.sy_rec_r[7].value
             if self.counter != count and total > 0:
                 # copy values of previous to current
-                sy_rec_new_p = [None] * 22
+                sy_rec_new_p = [self.sh_system.cell(2, k + 1) for k in range(23)]
                 for k in range(1, 21):
                     sy_rec_new_p[k] = self.sh_system.cell(self.counter * 3 + 2, k + 2)
                     sy_rec_new_p[k].value = self.sy_rec_r[k].value
