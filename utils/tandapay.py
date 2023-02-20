@@ -31,6 +31,30 @@ class TandaPaySimulator(object):
         self.sy_rec_f = [self.sh_system.cell(3, i + 2) for i in range(22)]
         self.sy_rec_r = [self.sh_system.cell(4, i + 2) for i in range(22)]
 
+    def _init_system_sheet(self, target_dir):
+        for i in range(2):
+            self.sh_system.cell(i + 2, 3).value = self.ev[0]
+            self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
+            for k in range(5, 23):
+                self.sh_system.cell(i + 2, k).value = 0 if k != 18 else 'no'
+            self.sh_system.cell(i + 2, 21).value = self.ev[9] / self.ev[0]
+        for i in range(3, 30):
+            for k in range(3, 23):
+                self.sh_system.cell(i + 2, k).value = 0
+        self.excel_files['system'] = os.path.join(target_dir, FILE_SYSTEM)
+        self.save_to_excel('system')
+
+    def _init_user_sheet(self, target_dir):
+        for i in range(self.ev[0]):
+            self.sh_user.cell(i + 2, 1).value = f'user{i + 1}'
+            self.set_reorg_time(i, 0)
+            self.set_invalid_refund_available(i, 0)
+            self.set_total_payment_specific_user(i, self.ev[0])
+            self.set_payable(i, 'yes')
+            self.set_defect_count(i, 0)
+        self.excel_files['user'] = os.path.join(target_dir, FILE_USER)
+        self.save_to_excel('user')
+
     def _checksum(self, syfunc: int):
         checked_vals = []
         for i in range(self.ev[0]):
@@ -64,30 +88,6 @@ class TandaPaySimulator(object):
             self.sy_rec_f[i] = self.sh_system.cell(self.counter * 3, i + 2)
             self.sy_rec_r[i] = self.sh_system.cell(self.counter * 3 + 1, i + 2)
 
-    def init_system_sheet(self, target_dir):
-        for i in range(2):
-            self.sh_system.cell(i + 2, 3).value = self.ev[0]
-            self.sh_system.cell(i + 2, 4).value = self.ev[9] / self.ev[0]
-            for k in range(5, 23):
-                self.sh_system.cell(i + 2, k).value = 0 if k != 18 else 'no'
-            self.sh_system.cell(i + 2, 21).value = self.ev[9] / self.ev[0]
-        for i in range(3, 30):
-            for k in range(3, 23):
-                self.sh_system.cell(i + 2, k).value = 0
-        self.excel_files['system'] = os.path.join(target_dir, FILE_SYSTEM)
-        self.save_to_excel('system')
-
-    def init_user_sheet(self, target_dir):
-        for i in range(self.ev[0]):
-            self.sh_user.cell(i + 2, 1).value = f'user{i + 1}'
-            self.set_reorg_time(i, 0)
-            self.set_invalid_refund_available(i, 0)
-            self.set_total_payment_specific_user(i, self.ev[0])
-            self.set_payable(i, 'yes')
-            self.set_defect_count(i, 0)
-        self.excel_files['user'] = os.path.join(target_dir, FILE_USER)
-        self.save_to_excel('user')
-
     def save_to_excel(self, db_type):
         if not self.matrix:
             self.wb[db_type].save(self.excel_files[db_type])
@@ -96,10 +96,10 @@ class TandaPaySimulator(object):
         s_time = time.time()
         target_dir = os.path.join(target_dir, datetime.now().strftime('%m_%d_%Y__%H_%M_%S'))
         os.makedirs(target_dir, exist_ok=True)
-        self.init_user_sheet(target_dir)
-        self.init_system_sheet(target_dir)
+        self._init_user_sheet(target_dir)
+        self._init_system_sheet(target_dir)
 
-        logger.debug(f'EV1: {self.ev[0]}')
+        logger.debug(f'EV1(Total members in the group): {self.ev[0]}')
 
         # Subgroup  # FUNCTION FOR SUBGROUP EXECUTION
         step1_ev1 = self.ev[0]
@@ -206,6 +206,7 @@ class TandaPaySimulator(object):
 
         # ROLE 2
         # temp_val_four users and pick remaining users randomly to be equal with EV6
+        # (percentage of members who are unwilling to act alone)
         remaining_pct = int(self.ev[5] * self.ev[0]) - temp_val_four
         if remaining_pct > 0:
             rand_dep_user = random.sample(range(temp_val_four, self.ev[0]), remaining_pct)
@@ -220,8 +221,7 @@ class TandaPaySimulator(object):
             self.assign_variables()
             if self.counter == 1:
                 self.user_func_1()
-
-            if self.counter > 1:
+            else:
                 self.user_func_2()
 
             self.sys_func_3()
@@ -236,7 +236,7 @@ class TandaPaySimulator(object):
             self.sys_func_6()
 
             self.sys_func_7()
-            self._checksum(7)       # SysFunc7 doesn't perform checksum inside it.
+            self._checksum(syfunc=7)       # SysFunc7 doesn't perform checksum inside it.
 
             self.sys_func_8()
 
