@@ -171,67 +171,7 @@ User data determines what the user will do next.
 
 ## System database
 
-The system database creates 10 periods composed of 30 stages as shown in order below. Stages 5, 8, 11, 14, 17, 20, 23, 26, 29 are not use as a functional part of the simulation.
-
-Stage 1. Pay premiums stage for Period 1
-
-Stage 2. Finalize claims stage for Period 0
-
-Stage 3. Reorg subgroups stage for Period 1
-
-Stage 4. Pay premiums stage for Period 2
-
-Stage 5. Finalize claims stage for Period 1
-
-Stage 6. Reorg subgroups stage for Period 2
-
-Stage 7. Pay premiums stage for Period 3
-
-Stage 8. Finalize claims stage for Period 2
-
-Stage 9. Reorg subgroups stage for Period 3
-
-Stage 10. Pay premiums stage for Period 4
-
-Stage 11. Finalize claims stage for Period 3
-
-Stage 12. Reorg subgroups stage for Period 4
-
-Stage 13. Pay premiums stage for Period 5
-
-Stage 14. Finalize claims stage for Period 4
-
-Stage 15. Reorg subgroups stage for Period 5
-
-Stage 16. Pay premiums stage for Period 6
-
-Stage 17. Finalize claims stage for Period 5
-
-Stage 18. Reorg subgroups stage for Period 6
-
-Stage 19. Pay premiums stage for Period 7
-
-Stage 20. Finalize claims stage for Period 6
-
-Stage 21. Reorg subgroups stage for Period 7
-
-Stage 22. Pay premiums stage for Period 8
-
-Stage 23. Finalize claims stage for Period 7
-
-Stage 24. Reorg subgroups stage for Period 8
-
-Stage 25. Pay premiums stage for Period 9
-
-Stage 26. Finalize claims stage for Period 8
-
-Stage 27. Reorg subgroups stage for Period 9
-
-Stage 28. Pay premiums stage for Period 10
-
-Stage 29. Finalize claims stage for Period 9
-
-Stage 30. Reorg subgroups stage for period 10
+The system database creates 10 periods 
 
 ### System record (SyRec) variables
 
